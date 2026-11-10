@@ -54,6 +54,15 @@ npm run app:dev    # next dev(:3000) + 따로 띄운 API(:8765, 토큰 없음)�
 
 영상: 유튜브·Vimeo 주소면 yt-dlp 로 사람이 단 자막 → 자동 자막(ko→en) 순으로 쓰고, 없으면 오디오를 받아 faster-whisper(large-v3-turbo, CPU int8, HF 캐시만 사용)로 받아쓴다. 대본은 60초 구간 = 한 '쪽'.
 
+## 정적 데모 (웹, 읽기 전용)
+
+서버·모델 없이 브라우저에서 돌려 보는 데모. 실제 API 응답을 `TestClient` 로 떠서 `/demo/<경로 해시>.json` 으로 싣고, 화면은 `NEXT_PUBLIC_DEMO=1` 이면 그 파일을 읽는다(쓰기·새 질문은 막음, 녹화한 예시 질문 7개와 대표 문서 6개의 요약·숫자 정리만 동작).
+
+```bash
+uv run python scripts/demo_export.py          # demo/data/ — 공개·개인(pms-*) 문서만, 원문 PDF·쪽 이미지는 pms-* 만
+cd desktop && npm run build:demo               # demo/site/ (정적) — 끝에 데스크톱용 out/ 을 다시 빌드
+```
+
 ## 보고서 모드 (2026-11-10 grill 합의)
 
 읽기 화면의 [보고서] 탭(문서 1개) · 문서함에서 2~4개 체크 → [비교 보고서]. 원할 때 만들고 `data/reports/<문서>.json` 에 저장, 청크 지문이 바뀌면 '오래됨' + [다시 만들기].

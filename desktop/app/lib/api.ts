@@ -18,7 +18,20 @@ function boot(): { api: string; token: string } {
 const CFG = boot();
 export const API = CFG.api;
 const H = (extra: Record<string, string> = {}) => ({ "x-aiocr-token": CFG.token, ...extra });
-export const pageImage = (doc: string, page: number) => `${API}/documents/${encodeURIComponent(doc)}/page/${page}.png?t=${CFG.token}`;
+
+// ── 정적 데모(NEXT_PUBLIC_DEMO=1) — 서버 없이 미리 떠 둔 API 응답(/demo/<해시>.json)을 읽는다. 쓰기는 막는다.
+// 해시 = 디코딩한 요청 경로의 FNV-1a 32bit(UTF-16 단위) — scripts/demo_export.py 의 demo_key 와 같아야 한다.
+export const DEMO = process.env.NEXT_PUBLIC_DEMO === "1";
+export const DEMO_MSG = "데모에서는 미리 준비한 예시만 볼 수 있어요. 자료 추가·새 질문은 데스크톱 앱에서 돼요.";
+export function demoKey(path: string): string {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < path.length; i++) { h ^= path.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+  return h.toString(16).padStart(8, "0");
+}
+const demoPath = (p: string) => decodeURIComponent(p.replace(/\+/g, " "));
+const demoFile = (p: string) => `/demo/${demoKey(demoPath(p))}.json`;
+export const pageImage = (doc: string, page: number) =>
+  DEMO ? `/demo/${demoKey(`/documents/${doc}/page/${page}.png`)}.png` : `${API}/documents/${encodeURIComponent(doc)}/page/${page}.png?t=${CFG.token}`;
 
 export type Mode = "dense" | "sparse" | "hybrid" | "hybrid+rerank";
 export const MODES: Mode[] = ["dense", "sparse", "hybrid", "hybrid+rerank"];
@@ -68,8 +81,10 @@ async function j<T>(r: Response): Promise<T> {
   }
   return r.json();
 }
-const get = <T,>(path: string) => fetch(`${API}${path}`, { headers: H() }).then((r) => j<T>(r));
-const send = <T,>(method: string, path: string, body?: unknown) =>
+const get = <T,>(path: string) => DEMO
+  ? fetch(demoFile(path)).then((r) => (r.ok ? r.json() as Promise<T> : Promise.reject(new Error(DEMO_MSG))))
+  : fetch(`${API}${path}`, { headers: H() }).then((r) => j<T>(r));
+const send = <T,>(method: string, path: string, body?: unknown) => DEMO ? Promise.reject<T>(new Error(DEMO_MSG)) :
   fetch(`${API}${path}`, { method, headers: H({ "content-type": "application/json" }), body: body ? JSON.stringify(body) : undefined })
     .then((r) => j<T>(r));
 
@@ -88,6 +103,7 @@ export const search = (q: string, collection: string, mode: Mode, k = 5) =>
   get<{ sec: number; hits: Hit[] }>(`/search?${new URLSearchParams({ q, collection, mode, k: String(k) })}`);
 
 export function uploadFile(file: File) {
+  if (DEMO) return Promise.reject<Job>(new Error(DEMO_MSG));
   const fd = new FormData();
   fd.append("file", file);
   return fetch(`${API}/documents/upload`, { method: "POST", headers: H(), body: fd }).then((r) => j<Job>(r));
@@ -102,7 +118,29 @@ export type ChatEvents = {
 };
 
 /** /chat SSE 를 fetch 스트림으로 읽는다(EventSource 는 POST·헤더를 못 쓴다). */
+/** 데모: 녹화한 /chat 이벤트를 다시 흘린다(토큰은 잘게 나눠 타이핑처럼). 녹화 키 = llm·범위·질문. */
+export const demoChatKey = (q: string, llm: string, docs: string[]) => `chat|${llm}|${[...docs].sort().join(",")}|${q.trim()}`;
+async function demoChat(q: string, llm: string, on: ChatEvents, docs: string[]) {
+  const r = await fetch(`/demo/${demoKey(demoChatKey(q, llm, docs))}.json`);
+  if (!r.ok) return on.error(`${DEMO_MSG} 첫 화면의 예시 질문을 눌러 보세요.`);
+  const evs: [keyof ChatEvents, unknown][] = await r.json();
+  const wait = (ms: number) => new Promise((res) => setTimeout(res, ms));
+  for (const [ev, data] of evs) {
+    if (ev === "token" || ev === "replace") continue;  // 녹화한 토큰 대신 최종 답을 다시 쪼개 흘린다
+    if (ev === "done") {
+      const text = (data as Done).answer;
+      for (let i = 0; i < text.length; i += 6) { on.token(text.slice(i, i + 6)); await wait(12); }
+      on.replace(text);
+    } else await wait(ev === "hits" ? 500 : 0);
+    (on[ev] as (x: unknown) => void)(data);
+  }
+}
+
+/** 데모에서 눌러 볼 수 있는 녹화된 질문(첫 화면·검색 비교). */
+export const getDemoPresets = () => get<string[]>("/__demo/presets");
+
 export async function chat(q: string, history: { role: string; text: string }[], llm: "local" | "claude", on: ChatEvents, docs: string[] = []) {
+  if (DEMO) return demoChat(q, llm, on, docs);
   const r = await fetch(`${API}/chat`, { method: "POST", headers: H({ "content-type": "application/json" }), body: JSON.stringify({ q, history, llm, docs }) });
   if (!r.ok || !r.body) return on.error(`${r.status}`);
   const reader = r.body.getReader();
@@ -132,7 +170,7 @@ export const setSegments = (doc: string, starts: number[], kind: string) =>
   send<Job>("POST", `/documents/${encodeURIComponent(doc)}/segments`, { starts, kind });
 export type DocDetail = Omit<Doc, "pages"> & { pages: DocPage[] };
 export const getDoc = (id: string) => get<DocDetail>(`/documents/${encodeURIComponent(id)}`);
-export const rawUrl = (doc: string) => `${API}/documents/${encodeURIComponent(doc)}/raw?t=${CFG.token}`;
+export const rawUrl = (doc: string) => DEMO ? `/demo/${demoKey(`/documents/${doc}/raw`)}.pdf` : `${API}/documents/${encodeURIComponent(doc)}/raw?t=${CFG.token}`;
 
 // ── 보고서 모드 ──
 export type KW = { term: string; score?: number; z?: number; count: number; pages: number[]; chunk: string | null };

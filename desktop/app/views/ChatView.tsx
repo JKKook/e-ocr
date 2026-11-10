@@ -4,6 +4,7 @@ import { addUrl, chat, feedback, getJob, uploadFile, type Confidence, type Doc, 
 import { Composer, DocPicker, jobStatus, stripUrls, urlsIn, type Attach } from "./Composer";
 import { Icon, docIcon } from "./icons";
 import { SourcePanel } from "./SourcePanel";
+import { DemoPresets } from "./DemoPresets";
 
 export type Msg =
   | { role: "user"; text: string; attached?: string[]; quote?: Quote }
@@ -205,6 +206,7 @@ export function ChatView({ conv, onChange, docs, refreshDocs, onManageDocs, onOp
           <h2>무엇이 궁금하세요?</h2>
           <p className="muted">질문만 쓰면 문서 {docs.length}개에서 찾아 근거와 함께 답해요. 웹·PDF·유튜브 링크를 붙여 넣거나 파일을 끌어다 놓으면 그 자료로 바로 답해요.</p>
           {composer(true)}
+          <DemoPresets onPick={(q) => ask(q, [])} />
           {recent.length > 0 && (
             <section className="recent" aria-label="최근 문서">
               <div className="rhead"><b>최근 문서</b><button className="linkbtn" onClick={onManageDocs}>문서함 열기</button></div>

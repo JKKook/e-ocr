@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
-import { getDocs, getReport, health, type Doc, type Report } from "./lib/api";
+import { DEMO, getDocs, getReport, health, type Doc, type Report } from "./lib/api";
 import { ChatView, type Conv } from "./views/ChatView";
 import { CompareView } from "./views/CompareView";
 import { DocsView } from "./views/DocsView";
@@ -119,7 +119,7 @@ export default function Home() {
   return (
     <div className="app">
       <nav className="side" aria-label="메뉴">
-        <div className="brand">e-ocr<small>스캔·PDF·웹·영상에 묻고 답 받기</small></div>
+        <div className="brand">e-ocr{DEMO && <span className="pill warn" style={{ marginLeft: 6 }}>데모</span>}<small>스캔·PDF·웹·영상에 묻고 답 받기</small></div>
         <button className="newchat" onClick={startNew}><Icon name="plus" size={16} />새 대화</button>
         <button className={`navitem ${view === "docs" ? "on" : ""}`} onClick={() => setView("docs")}><Icon name="stack" size={16} />문서함<span className="count">{docs.length}</span></button>
         {convs.length > 0 && <div className="group">대화</div>}

@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { DemoPresets } from "./DemoPresets";
 import { COLLECTION_LABEL, COLLECTIONS, MODE_LABEL, MODES, search, type Hit, type Mode } from "../lib/api";
 import { Hits, Spinner } from "./Hits";
 
@@ -11,12 +12,12 @@ export function CompareView() {
   const [res, setRes] = useState<Partial<Record<Mode, Col>>>({});
   const busy = Object.values(res).some((v) => v === "busy");
 
-  async function run() {
-    if (!q.trim()) return;
+  async function run(text = q) {
+    if (!text.trim()) return;
     setRes(Object.fromEntries(MODES.map((m) => [m, "busy"])));
     // 같은 임베딩 모델을 쓰므로 순서대로 — 결과가 오는 대로 칸을 채운다.
     for (const m of MODES) {
-      try { const r = await search(q, col, m); setRes((p) => ({ ...p, [m]: r })); }
+      try { const r = await search(text, col, m); setRes((p) => ({ ...p, [m]: r })); }
       catch (e) { setRes((p) => ({ ...p, [m]: { err: String(e) } })); }
     }
   }
@@ -31,6 +32,7 @@ export function CompareView() {
           </select>
           <button className="btn primary" disabled={busy || !q.trim()}>비교</button>
         </form>
+        <div style={{ marginTop: 10 }}><DemoPresets label="데모 — 녹화된 질문으로 비교해 보세요" onPick={(x) => { setQ(x); run(x); }} /></div>
       </div>
       <div className="cols" style={{ marginTop: 12 }}>
         {MODES.map((m) => {
