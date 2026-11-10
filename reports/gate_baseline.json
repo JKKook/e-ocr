@@ -1,0 +1,41 @@
+{
+ "when": "2026-11-10T22:38:17",
+ "config": {
+  "collection": "vlm_ctx",
+  "mode": "hybrid+rerank",
+  "pool": 30
+ },
+ "metrics": {
+  "base30.hit@1": 0.767,
+  "base30.recall@5": 1.0,
+  "base30.mrr@10": 0.862,
+  "synth_dev.hit@1": 0.736,
+  "synth_dev.recall@5": 0.92,
+  "synth_dev.mrr@10": 0.815,
+  "synth_holdout.hit@1": 0.8,
+  "synth_holdout.recall@5": 0.9,
+  "synth_holdout.mrr@10": 0.842,
+  "vague.hit@1": 1.0,
+  "vague.recall@5": 1.0,
+  "vague.mrr@10": 1.0,
+  "false_refusal": 0.013,
+  "true_refusal": 1.0,
+  "sec_per_q": 1.77
+ },
+ "n": {
+  "base30.hit@1": 30,
+  "base30.recall@5": 30,
+  "base30.mrr@10": 30,
+  "synth_dev.hit@1": 87,
+  "synth_dev.recall@5": 87,
+  "synth_dev.mrr@10": 87,
+  "synth_holdout.hit@1": 20,
+  "synth_holdout.recall@5": 20,
+  "synth_holdout.mrr@10": 20,
+  "vague.hit@1": 12,
+  "vague.recall@5": 12,
+  "vague.mrr@10": 12,
+  "false_refusal": 149,
+  "true_refusal": 12
+ }
+}

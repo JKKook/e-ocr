@@ -1,0 +1,1297 @@
+{
+ "collection": "vlm_ctx",
+ "mode": "hybrid+rerank",
+ "k": 5,
+ "items": [
+  {
+   "qid": "q01",
+   "q": "CRNN 모델의 파라미터 수는 얼마인가?",
+   "gold": "8.3M — 비교한 다른 모델(304M·490M)보다 훨씬 작다",
+   "ctx_ids": [
+    "crnn:7:2",
+    "crnn:7:1",
+    "crnn:6:0",
+    "crnn:6:5",
+    "str-compare:2:0"
+   ],
+   "ctx_text": [
+    "[1] the fully-connected layers are not needed. Consequently, the number of parameters of CRNN is much less than the models learned on the variants of CNN [22, 21], resulting in a much smaller model compared with [22, 21]. Our model has 8.3 million parameters, taking only 33MB RAM (using 4-bytes single-precision ﬂoat for each parameter), thus it can be easily ported to mobile devices.\nTable 3 clearly shows the differences among different approaches in details, and fully demonstrates the advantages of CRNN over other competing methods.\nIn addition, to test the impact of parameter δ, we experiment different values of δ in Eq. 2. In Fig. 4 we plot the recognition accuracy as a function of δ. Larger δ results in more candidates, thus more accurate lexicon-based transcription. On the other hand, the computational cost grows with larger δ, due to longer BK-tree search time, as well as",
+    "[2] - 75.9 - 88.5 80.3 - - - Rodrguez-Serrano et al. [30] 76.1 57.4 - 70.0 - - - - - - Jaderberg et al. [23] - - - 86.1 - 96.2 91.5 - - - Su and Lu [33] - - - 83.0 - 92.0 82.0 - - - Gordo [14] 93.3 86.6 - 91.8 - - - - - - Jaderberg et al. [22] 97.1 92.7 - 95.4 80.7* 98.7 98.6 93.3 93.1* 90.8* Jaderberg et al. [21] 95.5 89.6 - 93.2 71.7 97.8 97.0 93.4 89.6 81.8 CRNN 97.6 94.4 78.2 96.4 80.8 98.7 97.6 95.5 89.4 86.7 Notice that though the recent models learned by label embedding [5, 14] and incremental learning [22] achieved highly competitive performance, they are constrained to a speciﬁc dictionary.\nModel Size: This column is to report the storage space of the learned model. In CRNN, all layers have weightsharing connections, and the fully-connected layers are not needed. Consequently, the number of parameters of CRNN is much less than the models learned on the variants of CNN",
+    "[3] train. We ﬁnd that the batch normalization [19] technique is extremely useful for training network of such depth. Two batch normalization layers are inserted after the 5th and 6th convolutional layers respectively. With the batch normalization layers, the training process is greatly accelerated.\nWe implement the network within the Torch7 [10] framework, with custom implementations for the LSTM units (in Torch7/CUDA), the transcription layer (in C++) and the BK-tree data structure (in C++). Experiments are carried out on a workstation with a 2.50 GHz Intel(R) Xeon(R) E5- 2609 CPU, 64GB RAM and an NVIDIA(R) Tesla(TM) K40 GPU. Networks are trained with ADADELTA, setting the parameter ρ to 0.9. During training, all images are scaled to 100 × 32 in order to accelerate the training process. The training process takes about 50 hours to reach convergence.",
+    "[4] he number of model parameters (Model Size, M stands for millions).\nE2E Train Conv Ftrs CharGT-Free Unconstrained Model Size Wang et al. [34] \u0017 \u0017 \u0017 \u0014 - Mishra et al. [28] \u0017 \u0017 \u0017 \u0017 - Wang et al. [35] \u0017 \u0014 \u0017 \u0014 - Goel et al. [13] \u0017 \u0017 \u0014 \u0017 - Bissacco et al. [8] \u0017 \u0017 \u0017 \u0014 - Alsharif and Pineau [6] \u0017 \u0014 \u0017 \u0014 - Almaz´an et al. [5] \u0017 \u0017 \u0014 \u0017 - Yao et al. [36] \u0017 \u0017 \u0017 \u0014 - Rodrguez-Serrano et al. [30] \u0017 \u0017 \u0014 \u0017 - Jaderberg et al. [23] \u0017 \u0014 \u0017 \u0014 - Su and Lu [33] \u0017 \u0017 \u0014 \u0014 - Gordo [14] \u0017 \u0017 \u0017 \u0017 - Jaderberg et al. [22] \u0014 \u0014 \u0014 \u0017 490M Jaderberg et al. [21] \u0014 \u0014 \u0014 \u0014 304M CRNN \u0014 \u0014 \u0014 \u0014 8.3M case are still promising.\nFor further understanding the advantages of the proposed algorithm over other text recognition approaches, we provide a comprehensive comparison on several properties named E2E Train, Conv Ftrs, CharGT-Free, Unconstrained, and Model Size, as summarized in Table 3.\nE2E Train: This column is to show whether a certain",
+    "[5] Model Year Train data IIIT SVT IC03 IC13 IC15 SP CT Time params 3000 647 860 867 857 1015 1811 2077 645 288 ms/image ×106 Reported results CRNN [24] 2015 MJ 78.2 80.8 89.4 − − 86.7 − − − − 160 8.3 RARE [25] 2016 MJ 81.9 81.9 90.1 − 88.6 − − − 71.8 59.2 <2 − R2AM [16] 2016 MJ 78.4 80.7 88.7 − − 90.0 − − − − 2.2 − STAR-Net [18] 2016 MJ+PRI 83.3 83.6 89.9 − − 89.1 − − 73.5 − − − GRCNN [28] 2017 MJ 80.8 81.5 91.2 − − − − − − − − − ATR [30] 2017 PRI+C − − − − − − − − 75.8 69.3 − − FAN [4] 2017 MJ+ST+C 87.4 85.9 − 94.2 − 93.3 70.6 − − − − − Char-Net [17] 2018 MJ 83.6 84.4 91.5 − 90.8 − − 60.0 73.5 − − − AON [5] 2018 MJ+ST 87.0 82.8 − 91.5 − − − 68.2 73.0 76.8 − − EP [2] 2018 MJ+ST 88.3 87.5 − 94.6 − 94.4 73.9 − − − − − Rosetta [3] 2018 PRI − − − − − − − − − − − − SSFL [19] 2018 MJ 89.4 87.1 − 94.7 94.0 − − − 73.9 62.5 − − Our experiment CRNN [24] 2015 MJ+ST 82.9 81.6 93.1 92.6 91.1 89.2 69.4"
+   ],
+   "local": {
+    "text": "CRNN 모델의 파라미터 수는 8.3百万参数，占用仅33MB的RAM。[1]",
+    "sec": 5.7,
+    "usd": 0.0,
+    "in_tok": 2018,
+    "out_tok": 30,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "8.3M 파라미터와 33MB RAM 모두 [1]에 근거함(타 모델 비교는 누락, 답변이 중국어로 혼용됨)"
+    }
+   },
+   "claude": {
+    "text": "CRNN 모델의 파라미터 수는 830만 개(8.3 million)이며, 4바이트 단정밀도 부동소수점 기준으로 약 33MB RAM만 차지합니다. [1][4]",
+    "sec": 3.67,
+    "usd": 0.01215,
+    "in_tok": 2846,
+    "out_tok": 77,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "8.3M 파라미터와 33MB RAM 모두 근거 [1][4]와 일치하며, 304M·490M 모델과의 비교는 빠졌지만 질문의 핵심 수치는 맞힘"
+    }
+   }
+  },
+  {
+   "qid": "q02",
+   "q": "Which layer of CRNN converts the per-frame predictions into the final label sequence?",
+   "gold": "The transcription layer (CTC-based)",
+   "ctx_ids": [
+    "crnn:2:4",
+    "crnn:2:5",
+    "crnn:4:0",
+    "crnn:4:6",
+    "crnn:3:1"
+   ],
+   "ctx_text": [
+    "[1] for each frame of the feature sequence, outputted by the convolutional layers. The transcription layer at the top of CRNN is adopted to translate the per-frame predictions by the recurrent layers into a label sequence. Though CRNN is composed of different kinds of network architectures (eg. CNN and RNN), it can be jointly trained with one loss function.\n...\nConvolutional Layers ...\nRecurrent Layers - s - t - a a t t e \"state\" Transcription Layer Input image Convolutional feature maps Convolutional feature maps Feature sequence Deep bidirectional LSTM Per-frame predictions (disbritutions) Predicted sequence ......\n......\n...\n...\nFigure 1. The network architecture. The architecture consists of three parts: 1) convolutional layers, which extract a feature sequence from the input image; 2) recurrent layers, which predict a label distribution for each frame; 3) transcription layer, which",
+    "[2] extract a feature sequence from the input image; 2) recurrent layers, which predict a label distribution for each frame; 3) transcription layer, which translates the per-frame predictions into the ﬁnal label sequence.\n2.1. Feature Sequence Extraction In CRNN model, the component of convolutional layers is constructed by taking the convolutional and max-pooling layers from a standard CNN model (fully-connected layers are removed). Such component is used to extract a sequential feature representation from an input image. Before being fed into the network, all the images need to be scaled to the same height. Then a sequence of feature vectors is extracted from the feature maps produced by the component of convolutional layers, which is the input for the recurrent layers. Speciﬁcally, each feature vector of a feature sequence is generated from left to right on the feature maps",
+    "[3] i.e. Back-Propagation Through Time (BPTT). At the bottom of the recurrent layers, the sequence of propagated differentials are concatenated into maps, inverting the operation of converting feature maps into feature sequences, and fed back to the convolutional layers. In practice, we create a custom network layer, called “Map-to-Sequence”, as the bridge between convolutional layers and recurrent layers.\n2.3. Transcription Transcription is the process of converting the per-frame predictions made by RNN into a label sequence. Mathematically, transcription is to ﬁnd the label sequence with the highest probability conditioned on the per-frame predictions. In practice, there exists two modes of transcription, namely the lexicon-free and lexicon-based transcriptions. A lexicon is a set of label sequences that prediction",
+    "[4] l′) can be found efﬁciently with the BK-tree data structure [9], which is a metric tree speciﬁcally adapted to discrete metric spaces. The search time complexity of BK-tree is O(log |D|), where |D| is the lexicon size. Therefore this scheme readily extends to very large lexicons. In our approach, a BK-tree is constructed ofﬂine for a lexicon. Then we perform fast online search with the tree, by ﬁnding sequences that have less or equal to δ edit distance to the query sequence.\n2.4. Network Training Denote the training dataset by X = {Ii, li}i, where Ii is the training image and li is the ground truth label sequence.\nThe objective is to minimize the negative log-likelihood of conditional probability of ground truth:\nO = − X Ii,li∈X log p(li|yi), (3)",
+    "[5] learn a robust representation for sequence-like objects such as scene text [22].\nHowever, these approaches usually extract holistic representation of the whole image by CNN, then the local deep features are collected for recognizing each component of a sequencelike object.\nSince CNN requires the input images to be scaled to a ﬁxed size in order to satisfy with its ﬁxed input dimension, it is not appropriate for sequence-like objects due to their large length variation. In CRNN, we convey deep features into sequential representations in order to be invariant to the length variation of sequence-like objects.\n2.2. Sequence Labeling A deep bidirectional Recurrent Neural Network is built on the top of the convolutional layers, as the recurrent layers. The recurrent layers predict a label distribution yt for each frame xt in the feature sequence x = x1, . . . , xT . The"
+   ],
+   "local": {
+    "text": "CRNN의 transcription layer가 각 프레임의 예측을 최종 레이블 시퀀스로 변환합니다.[3] [1]",
+    "sec": 4.26,
+    "usd": 0.0,
+    "in_tok": 1072,
+    "out_tok": 35,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "transcription layer를 정확히 지목했고 근거 [1][3]에 명시됨"
+    }
+   },
+   "claude": {
+    "text": "Transcription layer(전사 계층)가 CRNN의 최상단에서 순환 계층이 만든 프레임별 예측을 최종 라벨 시퀀스로 변환합니다. 이는 프레임별 예측에 조건화된 확률이 가장 높은 라벨 시퀀스를 찾는 과정입니다. [1][3]",
+    "sec": 3.72,
+    "usd": 0.00998,
+    "in_tok": 2191,
+    "out_tok": 122,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "전사 계층을 정확히 지목했고 프레임별 예측을 최종 라벨 시퀀스로 변환한다는 설명도 [1][3]에 근거함 (CTC 언급은 없으나 부가 정보)"
+    }
+   }
+  },
+  {
+   "qid": "q03",
+   "q": "ResNet-18 백본의 DBNet은 MSRA-TD500에서 속도와 F-measure가 얼마인가?",
+   "gold": "F-measure 82.8, 62 FPS",
+   "ctx_ids": [
+    "dbnet:1:2",
+    "dbnet:6:1",
+    "dbnet:5:0",
+    "dbnet:7:2",
+    "dbnet:7:0"
+   ],
+   "ctx_text": [
+    "[1] cessing but also enhances the performance of text detection. Based on a simple segmentation network, we validate the performance improvements of DB on ﬁve benchmark datasets, which consistently achieves stateof-the-art results, in terms of both detection accuracy and speed. In particular, with a light-weight backbone, the performance improvements by DB are signiﬁcant so that we can look for an ideal tradeoff between detection accuracy and efﬁciency. Speciﬁcally, with a backbone of ResNet-18, our detector achieves an F-measure of 82.8, running at 62 FPS, on the MSRA-TD500 dataset. Code is available at:\nhttps://github.com/MhLiao/DB.\nIntroduction In recent years, reading text in scene images has become an active research area, due to its wide practical applications such as image/video understanding, visual search, automatic driving, and blind auxiliary.",
+    "[2] ization In Tab. 1, we can see that our proposed DB improves the performance signiﬁcantly for both ResNet-18 and ResNet-50 on the two datasets. For the ResNet-18 backbone, DB achieves 3.7% and 4.9% performance gain in terms of F-measure on the MSRA-TD500 dataset and the CTW1500 dataset. For the ResNet-50 backbone, DB brings 3.2% (on the MSRA-TD500 dataset) and 4.6% (on the CTW1500 dataset) improvements. Moreover, since DB can be removed in the inference period, the speed is the same as the one without DB.\nDeformable convolution As shown in Tab. 1, the deformable convolution can also brings 1.5 −5.0 performance gain since it provides a ﬂexible receptive ﬁeld for the backbone, with small extra time costs. For the MSRA-TD500 dataset, the deformable convolution increase the F-measure by 1.5% (with ResNet-18) and 5.0% (with ResNet-50). For the CTW1500 dataset, 3.6% (with ResNet-18) and 4.9%",
+    "[3] Figure 7: Some visualization results on text instances of various shapes, including curved text, multi-oriented text, vertical text, and long text lines. For each unit, the top right is the threshold map; the bottom right is the probability map.\nTable 1: Detection results with different settings. “DConv” indiates deformable convolution. “P”, “R”, and “F” indicate precision, recall, and f-measure respectively.\nBackbone DConv DB MSRA-TD500 CTW1500 P R F FPS P R F FPS ResNet-18 × × 85.5 70.8 77.4 66 76.3 72.8 74.5 59 ResNet-18 ✓ × 86.8 72.3 78.9 62 80.9 75.4 78.1 55 ResNet-18 × ✓ 87.3 75.8 81.1 66 82.4 76.6 79.4 59 ResNet-18 ✓ ✓ 90.4 76.3 82.8 62 84.8 77.5 81.0 55 ResNet-50 × × 84.6 73.5 78.7 40 81.6 72.9 77.0 27 ResNet-50 ✓ × 90.5 77.9 83.7 32 86.2 78.0 81.9 22 ResNet-50 × ✓ 86.6 77.7 81.9 40 84.3 79.1 81.6 27 ResNet-50 ✓ ✓ 91.5 79.2 84.9 32 86.9 80.2 83.4 22",
+    "[4] 50” is superior to previous methods on accuracy and speed. For the accuracy, “DB-ResNet-50” surpasses the previous state-of-the-art method by 1.9% and 3.8% on the MSRA-TD500 and MLT-2017 dataset respectively. For the speed, “DB-ResNet-50” is 3.2 times faster than the previous fastest method (Liao et al. 2018) on the MSRA-TD500 dataset. With a light-weight backbone, “DB- ResNet-18 (736)” achieves a comparative accuracy compared to the previous state-of-the-art method (Liu et al.\n2018) (82.8 vs 83.0) and runs at 62 FPS, which is 6.2 times faster than the previous fastest method (Liao et al. 2018), on the MSRA-TD500. The speed can be further accelerated to 82 FPS (“ResNet-18 (512)”) by decreasing the input size.\nLimitation One limitation of our method is that it can not deal with cases “text inside text”, which means that a text instance",
+    "[5] “DB-ResNet-50 (1152)” achieves the state-of-the-art performance on accuracy. Compared to the previous fastest method (Zhou et al. 2017), “DB-ResNet-50 (736)” outperforms it by 7.2% on accuracy and runs twice faster. For “DB- ResNet-18 (736)”, the speed can be 48 fps when ResNet-18 is applied to the backbone, with an f-measure of 82.3.\nTable 5: Detection results on the ICDAR 2015 dataset. The values in the bracket mean the height of the input images.\n“TB” and “PSE” are short for TextBoxes++ and PSENet.\nMethod P R F FPS CTPN (Tian et al. 2016) 74.2 51.6 60.9 7.1 EAST (Zhou et al. 2017) 83.6 73.5 78.2 13.2 SSTD (He et al. 2017a) 80.2 73.9 76.9 7.7 WordSup (Hu et al. 2017) 79.3 77 78.2 - Corner (Lyu et al. 2018b) 94.1 70.7 80.7 3.6 TB (Liao, Shi, and Bai 2018) 87.2 76.7 81.7 11.6 RRD (Liao et al. 2018) 85.6 79 82.2 6.5 MCN (Liu et al. 2018) 72 80 76 - TextSnake (Long et al. 2018) 84.9 80.4"
+   ],
+   "local": {
+    "text": "ResNet-18 백본의 DBNet은 MSRA-TD500 데이터셋에서 F-measure 82.8과 함께 62 FPS의 속도를 달성합니다. [1]",
+    "sec": 4.44,
+    "usd": 0.0,
+    "in_tok": 1852,
+    "out_tok": 50,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "F-measure 82.8과 62 FPS 모두 정답과 일치하며 근거 [1]에 명시됨"
+    }
+   },
+   "claude": {
+    "text": "ResNet-18 백본의 DBNet은 MSRA-TD500 데이터셋에서 F-measure 82.8, 속도 62 FPS를 기록합니다(입력 크기 736 기준). [1][4]",
+    "sec": 3.62,
+    "usd": 0.01211,
+    "in_tok": 2833,
+    "out_tok": 78,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "F-measure 82.8·62 FPS 모두 일치, 입력 크기 736도 근거[4]에 명시"
+    }
+   }
+  },
+  {
+   "qid": "q04",
+   "q": "이진화 단계를 분할 네트워크 안에 넣어 함께 학습할 수 있게 만든 모듈은?",
+   "gold": "Differentiable Binarization(DB) 모듈",
+   "ctx_ids": [
+    "dbnet:2:0",
+    "dbnet:1:1",
+    "pms-ai-ocr:1:4",
+    "dbnet:1:6",
+    "pms-ai-ocr:1:0"
+   ],
+   "ctx_text": [
+    "[1] image segmentation map binarization map detection results threshold map Figure 2: Traditional pipeline (blue ﬂow) and our pipeline (red ﬂow). Dashed arrows are the inference only operators; solid arrows indicate differentiable operators in both training and inference.\ning it along with a segmentation network.\nThe major contribution in this paper is the proposed DB module that is differentiable, which makes the process of binarization end-to-end trainable in a CNN. By combining a simple network for semantic segmentation and the proposed DB module, we proposed a robust and fast scene text detector. Observed from the performance evaluation of using the DB module, we discover that our detector has several prominent advantages over the previous state-of-the-art segmentation-based approaches.\n1. Our method achieves consistently better performances on",
+    "[2] methods are quite popular in scene text detection, as the segmentation results can more accurately describe scene text of various shapes such as curve text. However, the post-processing of binarization is essential for segmentation-based detection, which converts probability maps produced by a segmentation method into bounding boxes/regions of text. In this paper, we propose a module named Differentiable Binarization (DB), which can perform the binarization process in a segmentation network. Optimized along with a DB module, a segmentation network can adaptively set the thresholds for binarization, which not only simpliﬁes the post-processing but also enhances the performance of text detection. Based on a simple segmentation network, we validate the performance improvements of DB on",
+    "[3] 조화(문서에서 어떤 의미인가)** 세 단계로 발전해 왔고, 최근에는 이 단계를 하나의 모델로 처리하는 **OCR-free·VLM** 방식이 함께 쓰인다. 아래 자료는 이 흐름을 따라 기초 논문 → 실전 툴킷 → 문서 AI → End-to-end → 평가 순서로 모았다. 이미 그린가이드에서 **PP-OCRv5(한국어 모바일 모델)를 RapidOCR 로 서빙**해, 분리배출 표시와 제품명을 읽고 분류 결과와 log-linear 로 융합하고 있다. 학습은 이 실무 사례를 기준점으로 삼는다.\n## 1. 기초 논문 | 주제 | 자료 | 핵심 | |---|---|---| | 인식 | [CRNN (2015)](https://arxiv.org/abs/1507.05717) | CNN + RNN + CTC, 문자열 인식의 기본 구조 | | 인식 비교 | [What Is Wrong With Scene Text Recognition Model Comparisons? (2019)](https://arxiv.org/abs/1904.01906) | 인식 모델을 4단계 모듈로 나눠 공정 비교 — CLOVA AI · [코드](https://github.com/clovaai/deep-text-recognition-benchmark) | | 검출 | [DBNet (2019)](https://arxiv.org/abs/1911.08947) | 미분 가능한 이진화로 빠르고 정확한 영역 검출 | | 검출 | [CRAFT (2019)](https://arxiv.org/abs/1904.01941) | 문자 단위 영역·연결도로 휘어진 글자 검출 — [코드](https://github.com/clovaai/CRAFT-pytorch) |",
+    "[4] ine (following the red arrows in Fig. 2) aims to insert the binarization operation into a segmentation network for joint optimization. In this manner, the threshold value at every place of an image can be adaptively predicted, which can fully distinguish the pixels from the foreground and background. However, the standard binarization function is not differentiable, we instead present an approximate function for binarization called Differentiable Binarization (DB), which is fully differentiable when trainarXiv:1911.08947v2  [cs.CV]  3 Dec 2019",
+    "[5] --title: AI OCR status: active summary: 텍스트 검출 → 인식 → 문서 구조화까지, 고전 파이프라인에서 OCR-free·VLM 까지 이어지는 학습 자료 모음과 실습 연결 stack:\nDetection: [DBNet, CRAFT] Recognition: [CRNN + CTC, TrOCR] Toolkit: [PaddleOCR (PP-OCRv5), RapidOCR, Tesseract, EasyOCR, docTR, Surya] Document AI: [LayoutLMv3, Donut, Docling, Marker] End-to-end / VLM: [GOT-OCR 2.0, olmOCR, Claude PDF support] Benchmark / Data: [ICDAR RRC, OCRBench, OmniDocBench, AI-Hub] pipeline:\n- { name: 기초 — 인식, desc: \"CRNN + CTC 로 이미지 한 줄을 문자열로 바꾸는 기본 구조, 인식 모델 비교 기준(CLOVA 분석 논문)\", tech: [CRNN, CTC] } - { name: 기초 — 검출, desc: \"글자가 있는 영역 찾기 — DBNet(미분 가능한 이진화), CRAFT(문자 단위 영역)\", tech: [DBNet, CRAFT] } - { name: 실전 툴킷, desc: \"검출 + 방향 분류 + 인식을 묶은 경량 파이프라인 PP-OCR 구조를 읽고 PaddleOCR·RapidOCR 로 직접 돌려 본다\", tech: [PaddleOCR, RapidOCR] }"
+   ],
+   "local": {
+    "text": "이진화 단계를 분할 네트워크 안에 넣어 함께 학습할 수 있게 만든 모듈은 Differentiable Binarization (DB) 모듈입니다.[1]",
+    "sec": 5.81,
+    "usd": 0.0,
+    "in_tok": 1455,
+    "out_tok": 45,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "근거 [1]·[2]·[4]의 DB 모듈 설명과 일치"
+    }
+   },
+   "claude": {
+    "text": "Differentiable Binarization(DB) 모듈입니다. 이진화 연산을 분할 네트워크에 넣어 함께 최적화하며, 미분 가능한 근사 함수를 써서 학습 중에도 이진화가 end-to-end로 가능해지고 이미지 각 위치의 임계값을 적응적으로 예측할 수 있습니다 [2][4][1].",
+    "sec": 3.9,
+    "usd": 0.01211,
+    "in_tok": 2688,
+    "out_tok": 136,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "DB 모듈을 정확히 지목했고 부가 설명도 근거 [1][2][4]와 일치"
+    }
+   }
+  },
+  {
+   "qid": "q05",
+   "q": "CRAFT가 글자 영역 점수 외에 예측하는, 인접 문자 사이의 연결을 나타내는 점수는?",
+   "gold": "affinity score",
+   "ctx_ids": [
+    "craft:1:3",
+    "craft:11:2",
+    "craft:7:6",
+    "craft:6:1",
+    "craft:11:0"
+   ],
+   "ctx_text": [
+    "[1] hallenging texts by linking the successive characters in a bottom-up manner. Unfortunately, ∗Corresponding author.\nHorizontal Curved Arbitrary (a) (b) Figure 1. Visualization of character-level detection using CRAFT.\n(a) Heatmaps predicted by our proposed framework. (b) Detection results for texts of various shape.\nmost of the existing text datasets do not provide characterlevel annotations, and the work needed to obtain characterlevel ground truths is too costly.\nIn this paper, we propose a novel text detector that localizes the individual character regions and links the detected characters to a text instance. Our framework, referred to as CRAFT for Character Region Awareness For Text detection, is designed with a convolutional neural network producing the character region score and afﬁnity score. The region score is used to localize individual characters in",
+    "[2] each line is proportional to the distance between paired control points. The ground truth generation for the LinkReﬁner is illustrated in Fig. 10. The output of the model is called the link score. For training, only the LinkReﬁner is trained on the CTW-1500 training dataset, while freezing CRAFT.\nAfter training, we have the outputs produced by the model, which are the region score, the afﬁnity score, and the link score. Here, the link score is used instead of the original afﬁnity score, and the text polygon is obtained entirely through the same process as done with TotalText. The CRAFT model localizes the individual characters, and the LinkReﬁner model combines the characters as well as the words separated by spaces, which are required by the CTW- 1500 evaluation.\nThe results on the CTW-1500 dataset are shown in : Polygon annotation and its control points",
+    "[3] et’s case, two difﬁcult characteristics coexist, namely annotations that are provided at the line-level and are of arbitrary polygons. To aid CRAFT in such cases, a small link reﬁnement network, which we call the LinkReﬁner, is used in conjunction with CRAFT. The input of the LinkReﬁner is a concatenation of the region score, the afﬁnity score, and the intermediate feature map of CRAFT, and the output is a reﬁned afﬁnity score adjusted for long texts. To combine characters, the reﬁned afﬁnity score is used instead of the original afﬁnity score, then the polygon generation is performed in the same way as it was performed for TotalText. Only LinkReﬁner is trained on the CTW-1500 dataset while freezing CRAFT. The detailed implementation of LinkReﬁner is addressed in the supplementary materials. As shown in Table 2, the proposed method achieves state-of-the-art performance.\n4.4. Discussions",
+    "[4] 4.8 PixelLink∗[4] 87.5 88.6 88.1 82.0 85.5 83.7 - - - 73.2 83.0 77.8 3.0 RRD∗[19] 86 92 89 80.0 88.0 83.8 - - - 73 87 79 10 Lyu et al.∗[26] 84.4 92.0 88.0 79.7 89.5 84.3 70.6 74.3 72.4 76.2 87.6 81.5 5.7 FOTS [21] - - 87.3 82.0 88.8 85.3 57.5 79.5 66.7 - - - 23.9 CRAFT(ours) 93.1 97.4 95.2 84.3 89.8 86.9 68.2 80.6 73.9 78.2 88.2 82.9 8.6 Table 1. Results on quadrilateral-type datasets, such as ICDAR and MSRA-TD500. ∗denote the results based on multi-scale tests. Methods in italic are results solely from the detection of end-to-end models for a fair comparison. R, P, and H refer to recall, precision and H-mean, respectively. The best score is highlighted in bold. FPS is for reference only because the experimental environments are different. We report the best FPSs, each of which was reported in the original paper.\nwith arrows in blue. The lengths of the local maxima lines",
+    "[5] A. LinkReﬁner for CTW-1500 dataset Region score (h/2×w/2×1) Affinity score (h/2×w/2×1) Stage4 Block (h/2×w/2×32) CRAFT Conv[3×3×64] Conv[3×3×64] Conv[3×3×64] : Concat : Element-wise Sum S Link score (h/2×w/2×1) S ASPP (R) Conv[1×1×1] Conv[1×1×128] Conv[3×3×128] rate=R ASPP (6) ASPP (12) ASPP (18) ASPP (24) LinkRefiner Figure 9. Schematic illustration of LinkReﬁner architecture.\nCTW-1500 dataset [38] provides polygon-only annotations without text transcriptions. Furthermore, annotations of CTW-1500 are provided at the line-level and does not consider spaces as separation cues. This is far from our assumption of afﬁnity, which is that the score for afﬁnity is zero for characters with a space between them.\nTo obtain a single-long polygon from the detected characters, we employ a shallow network for link reﬁnement, so called LinkReﬁner. The architecture of the LinkReﬁner"
+   ],
+   "local": {
+    "text": "CRAFT는 인접 문자 사이의 연결을 나타내는 가산점(score)과 지역화(region score)를 예측합니다.[3]",
+    "sec": 7.78,
+    "usd": 0.0,
+    "in_tok": 1498,
+    "out_tok": 32,
+    "judge": {
+     "correct": 0,
+     "grounded": false,
+     "why": "정답인 affinity score를 명시하지 않고 근거에 없는 '가산점'이라는 잘못된 용어를 사용함"
+    }
+   },
+   "claude": {
+    "text": "CRAFT는 개별 글자를 찾는 글자 영역 점수(region score)와 함께, 인접한 글자들을 하나의 텍스트로 연결하기 위한 어피니티 점수(affinity score)를 예측합니다. [1]",
+    "sec": 3.5,
+    "usd": 0.01105,
+    "in_tok": 2542,
+    "out_tok": 89,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "affinity score를 정확히 제시했고 근거 [1]에 region score와 affinity score 예측이 명시됨"
+    }
+   }
+  },
+  {
+   "qid": "q06",
+   "q": "CRAFT는 문자 단위 정답이 없는 실제 데이터로 어떻게 학습하나?",
+   "gold": "단어 단위 주석에서 중간 모델로 문자 단위 의사 정답을 만드는 weakly-supervised 학습",
+   "ctx_ids": [
+    "craft:8:2",
+    "craft:3:4",
+    "craft:5:0",
+    "craft:4:3",
+    "craft:1:3"
+   ],
+   "ctx_text": [
+    "[1] semantics, rather than visual cues.\nGeneralization ability Our method achieved state-of-theart performances on 3 different datasets without additional ﬁne-tuning. This demonstrates that our model is capable of capturing general characteristics of texts, rather than over- ﬁtting to a particular dataset.\n5. Conclusion We have proposed a novel text detector called CRAFT, which can detect individual characters even when characterlevel annotations are not given. The proposed method provides the character region score and the character afﬁnity score that, together, fully cover various text shapes in a bottom-up manner. Since real datasets provided with character-level annotations are rare, we proposed a weaklysupervised learning method that generates pseudo-ground truthes from an interim model. CRAFT shows state-of-theart performances on most public datasets and demonstrates",
+    "[2] Then, for each adjacent character box pair, an afﬁnity box is generated by setting the centers of the upper and lower triangles as corners of the box. The proposed ground truth deﬁnition enables the model to detect large or long-length text instances sufﬁciently, despite using small receptive ﬁelds. On the other hand, previous approaches like box regression require a large receptive ﬁeld in such cases. Our character-level detection makes it possible for convolutional ﬁlters to focus only on intracharacter and inter-character, instead of the entire text instance.\n3.2.2 Weakly-Supervised Learning Unlike synthetic datasets, real images in a dataset usually have word-level annotations. Here, we generate character boxes from each word-level annotation in a weaklysupervised manner, as summarized in Fig. 4. When a real image with word-level annotations is provided, the learned",
+    "[3] Character split Word-level annotation Character-level annotation Word box Region score Watershed labeling Character box Cropping Unwarping Figure 6. Character split procedure for achieving character-level annotation from word-level annotation: 1) crop the word-level image; 2) predict the region score; 3) apply the watershed algorithm; 4) get the character bounding boxes; 5) unwarp the character bounding boxes.\npearances of new texts, such as irregular fonts, and synthesized texts that have a different data distribution against that of the SynthText dataset.\nIf the conﬁdence score sconf(w) is below 0.5, the estimated character bounding boxes should be neglected since they have adverse effects when training the model. In this case, we assume the width of the individual character is constant and compute the character-level predictions by simply",
+    "[4] s computed as, Sc(p) = ( sconf(w) p ∈R(w), 1 otherwise, (2) where p denotes the pixel in the region R(w). The objective L is deﬁned as, L = X p Sc(p)· \u0000||Sr(p) −S∗ r(p)||2 2 +||Sa(p) −S∗ a(p)||2 2 \u0001 , (3) where S∗ r(p) and S∗ a(p) denote the pseudo-ground truth region score and afﬁnity map, respectively, and Sr(p) and Sa(p) denote the predicted region score and afﬁnity score, respectively. When training with synthetic data, we can obtain the real ground truth, so Sc(p) is set to 1.\nAs training is performed, the CRAFT model can predict characters more accurately, and the conﬁdence scores sconf(w) are gradually increased as well. Fig. 5 shows the character region score map during training. At the early stages of training, the region scores are relatively low for unfamiliar text in natural images. The model learns the ap-",
+    "[5] hallenging texts by linking the successive characters in a bottom-up manner. Unfortunately, ∗Corresponding author.\nHorizontal Curved Arbitrary (a) (b) Figure 1. Visualization of character-level detection using CRAFT.\n(a) Heatmaps predicted by our proposed framework. (b) Detection results for texts of various shape.\nmost of the existing text datasets do not provide characterlevel annotations, and the work needed to obtain characterlevel ground truths is too costly.\nIn this paper, we propose a novel text detector that localizes the individual character regions and links the detected characters to a text instance. Our framework, referred to as CRAFT for Character Region Awareness For Text detection, is designed with a convolutional neural network producing the character region score and afﬁnity score. The region score is used to localize individual characters in"
+   ],
+   "local": {
+    "text": "CRAFT는 실데이터에서 단어 단위의 어노테이션이 주어지지만 문자 단위의 어노테이션이 없을 경우, 임시 모델로부터 퍼소니 Ground Truth를 생성하여 약간 감독학습 방식으로 학습합니다.[2]",
+    "sec": 10.01,
+    "usd": 0.0,
+    "in_tok": 1101,
+    "out_tok": 70,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "단어 단위 주석에서 임시 모델로 의사 정답을 생성하는 weakly-supervised 학습을 맞힘(오타 '퍼소니'·'약간 감독'은 의미상 허용)"
+    }
+   },
+   "claude": {
+    "text": "CRAFT는 실제 이미지의 단어 단위 주석에서 약지도(weakly-supervised) 방식으로 문자 박스를 만들어 학습합니다. 중간 모델이 잘라낸 단어 이미지의 region score를 예측하고, 워터셰드 알고리즘으로 문자 박스를 얻은 뒤 원래 좌표로 되돌려 의사 정답(pseudo-GT)을 생성합니다 [1][2][3]. 이때 신뢰도 점수 sconf(w)가 0.5 미만이면 추정 박스를 버리고 문자 너비가 일정하다고 가정해 예측하며, 학습 손실에는 이 신뢰도가 가중치로 반영됩니다 [3][4].",
+    "sec": 4.68,
+    "usd": 0.0116,
+    "in_tok": 2238,
+    "out_tok": 265,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "단어 단위 주석에서 중간 모델로 문자 단위 의사 정답을 만드는 약지도 학습을 맞혔고, 세부 절차·신뢰도 처리도 근거 [1]-[4]에 있음"
+    }
+   }
+  },
+  {
+   "qid": "q07",
+   "q": "PP-OCR 전체 모델 크기는 중국어 6622자 인식 기준 얼마인가?",
+   "gold": "3.5M (영숫자 63개 인식은 2.8M)",
+   "ctx_ids": [
+    "ppocr:1:0",
+    "ppocr:10:3",
+    "ppocr:1:1",
+    "ppocr:2:0",
+    "ppocr:7:0"
+   ],
+   "ctx_text": [
+    "[1] PP-OCR: A Practical Ultra Lightweight OCR System Yuning Du, Chenxia Li, Ruoyu Guo, Xiaoting Yin, Weiwei Liu, Jun Zhou, Yifan Bai, Zilin Yu, Yehua Yang, Qingqing Dang, Haoshuang Wang Baidu Inc.\n{duyuning, yangyehua}@baidu.com Abstract The Optical Character Recognition (OCR) systems have been widely used in various of application scenarios, such as of- ﬁce automation (OA) systems, factory automations, online educations, map productions etc. However, OCR is still a challenging task due to the various of text appearances and the demand of computational efﬁciency. In this paper, we propose a practical ultra lightweight OCR system, i.e., PP- OCR. The overall model size of the PP-OCR is only 3.5M for recognizing 6622 Chinese characters and 2.8M for recognizing 63 alphanumeric symbols, respectively. We introduce a bag of strategies to either enhance the model ability",
+    "[2] English recog- Inference Time (ms) Model Type Fscore Model Size (M) CPU T4 GPU Ultra lightweight 0.5193 8.1 421 137 Large scale 0.5414 155.1 1199 204 Table 15: Compare between the ultra lightweight OCR system and the large scale one.\nnition. Figure 15 show some image results of the proposed PP-OCR system for multilingual recognition.\n4 Conclusions In this paper, we propose a practical ultra lightweight OCR system, PP-OCR, which the overall model size is only 3.5M for recognizing 6622 Chinese characters and 2.8M for recognizing 63 alphanumeric symbols. We introduce a bag of strategies to either enhance the model ability or light the model. The corresponding ablation experiments are also provided. Meanwhile, some practical ultra lightweight OCR models are released with a large-scale dataset.\nReferences Chen, P. 2020. GridMask data augmentation. arXiv preprint arXiv:2001.04086 . 2.2",
+    "[3] hinese characters and 2.8M for recognizing 63 alphanumeric symbols, respectively. We introduce a bag of strategies to either enhance the model ability or reduce the model size. The corresponding ablation experiments with the real data are also provided. Meanwhile, several pre-trained models for the Chinese and English recognition are released, including a text detector (97K images are used), a direction classiﬁer (600K images are used) as well as a text recognizer (17.9M images are used). Besides, the proposed PP-OCR are also veriﬁed in several other language recognition tasks, including French, Korean, Japanese and German. All of the above mentioned models are opensourced and the codes are available in the GitHub repository, i.e., https://github.com/PaddlePaddle/PaddleOCR.\n1 Introduction OCR (Optical Character Recognition), a technology which",
+    "[4] Figure 2: The framework of the proposed PP-OCR. The model size in the ﬁgure is about Chinese and English characters recognition. For alphanumeric symbols recognition, the model size of text recognition is from 1.6M to 0.9M. The rest of the models are the same size.\nFigure 3: Some images contained scene text.\nconsidering the cost. In particular, the OCR system need to be run on embedded devices in many scenarios, such as cell phones, which makes it necessary to consider the model size.\nTrade off model size and performance is difﬁcult but of great value. In this paper, we propose a practical ultra lightweight OCR system, named as PP-OCR, which consists of three parts, text detection, detected boxes rectiﬁcation and text recognition as shown in Figure 2.\nText Detection The purpose of text detection is to locate the text area in the image. In PP-OCR, we use Differentiable",
+    "[5] Number of training data Number of validation data Task Total Real Synthesis Real Text Detection 97K 68K 29K 500 Direction Classiﬁcation 600K 100K 500K 310K Text Recognition 17.9M 1.9M 16M 18.7K Table 1: Statistics of dataset for Chinese and English Recognition.\nNumber of training data Number of validation data Task Character Number Total Real Synthesis Total Real Synthesis Chinese and English Recognition 6622 17.9M 1.9M 16M 18.7K 18.7K 0 Alphanumeric Symbols Recognition 63 15M 0 15M 12K 12K 0 French Recognition 118 1.08M 0 1.08M 80K 0 80K Japanese Recognition 4399 0.99M 0 0.99M 80K 0 80K Korean Recognition 3636 0.94M 0 0.94M 80K 0 80K German Recognition 131 1.96M 0 1.96M 170K 0 170K Table 2: Statistics of dataset for multilingual recognition.\nFor direction classiﬁcation, there are 600k training images and 310K validation images. Among the training images,"
+   ],
+   "local": {
+    "text": "PP-OCR의 전체 모델 크기는 중국어 6622자를 인식하는 경우 3.5M입니다.[1]",
+    "sec": 7.13,
+    "usd": 0.0,
+    "in_tok": 1377,
+    "out_tok": 31,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "질문 대상인 중국어 6622자 기준 3.5M을 정확히 제시했고 근거 [1]에 명시됨"
+    }
+   },
+   "claude": {
+    "text": "PP-OCR의 전체 모델 크기는 중국어 6622자 인식 기준 3.5M입니다. [1][2][3]",
+    "sec": 3.2,
+    "usd": 0.01047,
+    "in_tok": 2495,
+    "out_tok": 49,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "질문이 요구한 중국어 6622자 기준 3.5M을 정확히 답했고 근거 [1][2]에 명시됨"
+    }
+   }
+  },
+  {
+   "qid": "q08",
+   "q": "PP-OCR의 방향 분류기 학습에는 이미지가 몇 장 쓰였나?",
+   "gold": "60만 장(600K)",
+   "ctx_ids": [
+    "ppocr:7:1",
+    "ppocr:7:0",
+    "ppocr:3:0",
+    "ppocr:1:1",
+    "ppocr:7:2"
+   ],
+   "ctx_text": [
+    "[1] taset for multilingual recognition.\nFor direction classiﬁcation, there are 600k training images and 310K validation images. Among the training images, 100K images are real scene images, which come from the public datasets (LSVT, RCTW-17, MTWI 2018). They are horizontal text which rectify and crop the ground truth of the images. The remaining 500K synthetic images mainly focus on the reversed text. We use the vertical fonts to synthesize some text images and then rotate them horizontally. All the validation images come from the real scenes.\nFor text recognition, there are 17.9M training images and 18.7K validation images. Among the training images, 1.9M images are real scene images, which come from some public datasets and Baidu image search. The public datasets used include LSVT, RCTW-17, MTWI 2018 and CCPD 2019. The remaining 16M synthetic images mainly focus on",
+    "[2] Number of training data Number of validation data Task Total Real Synthesis Real Text Detection 97K 68K 29K 500 Direction Classiﬁcation 600K 100K 500K 310K Text Recognition 17.9M 1.9M 16M 18.7K Table 1: Statistics of dataset for Chinese and English Recognition.\nNumber of training data Number of validation data Task Character Number Total Real Synthesis Total Real Synthesis Chinese and English Recognition 6622 17.9M 1.9M 16M 18.7K 18.7K 0 Alphanumeric Symbols Recognition 63 15M 0 15M 12K 12K 0 French Recognition 118 1.08M 0 1.08M 80K 0 80K Japanese Recognition 4399 0.99M 0 0.99M 80K 0 80K Korean Recognition 3636 0.94M 0 0.94M 80K 0 80K German Recognition 131 1.96M 0 1.96M 170K 0 170K Table 2: Statistics of dataset for multilingual recognition.\nFor direction classiﬁcation, there are 600k training images and 310K validation images. Among the training images,",
+    "[3] Figure 5: Architecture of the text detector DB. This ﬁgure comes from the paper of DB (Liao et al. 2020). The red and gray rectangles show the backbone and head of the text detector separately.\ntion, regularization parameters, learning rate warm-up, light head, pre-trained model and PACT quantization. Finally, the model size of the text recognizer is only 1.6M for Chinese and English recognition and 900KB for alphanumeric symbols recognition.\nIn order to implement a practical OCR system, we construct a large-scale dataset for Chinese and English recognition as an example. Speciﬁcally, text detection dataset has 97K images. Direction classiﬁcation dataset has 600k images. Text recognition dataset has 17.9M images. A small amount of the data are selected to conduct ablation experiments quickly and choose the appropriate strategies. We",
+    "[4] hinese characters and 2.8M for recognizing 63 alphanumeric symbols, respectively. We introduce a bag of strategies to either enhance the model ability or reduce the model size. The corresponding ablation experiments with the real data are also provided. Meanwhile, several pre-trained models for the Chinese and English recognition are released, including a text detector (97K images are used), a direction classiﬁer (600K images are used) as well as a text recognizer (17.9M images are used). Besides, the proposed PP-OCR are also veriﬁed in several other language recognition tasks, including French, Korean, Japanese and German. All of the above mentioned models are opensourced and the codes are available in the GitHub repository, i.e., https://github.com/PaddlePaddle/PaddleOCR.\n1 Introduction OCR (Optical Character Recognition), a technology which",
+    "[5] ts and Baidu image search. The public datasets used include LSVT, RCTW-17, MTWI 2018 and CCPD 2019. The remaining 16M synthetic images mainly focus on the scenarios for different backgrounds, translation, rotation, perspective transformation, line disturb, noise, vertical text and so on. The corpus of synthetic images come from the real scene images. All the validation images also come from the real scenes.\nIn order to conduct ablation experiments quickly and choose the appropriate strategies, we select 4k images from the real scene training images for text detection, and 300k ones from the real scene training images for text recognition.\nIn addition, we collected 300 images for different real application scenarios to evaluate the overall OCR system, including contract samples, license plates, nameplates, train tickets, test sheets, forms, certiﬁcates, street view images,"
+   ],
+   "local": {
+    "text": "PP-OCR의 방향 분류기 학습에는 600K장의 훈련 이미지와 310K장의 검증 이미지가 사용되었습니다.[2]",
+    "sec": 4.78,
+    "usd": 0.0,
+    "in_tok": 1327,
+    "out_tok": 45,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "학습 이미지 600K를 정확히 제시했고 검증 310K도 근거 [1][2]에 있음"
+    }
+   },
+   "claude": {
+    "text": "PP-OCR의 방향 분류기 학습에는 총 600K(60만) 장의 이미지가 쓰였으며, 이 중 100K장은 실제 장면 이미지이고 500K장은 합성 이미지입니다. [1][2]",
+    "sec": 3.76,
+    "usd": 0.0102,
+    "in_tok": 2331,
+    "out_tok": 88,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "600K 정답 일치, 실제 100K·합성 500K 구성도 근거 [1][2]에 명시"
+    }
+   }
+  },
+  {
+   "qid": "q09",
+   "q": "장면 글자 인식 모델을 공정하게 비교하려고 몇 단계 모듈로 나눴고 각 단계는 무엇인가?",
+   "gold": "4단계 — Transformation, Feature extraction, Sequence modeling, Prediction",
+   "ctx_ids": [
+    "str-compare:14:1",
+    "str-compare:4:0",
+    "pms-ai-ocr:1:4",
+    "str-compare:1:5",
+    "str-compare:14:0"
+   ],
+   "ctx_text": [
+    "[1] 0 69.2 81.0 27.4 5.5 2.0 94 ResNet None CTC 84.3 84.7 93.4 92.9 90.9 89.0 71.2 66.0 73.8 69.2 80.0 4.7 44.3 10.1 10 Attn 86.1 85.7 94.0 93.6 91.9 90.1 73.5 68.0 74.5 72.2 81.5 22.2 45.3 10.5 11 BiLSTM CTC 86.2 86.0 94.4 94.1 92.6 90.8 73.6 68.0 76.0 72.2 81.9 7.8 47.0 10.3 12 Attn 86.6 86.2 94.1 93.7 92.8 91.0 75.6 69.9 76.4 72.6 82.5 25.0 47.9 10.5 13 TPS VGG None CTC 80.0 78.0 90.1 89.7 88.7 87.5 65.1 60.6 65.5 57.0 75.1 4.8 7.3 1.6 14 Attn 82.9 82.3 92.0 91.7 90.5 89.2 69.4 64.2 73.0 62.2 78.5 21.0 8.3 2.0 15 BiLSTM CTC 84.6 83.8 93.3 92.9 91.2 89.4 72.4 66.8 74.0 66.8 80.2 7.6 10.0 1.8 165 Attn 86.2 85.8 93.9 93.7 92.6 91.1 74.5 68.9 76.2 70.4 82.0 23.6 10.8 2.0 17 RCNN None CTC 82.8 81.7 92.0 91.6 89.5 88.4 69.8 64.6 71.3 61.2 78.3 10.9 3.6 1.9 18 Attn 85.1 84.0 93.1 93.1 91.5 90.2 72.4 66.8 75.6 64.9 80.6 26.4 4.6 2.3 19 BiLSTM CTC 85.1 84.3 93.5 93.1 91.4 89.6 73.4 67.7 74.4 69.1",
+    "[2] Trans.\nFeat.\nSeq.\nPred.\nUNITED Input image Visual feature Contextual feature Prediction Normalized image Figure 3: Visualization of an example ﬂow of scene text recognition. We decompose a model into four stages.\n3. STR Framework Analysis The goal of the section is introducing the scene text recognition (STR) framework consisting of four stages, derived from commonalities among independently proposed STR models. After that, we describe the module options in each stage.\nDue to the resemblance of STR to computer vision tasks (e.g. object detection) and sequence prediction tasks, STR has beneﬁted from high-performance convolutional neural networks (CNNs) and recurrent neural networks (RNNs).\nThe ﬁrst combined application of CNN and RNN for STR, Convolutional-Recurrent Neural Network (CRNN) [24],",
+    "[3] 조화(문서에서 어떤 의미인가)** 세 단계로 발전해 왔고, 최근에는 이 단계를 하나의 모델로 처리하는 **OCR-free·VLM** 방식이 함께 쓰인다. 아래 자료는 이 흐름을 따라 기초 논문 → 실전 툴킷 → 문서 AI → End-to-end → 평가 순서로 모았다. 이미 그린가이드에서 **PP-OCRv5(한국어 모바일 모델)를 RapidOCR 로 서빙**해, 분리배출 표시와 제품명을 읽고 분류 결과와 log-linear 로 융합하고 있다. 학습은 이 실무 사례를 기준점으로 삼는다.\n## 1. 기초 논문 | 주제 | 자료 | 핵심 | |---|---|---| | 인식 | [CRNN (2015)](https://arxiv.org/abs/1507.05717) | CNN + RNN + CTC, 문자열 인식의 기본 구조 | | 인식 비교 | [What Is Wrong With Scene Text Recognition Model Comparisons? (2019)](https://arxiv.org/abs/1904.01906) | 인식 모델을 4단계 모듈로 나눠 공정 비교 — CLOVA AI · [코드](https://github.com/clovaai/deep-text-recognition-benchmark) | | 검출 | [DBNet (2019)](https://arxiv.org/abs/1911.08947) | 미분 가능한 이진화로 빠르고 정확한 영역 검출 | | 검출 | [CRAFT (2019)](https://arxiv.org/abs/1904.01941) | 문자 단위 영역·연결도로 휘어진 글자 검출 — [코드](https://github.com/clovaai/CRAFT-pytorch) |",
+    "[4] stance, we found 7 missing examples in IC03 dataset and 158 missing examples in IC13 dataset as well. We investigate several previous works on the STR datasets and show that the inconsistency causes incomparable results as shown in Table 1. Second, we introduce a unifying framework for STR that provides a common perspective for existing methods. Speciﬁcally, we divide the STR model into four different consecutive stages of operations: transformation (Trans.), feature extraction (Feat.), sequence modeling (Seq.), and prediction (Pred.). The framework provides not only existing methods but their possible variants toward an extensive analysis of module-wise con- 1 arXiv:1904.01906v4  [cs.CV]  18 Dec 2019",
+    "[5] # Trans.\nFeat.\nSeq.\nPred.\nIIIT SVT IC03 IC13 IC15 SP CT Acc.\nTime params FLOPS 3000 647 860 867 857 1015 1811 2077 645 288 Total ms ×106 ×109 1 None VGG None CTC 76.2 73.8 86.7 86.0 84.8 81.9 56.6 52.4 56.6 49.9 69.5 1.3 5.6 1.2 2 Attn 80.1 78.4 91.0 90.5 88.5 86.3 63.0 58.3 66.0 56.1 74.6 19.0 6.6 1.6 31 BiLSTM CTC 82.9 81.6 93.1 92.6 91.1 89.2 69.4 64.2 70.0 65.5 78.4 4.4 8.3 1.4 4 Attn 84.3 83.8 93.7 93.1 91.9 90.0 70.8 65.4 71.9 66.8 79.7 21.2 9.1 1.6 5 RCNN None CTC 80.9 78.5 90.5 89.8 88.4 85.9 65.1 60.5 65.8 60.3 75.4 7.7 1.9 1.6 62 Attn 83.4 82.4 92.2 92.0 90.2 88.1 68.9 63.6 72.1 64.9 78.5 24.1 2.9 2.0 73 BiLSTM CTC 84.2 83.7 93.5 93.0 90.9 88.8 71.4 65.8 73.6 68.1 79.8 10.7 4.6 1.8 8 Attn 85.7 84.8 93.9 93.4 91.6 89.6 72.7 67.1 75.0 69.2 81.0 27.4 5.5 2.0 94 ResNet None CTC 84.3 84.7 93.4 92.9 90.9 89.0 71.2 66.0 73.8 69.2 80.0 4.7 44.3 10.1 10 Attn 86.1 85.7 94.0 93.6 91.9 90.1"
+   ],
+   "local": {
+    "text": "장면 글자 인식 모델을 공정하게 비교하기 위해 4단계 모듈로 나누었습니다. 각 단계는 변환(Transformation), 특징 추출(FEATURE Extraction), 시퀀스 모델링(SEQUENCE Modeling), 예측(Prediction)으로 구성됩니다.[1]",
+    "sec": 15.34,
+    "usd": 0.0,
+    "in_tok": 2626,
+    "out_tok": 66,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "4단계(Trans·Feat·Seq·Pred) 모두 맞힘, 근거 [2][4]에 있으나 인용 [1]은 표 청크로 부정확"
+    }
+   },
+   "claude": {
+    "text": "장면 글자 인식(STR) 모델을 4단계 모듈로 나눠 비교했으며, 각 단계는 변환(Trans.), 특징 추출(Feat.), 시퀀스 모델링(Seq.), 예측(Pred.)입니다. [4][3]",
+    "sec": 3.56,
+    "usd": 0.01471,
+    "in_tok": 3430,
+    "out_tok": 99,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "4단계와 변환·특징 추출·시퀀스 모델링·예측을 모두 맞혔고 근거 [4]·[3]에 명시됨"
+    }
+   }
+  },
+  {
+   "qid": "q10",
+   "q": "TrOCR의 인코더와 디코더는 각각 어떤 사전학습 모델로 초기화했나?",
+   "gold": "인코더는 BEiT/DeiT, 디코더는 RoBERTa/MiniLM",
+   "ctx_ids": [
+    "trocr:3:1",
+    "trocr:1:6",
+    "trocr:3:2",
+    "trocr:3:3",
+    "trocr:2:0"
+   ],
+   "ctx_text": [
+    "[1] the probabilities over the vocabulary are calculated on that by the softmax function. We use beam search to get the ﬁnal output.\nModel Initialization Both the encoder and the decoder are initialized by the public models pre-trained on large-scale labeled and unlabeled datasets.\nEncoder Initialization The DeiT (Touvron et al. 2021) and BEiT (Bao, Dong, and Wei 2021) models are used for the encoder initialization in the TrOCR models. DeiT trains the image Transformer with ImageNet (Deng et al. 2009) as the sole training set. The authors try different hyperparameters and data augmentation to make the model dataefﬁcient. Moreover, they distill the knowledge of a strong image classiﬁer to a distilled token in the initial embedding, which leads to a competitive result compared to the CNNbased models.\nReferring to the Masked Language Model pre-training",
+    "[2] encoder and decoder parts, where wordpiece units are generated as the recognized text from the input image. To effectively train the TrOCR model, the encoder can be initialized with pre-trained ViT-style models (Dosovitskiy et al. 2021; Touvron et al. 2021; Bao, Dong, and Wei 2021) while the decoder can be initialized with pre-trained BERT-style models (Devlin et al. 2019; Liu et al. 2019; Dong et al. 2019; Wang et al. 2020b), respectively. Therefore, the advantage of TrOCR is three-fold.\nFirst, TrOCR uses the pre-trained image Transformer and text Transformer models, which take advantages of largescale unlabeled data for image understanding and language modeling, with no need for an external language model. SecarXiv:2109.10282v5  [cs.CL]  6 Sep 2022",
+    "[3] ken in the initial embedding, which leads to a competitive result compared to the CNNbased models.\nReferring to the Masked Language Model pre-training task, BEiT proposes the Masked Image Modeling task to pre-train the image Transformer. Each image will be converted to two views: image patches and visual tokens. They tokenize the original image into visual tokens by the latent codes of discrete VAE (Ramesh et al. 2021), randomly mask some image patches, and make the model recover the original visual tokens. The structure of BEiT is the same as the image Transformer and lacks the distilled token when compared with DeiT.\nDecoder Initialization We use the RoBERTa (Liu et al.\n2019) models and the MiniLM (Wang et al. 2020b) models to initialize the decoder. Generally, RoBERTa is a replication study of (Devlin et al. 2019) that carefully measures",
+    "[4] MiniLM (Wang et al. 2020b) models to initialize the decoder. Generally, RoBERTa is a replication study of (Devlin et al. 2019) that carefully measures the impact of many key hyperparameters and training data size. Based on BERT, they remove the next sentence prediction objective and dynamically change the masking pattern of the Masked Language Model.\nThe MiniLM are compressed models of the large pretrained Transformer models while retaining 99% performance. Instead of using the soft target probabilities of masked language modeling predictions or intermediate representations of the teacher models to guide the training of the student models in the previous work. The MiniLM models are trained by distilling the self-attention module of the last Transformer layer of the teacher models and introducing a teacher assistant to assist with the distillation.",
+    "[5] …… …… 1 2 3 4 5 6 37 38 39 40 …… H1 H2 H3 H4 H5 H6 H37 H38 H39 H40 [BOS] L IC ENSE Input Image Image Patches Flatten Patch Embedding Position Embedding Outputs (shifted right) Outputs Feed Forward Multi-Head Attention x N Encoder Feed Forward Masked Multi-Head Attention x N Multi-Head Attention Decoder E _OF _M CD ON ALD S ’ L IC ENSE E _OF _M CD ON ALD S ’ [EOS] Figure 1: The architecture of TrOCR, where an encoder-decoder model is designed with a pre-trained image Transformer as the encoder and a pre-trained text Transformer as the decoder.\nond, TrOCR does not require any convolutional network for the backbone and does not introduce any image-speciﬁc inductive biases, which makes the model very easy to implement and maintain. Finally, experiment results on OCR"
+   ],
+   "local": {
+    "text": "TrOCR의 인코더는 DeiT 및 BEiT 모델을 사용하여 사전학습된 ViT 스타일의 모델로 초기화하며, 디코더는 RoBERTa와 MiniLM 모델을 사용하여 사전학습된 BERT 스타일의 모델로 초기화합니다. [2][3]",
+    "sec": 11.41,
+    "usd": 0.0,
+    "in_tok": 1187,
+    "out_tok": 79,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "인코더 DeiT/BEiT, 디코더 RoBERTa/MiniLM 모두 맞히고 근거 [1][2][3]에 명시됨"
+    }
+   },
+   "claude": {
+    "text": "인코더는 DeiT와 BEiT 모델로, 디코더는 RoBERTa와 MiniLM 모델로 초기화했습니다. [1][3][4]",
+    "sec": 3.4,
+    "usd": 0.00979,
+    "in_tok": 2296,
+    "out_tok": 61,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "인코더 DeiT/BEiT, 디코더 RoBERTa/MiniLM 모두 정확하며 [1][3][4]에 명시됨"
+    }
+   }
+  },
+  {
+   "qid": "q11",
+   "q": "Donut 사전학습에 쓰는 합성 문서 생성기의 이름은?",
+   "gold": "SynthDoG",
+   "ctx_ids": [
+    "donut:23:0",
+    "donut:5:3",
+    "donut:6:0",
+    "donut:14:3",
+    "donut:3:3"
+   ],
+   "ctx_text": [
+    "[1] OCR-free Document Understanding Transformer 23 Fig. A. Examples of SynthDoG. English, Chinese, Japanese and Korean samples are shown (from top to bottom). Although the idea is simple, these synthetic samples play an important role in the pre-training of Donut. Please, see Figure 7 in the main paper for details A.2 Details of Synthetic Document Generator (SynthDoG) In this section, we explain the components of the proposed Synthetic Document Generator (SynthDoG) in detail. The entire pipeline basically follows Yim et al. [67]. Our source code is available at https://github.com/clovaai/donut.\nMore samples are shown in Figure A.\nBackground Background images are sampled from ImageNet [7]. Gaussian blur is randomly applied to the background image to represent out-of-focus effects.\nDocument Paper textures are sampled from the photos that we collected. The",
+    "[2] .\nVisual Corpora. We use IIT-CDIP [32], which is a set of 11M scanned english document images. A commercial CLOVA OCR API is applied to get the pseudo text labels. As aforementioned, however, this kind of dataset is not always available, especially for languages other than English. To alleviate the dependencies, we build a scalable Synthetic Document Generator, referred to as SynthDoG.\nUsing the SynthDog and Chinese, Japanese, Korean and English Wikipedia, we generated 0.5M samples per language.\nSynthetic Document Generator. The pipeline of image rendering basically follows Yim et al. [67]. As shown in Figure 4, the generated sample consists of 2https://huggingface.co/hyunwoongko/asian-bart-ecjk.",
+    "[3] 6 G. Kim et al.\nFig. 4. Generated English, Chinese, Japanese, and Korean samples with SynthDoG. Heuristic random patterns are applied to mimic the real documents several components; background, document, text, and layout. Background image is sampled from ImageNet [7], and a texture of document is sampled from the collected paper photos. Words and phrases are sampled from Wikipedia. Layout is generated by a simple rule-based algorithm that randomly stacks grids. In addition, several image rendering techniques [13,41,67] are applied to mimic real documents. The generated examples are shown in Figure 4. More details of SynthDoG are available in the code1 and Appendix A.2.\n2.4 Fine-tuning After the model learns how to read, in the application stage (i.e., fine-tuning), we teach the model how to understand the document image. As shown in Figure 3,",
+    "[4] age into a desired structured output. Unlike conventional methods, Donut does not depend on OCR and can easily be trained in an end-to-end fashion. We also propose a synthetic document image generator, SynthDoG, to alleviate the dependency on large-scale real document images and we show that Donut can be easily extended to a multi-lingual setting. We gradually trained the model from how to read to how to understand through the proposed training pipeline.\nOur extensive experiments and analysis on both external public benchmarks and private internal service datasets show higher performance and better costeffectiveness of the proposed method. This is a significant impact as the target tasks are already practically used in industries. Enhancing the pre-training objective could be a future work direction. We believe our work can easily be",
+    "[5] anner.\n2. We introduce a simple pre-training scheme that enables the utilization of synthetic data. By using our generator SynthDoG, we show Donut can easily be extended to a multi-lingual setting, which is not applicable for the conventional approaches that need to retrain an off-the-shelf OCR engine.\n3. We conduct extensive experiments and analyses on both public benchmarks and private industrial datasets, showing that the proposed method achieves not only state-of-the-art performances on benchmarks but also has many practical advantages (e.g., cost-effective) in real-world applications.\n4. The codebase, pre-trained model, and synthetic data are available at GitHub.1 2 Method 2.1 Preliminary: background There have been various visual document understanding (VDU) methods to understand and extract essential information from the semi-structured documents"
+   ],
+   "local": {
+    "text": "Donut 사전학습에 사용된 합성 문서 생성기의 이름은 SynthDoG입니다.[1]",
+    "sec": 5.83,
+    "usd": 0.0,
+    "in_tok": 1057,
+    "out_tok": 27,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "SynthDoG를 정확히 제시했고 근거 [1]에 명시됨"
+    }
+   },
+   "claude": {
+    "text": "Donut 사전학습에 쓰는 합성 문서 생성기의 이름은 SynthDoG(Synthetic Document Generator)입니다. 이를 이용해 중국어·일본어·한국어·영어 위키피디아로 언어별 0.5M개의 샘플을 생성했습니다. [2][5]",
+    "sec": 3.66,
+    "usd": 0.00974,
+    "in_tok": 2157,
+    "out_tok": 112,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "SynthDoG 명칭과 언어별 0.5M 샘플 생성 모두 근거 [2]에 있음"
+    }
+   }
+  },
+  {
+   "qid": "q12",
+   "q": "LayoutLMv3에서 텍스트 단어와 이미지 패치의 대응 관계를 배우는 사전학습 목표는?",
+   "gold": "Word-Patch Alignment(WPA)",
+   "ctx_ids": [
+    "layoutlmv3:2:2",
+    "layoutlmv3:2:1",
+    "layoutlmv3:3:1",
+    "layoutlmv3:4:1",
+    "layoutlmv3:1:1"
+   ],
+   "ctx_text": [
+    "[1] utLMv3 learns to reconstruct masked word tokens of the text modality and symmetrically reconstruct masked patch tokens of the image modality. Inspired by DALL-E [43] and BEiT [3], we obtain the target image tokens from latent codes of a discrete VAE. For documents, each text word corresponds to an image patch. To learn this cross-modal alignment, we propose a Word-Patch Alignment (WPA) objective to predict whether the corresponding image patch of a text word is masked.\nInspired by ViT [11] and ViLT [22], LayoutLMv3 directly leverages raw image patches from document images without complex pre-processing steps such as page object detection. LayoutLMv3 jointly learns image, text and multimodal representations in a Transformer model with unified MLM, MIM and WPA objectives. This makes LayoutLMv3 the first multimodal pre-trained Document AI",
+    "[2] nate the need for region supervision in training object detectors; (2) pre-training objectives on image modality: our LayoutLMv3 learns to reconstruct discrete image tokens of masked patches instead of raw pixels or region features to capture high-level layout structures rather than noisy details.\ntokens) objectives further add difficulty to cross-modal alignment learning, which is essential to multimodal representation learning.\nTo overcome the discrepancy in pre-training objectives of text and image modalities and facilitate multimodal representation learning, we propose LayoutLMv3 to pre-train multimodal Transformers for Document AI with unified text and image masking objectives MLM and MIM. As shown in Figure 3, LayoutLMv3 learns to reconstruct masked word tokens of the text modality and symmetrically reconstruct masked patch tokens of the image modality. Inspired",
+    "[3] nd its corresponding text and layout position information, the model takes the linear projection of patches and word tokens as inputs and encodes them into contextualized vector representations. LayoutLMv3 is pre-trained with discrete token reconstructive objectives of Masked Language Modeling (MLM) and Masked Image Modeling (MIM). Additionally, LayoutLMv3 is pre-trained with a Word-Patch Alignment (WPA) objective to learn cross-modal alignment by predicting whether the corresponding image patch of a text word is masked. “Seg” denotes segment-level positions. “[CLS]”, “[MASK]”, “[SEP]” and “[SPE]” are special tokens.\nsequence. Following the LayoutLM, we normalize all coordinates by the size of images, and use embedding layers to embed x-axis, y-axis, width and height features separately [54]. The LayoutLM and LayoutLMv2 adopt word-level layout positions, where each",
+    "[4] g (MIM). To encourage the model to interpret visual content from contextual text and image representations, we adapt the MIM pre-training objective in BEiT [3] to our multimodal Transformer model. The MIM objective is a symmetry to the MLM objective, that we randomly mask a percentage of about 40% image tokens with the blockwise masking strategy [3]. The MIM objective is driven by a cross-entropy loss to reconstruct the masked image tokens x𝑚under the context of their surrounding text and image tokens.\n𝐿𝑀𝐼𝑀(𝜃) = − 𝑀′ ∑︁ 𝑚=1 log𝑝𝜃 \u0010 x𝑚| X𝑀′, Y𝐿′\u0011 (2) The labels of image tokens come from an image tokenizer, which can transform dense image pixels into discrete tokens according to a visual vocabulary [43]. Thus MIM facilitates learning high-level layout structures rather than noisy low-level details.\nObjective III: Word-Patch Alignment (WPA). For documents,",
+    "[5] n this paper, we propose LayoutLMv3 to pre-train multimodal Transformers for Document AI with unified text and image masking. Additionally, LayoutLMv3 is pre-trained with a word-patch alignment objective to learn crossmodal alignment by predicting whether the corresponding image patch of a text word is masked. The simple unified architecture and training objectives make LayoutLMv3 a general-purpose pretrained model for both text-centric and image-centric Document AI tasks. Experimental results show that LayoutLMv3 achieves stateof-the-art performance not only in text-centric tasks, including form understanding, receipt understanding, and document visual question answering, but also in image-centric tasks such as document image classification and document layout analysis. The code and models are publicly available at https://aka.ms/layoutlmv3.\nCCS CONCEPTS"
+   ],
+   "local": {
+    "text": "LayoutLMv3에서는 Word-Patch Alignment (WPA) 목적을 통해 텍스트 단어와 이미지 패치의 대응 관계를 학습합니다. 이 목적은 텍스트 단어가 마스킹되었는지를 예측하여 해당하는 이미지 패치가 마스킹되었는지를 예측하도록 모델을 학습시킵니다.[1]",
+    "sec": 5.43,
+    "usd": 0.0,
+    "in_tok": 1109,
+    "out_tok": 86,
+    "judge": {
+     "correct": 2,
+     "grounded": false,
+     "why": "WPA는 맞혔으나 '텍스트 단어의 마스킹 여부를 예측한다'는 설명은 근거에 없는 왜곡임"
+    }
+   },
+   "claude": {
+    "text": "텍스트 단어와 이미지 패치의 대응 관계를 배우는 사전학습 목표는 Word-Patch Alignment(WPA)입니다. WPA는 텍스트 단어에 해당하는 이미지 패치가 마스킹되었는지 여부를 예측하는 방식으로 모달 간 정렬을 학습합니다. [1][3]",
+    "sec": 3.77,
+    "usd": 0.01082,
+    "in_tok": 2384,
+    "out_tok": 129,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "WPA를 정확히 제시했고 마스킹 여부 예측 설명도 근거 [1][3]과 일치"
+    }
+   }
+  },
+  {
+   "qid": "q13",
+   "q": "LayoutLMv3는 문서 이미지 특징을 CNN 없이 어떻게 입력하나?",
+   "gold": "이미지 패치의 linear projection 을 단어 토큰과 함께 입력",
+   "ctx_ids": [
+    "layoutlmv3:3:3",
+    "layoutlmv3:3:2",
+    "layoutlmv3:2:4",
+    "layoutlmv3:5:3",
+    "layoutlmv3:8:2"
+   ],
+   "ctx_text": [
+    "[1] ith linear projection features of image patches before feeding them into the multimodal Transformer. Specifically, we resize a document image into 𝐻×𝑊 and denote the image with I ∈R𝐶×𝐻×𝑊, where 𝐶, 𝐻and𝑊are the channel size, width and height of the image respectively. We then split the image into a sequence of uniform 𝑃× 𝑃patches, linearly project the image patches to 𝐷dimensions and flatten them into a sequence of vectors, which length is 𝑀= 𝐻𝑊/𝑃2. Then we add learnable 1D position embeddings to each patch since we have not observed improvements from using 2D position embeddings in our preliminary experiments. LayoutLMv3 is the first multimodal model in Document AI that does not rely on CNNs to extract image features, which is vital to Document AI models to reduce parameters or remove complex pre-processing steps.\nWe insert semantic 1D relative position and spatial 2D relative",
+    "[2] g layers to embed x-axis, y-axis, width and height features separately [54]. The LayoutLM and LayoutLMv2 adopt word-level layout positions, where each word has its positions. Instead, we adopt segment-level layout positions that words in a segment share the same 2D position since the words usually express the same semantic meaning [28].\nImage Embedding. Existing multimodal models in Document AI either extract CNN grid features [2, 56] or rely on an object detector like Faster R-CNN [44] to extract region features [14, 31, 40, 54] for image embeddings, which accounts for heavy computation bottleneck or require region supervision. Inspired by ViT [11] and ViLT [22], we represent document images with linear projection features of image patches before feeding them into the multimodal Transformer. Specifically, we resize a document image into 𝐻×𝑊",
+    "[3] stion answering, and imagecentric benchmarks: RVL-CDIP [16] for document image classification, PubLayNet [59] for document layout analysis. Experiment results demonstrate that LayoutLMv3 achieves state-of-the-art performance on these benchmarks with parameter efficiency. Furthermore, LayoutLMv3 is easy to reproduce for its simple and neat architecture and pre-training objectives.\nOur contributions are summarized as follows:\n• LayoutLMv3 is the first multimodal model in Document AI that does not rely on a pre-trained CNN or Faster R-CNN backbone to extract visual features, which significantly saves parameters and eliminates region annotations.\n• LayoutLMv3 mitigates the discrepancy between text and image multimodal representation learning with unified discrete token reconstructive objectives MLM and MIM. We further propose a Word-Patch Alignment (WPA) objective",
+    "[4] LILT fine-tunes on different languages with pre-trained textual models [50]. FormNet leverages the spatial relationship between tokens in a form [25]. • [T+L+I (R)] text, layout and image modalities with Faster R-CNN region features: This line of works extract image region features from RoI heads in the Faster R-CNN model [44]. Among them, LayoutLM [54] and TILT [40] use OCR words’ bounding box to serve as region proposals and add the region features to corresponding text embeddings.\nSelfDoc [31] and UDoc [14] use document object proposals and concatenate region features with text embeddings.\n• [T+L+I (G)] text, layout and image modalities with CNN grid features: LayoutLMv2 [56] and DocFormer [2] extract image grid features with a CNN backbone without object detection. XYLayoutLM [15] adopts the architecture of LayoutLMv2 and improves layout representation.",
+    "[5] natural images vision-and-language pre-training (VLP), research works have seen a shift from region features [5, 47, 48] to grid features [19] to lift limitations of pre-defined object classes and region supervision. Inspired by vision Transformer (ViT) [11], there have also been recent efforts in VLP without CNNs to overcome the weakness of CNN.\nStill, most rely on separate self-attention networks to learn visual features; thus, their computational cost is not reduced [12, 29, 57].\nAn exception is ViLT, which learns visual features with a lightweight linear layer and significantly cuts down the model size and running time [22]. Inspired by ViLT, our LayoutLMv3 is the first multimodal model in Document AI that utilizes image embeddings without CNNs.\nReconstructive pre-training objectives revolutionized representation learning. In NLP research, BERT firstly proposed “masked"
+   ],
+   "local": {
+    "text": "LayoutLMv3는 문서 이미지를 𝐻×𝑊 크기로 리사이즈한 후, 이 이미지를 𝑃×𝑃 크기의 패치로 나누고, 이를 𝐷 차원으로 선형 변환하여 평탄화시킵니다. [1]",
+    "sec": 10.71,
+    "usd": 0.0,
+    "in_tok": 1171,
+    "out_tok": 65,
+    "judge": {
+     "correct": 1,
+     "grounded": true,
+     "why": "패치 선형 투영은 맞혔으나 단어 토큰과 함께 멀티모달 Transformer에 입력한다는 점이 빠짐"
+    }
+   },
+   "claude": {
+    "text": "문서 이미지를 H×W로 리사이즈한 뒤 P×P 크기의 균일한 패치로 나누고, 각 패치를 D차원으로 선형 투영해 길이 M=HW/P²인 벡터 시퀀스로 평탄화하여 멀티모달 Transformer에 입력합니다. 여기에 학습 가능한 1D 위치 임베딩을 각 패치에 더하며, 이를 통해 CNN이나 Faster R-CNN 없이 시각 특징을 처리합니다 [1][2].",
+    "sec": 4.08,
+    "usd": 0.01135,
+    "in_tok": 2361,
+    "out_tok": 191,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "이미지 패치를 선형 투영해 멀티모달 Transformer에 입력한다는 핵심을 맞혔고, 세부 내용도 [1][2]에 근거함"
+    }
+   }
+  },
+  {
+   "qid": "q14",
+   "q": "GOT 모델의 파라미터 수와 구조는?",
+   "gold": "580M, 고압축 인코더 + 긴 문맥 디코더의 end-to-end 모델",
+   "ctx_ids": [
+    "got-ocr2:6:1",
+    "got-ocr2:1:1",
+    "got-ocr2:3:4",
+    "got-ocr2:10:1",
+    "got-ocr2:9:2"
+   ],
+   "ctx_text": [
+    "[1] int-training 3.3.1 The Final Architecture of GOT After the pre-training step of the vision encoder, we connect it to a larger language model with more powerful capabilities to build the final architecture of GOT. Here, we adopt the Qwen [4] with 500M parameters as the decoder because it has a relatively small number of parameters while incorporating prior knowledge of multiple languages. The dimension of the connector (i.e., the linear embedding layer) is adjusted into 1024×1024 to align with the input channels of the Qwen-0.5B. Hence, GOT enjoys the seamless encoder-decoder paradigm with about 580M parameters in total, which is more computationally resource-friendly and easier to deploy on a consumer-grade GPU with 4G memory.\nThe high compression rate (1024×1024 optical pixels to 256 image tokens) of the encoder saves a lot",
+    "[2] tric shapes) as \"characters\" and propose the General OCR Theory along with an excellent model, namely GOT, to promote the arrival of OCR-2.0. The GOT, with 580M parameters, is a unified, elegant, and end-to-end model, consisting of a high-compression encoder and a long-contexts decoder. As an OCR-2.0 model, GOT can handle all the above \"characters\" under various OCR tasks. On the input side, the model supports commonly used scene- and document-style images in slice and whole-page styles. On the output side, GOT can generate plain or formatted results (markdown/tikz/smiles/kern) via an easy prompt. Besides, the model enjoys interactive OCR features, i.e., region-level recognition guided by coordinates or colors. Furthermore, we also adapt dynamic resolution and multipage OCR technologies to GOT for better practicality. In experiments, we provide",
+    "[3] ple’s higher optical character processing demands. In architecture, we adopt the unsophisticated encoder-decoder paradigm for the model. Specifically, GOT enjoys a high compression rate encoder to transfer the optical image to tokens as well as a long context length decoder to output the corresponding OCR results. The encoder has approximately 80M parameters posing 1024×1024 input size which is enough to deal with commonly used photo/document input styles. Each input image will be compressed to tokens with 256×1024 dimensions. The decoder of GOT, with 0.5B parameters, supports 8K max length tokens to ensure it can tackle long-context scenarios. We devise an effective and efficient training strategy for GOT, which can be divided into three procedures, i.e., decoupled pre-training of the encoder, joint-training",
+    "[4] ormatted outputs. Besides, the dynamic resolution scheme is a good choice when processing higher-resolution images.\n4.2.4 Fine-grained OCR performance We report the fine-grained OCR metrics of GOT. As shown in Table 4, the GOT is overall better than Fox [20] on both the bounding box-based and color-based referential OCR tasks, indicating that our model enjoys excellent interactive OCR capabilities.\nMetrics English Chinese region color region color DocOwl1.5 [13] Fox [20] GOT Fox [20] GOT Fox [20] GOT Fox [20] GOT Edit Distance ↓ 0.435 0.059 0.041 0.064 0.034 0.042 0.033 0.114 0.040 F1-score ↑ 0.670 0.957 0.970 0.940 0.966 0.955 0.965 0.884 0.957 Precision ↑ 0.886 0.962 0.973 0.942 0.970 0.966 0.974 0.902 0.969 Recall ↑ 0.617 0.955 0.969 0.942 0.964 0.947 0.958 0.873 0.948 BLEU ↑ 0.478 0.914 0.926 0.868 0.910 0.885 0.898 0.778 0.884 METEOR ↑ 0.569 0.955 0.966 0.938 0.961 0.934 0.942 0.848",
+    "[5] Note that the test data for each benchmark undergoes strict text similarity filtering to ensure that it is not included in the training data. Sources of each test benchmark and model performance analysis are as follows.\n4.2.1 Plain document OCR performance We use the open-source Fox [20] benchmark to test the performance of GOT on both Chinese and English PDF OCR. The metrics we used are those commonly in OCR tasks, i.e., edict distance, F1-score, precision, recall, BLEU, and METEOR. Due to the lengthy text of the document, we use word-level segmentation to calculate each indicator. As shown in Table 1, with only 580M, GOT achieves advanced performance on pure text OCR in the document, proving the excellent PDF text perception and recognition ability.\nMethod Size Edit Distance↓ F1-score↑ Precision↑ Recall↑ BLEU↑ METEOR↑ en zh en zh en zh en zh en zh en zh UReader [50] 7B 0.568 - 0.661 -"
+   ],
+   "local": {
+    "text": "GOT은 약 580M개의 파라미터를 가지고 있으며, 시각 인코더와 언어 디코커 패러다임을 사용합니다. 인코더는 대략 80M개의 파라미터로 구성되어 있고 1024×1024 입력 크기를 가집니다.[3] [1]",
+    "sec": 12.93,
+    "usd": 0.0,
+    "in_tok": 1427,
+    "out_tok": 84,
+    "judge": {
+     "correct": 1,
+     "grounded": true,
+     "why": "580M과 인코더-디코더 구조는 맞혔으나 고압축 인코더·긴 문맥 디코더·end-to-end 특성은 빠짐"
+    }
+   },
+   "claude": {
+    "text": "GOT는 총 약 580M 파라미터의 인코더-디코더 구조 모델로, 약 80M 파라미터의 고압축 인코더(1024×1024 입력, 이미지당 256개 토큰)와 최대 8K 토큰을 지원하는 0.5B 파라미터(Qwen-0.5B)의 긴 문맥 디코더로 구성됩니다. 둘 사이의 연결부(선형 임베딩 층)는 Qwen-0.5B의 입력 채널에 맞춰 1024×1024로 조정되었습니다 [1][2][3].",
+    "sec": 4.3,
+    "usd": 0.01195,
+    "in_tok": 2476,
+    "out_tok": 205,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "580M 총 파라미터와 고압축 인코더+긴 문맥 디코더 end-to-end 구조를 모두 맞혔고 세부 수치(80M 인코더, 0.5B Qwen 디코더, 8K 토큰, 256 토큰, 1024×1024 커넥터)도 근거 [1][3]에 있음"
+    }
+   }
+  },
+  {
+   "qid": "q15",
+   "q": "Which paper treats charts, sheet music and geometric shapes as characters to read?",
+   "gold": "GOT-OCR 2.0 (General OCR Theory)",
+   "ctx_ids": [
+    "got-ocr2:1:0",
+    "got-ocr2:7:0",
+    "got-ocr2:3:3",
+    "got-ocr2:10:2",
+    "got-ocr2:7:1"
+   ],
+   "ctx_text": [
+    "[1] General OCR Theory: Towards OCR-2.0 via a Unified End-to-end Model Haoran Wei1,∗, Chenglong Liu3,∗, Jinyue Chen3, Jia Wang1, Lingyu Kong3, Yanming Xu1, Zheng Ge1, Liang Zhao1, Jianjian Sun1, Yuang Peng4, Chunrui Han2, Xiangyu Zhang1,2 1StepFun 2Megvii Technology 3University of Chinese Academy of Sciences 4Tsinghua University https://github.com/Ucas-HaoranWei/GOT-OCR2.0 Abstract Traditional OCR systems (OCR-1.0) are increasingly unable to meet people’s usage due to the growing demand for intelligent processing of man-made optical characters. In this paper, we collectively refer to all artificial optical signals (e.g., plain texts, math/molecular formulas, tables, charts, sheet music, and even geometric shapes) as \"characters\" and propose the General OCR Theory along with an excellent model, namely GOT, to promote the arrival of OCR-2.0. The GOT,",
+    "[2] Text sources .tex geometry codes smiles humdrum **kern chart codes Rendering tools mathpix pdftex matplotlib tikz verovio pyecharts Results Figure 3: We use six rendering tools to run data engines to make the GOT work well on diverse OCR tasks. We utilize the LATEX for tables, Mathpix-markdown-it for math/molecular formulas, Tikz for simple geometric shapes, Verovio for sheet music, and Matplotlib/Pyecharts for charts, respectively.\nMore general OCR data.\nWe hope GOT can deal with more general optical artificial “characters”.\nAccordingly, we collect three related challenging tasks and generate the corresponding data. They are sheet music, geometric shapes, and charts, respectively.\n• Sheet music. Music is a precious part of the cultural heritage and optical music recognition plays an important role in achieving automatic recognition and transcription of sheet music [7, 38]. We",
+    "[3] OCR-2.0 model should not be a chatbot, like LVLM, that focuses on reasoning tasks. Its focus should be on strong perception and recognition of optical characters, so it needs a reasonable number of model parameters in exchange for lower training and inference costs.\n• Versatility. The OCR-2.0 model’s other important point is versatility, including recognizing more general artificial optical “characters”, e.g., sheet music, charts, geometric shapes, etc. Besides, the model should support the output format with stronger readability, e.g., LATEX/Markdown format for formulas and tables.\nBased on the proposed general OCR theory, we present a primary OCR-2.0 model (GOT) to bridge the gap between OCR-1.0 models and people’s higher optical character processing demands. In architecture, we adopt the unsophisticated encoder-decoder paradigm for the model. Specifically,",
+    "[4] 42 0.964 0.947 0.958 0.873 0.948 BLEU ↑ 0.478 0.914 0.926 0.868 0.910 0.885 0.898 0.778 0.884 METEOR ↑ 0.569 0.955 0.966 0.938 0.961 0.934 0.942 0.848 0.931 Table 4: Comparison of fine-grained document OCR.\nMetric Deplot (1.3B) [22] UniChart (0.26B) [31] ChartVLM (7.3B) [48] GPT-4V (>100B) [36] Qwen-VL (>72B) [5] GOT (0.58B) ChartQA-SE AP@strict 0.614 0.423 0.718 0.504 0.586 0.747 AP@slight 0.709 53.18 0.814 0.606 0.685 0.845 AP@high 0.729 0.560 0.842 0.643 0.727 0.867 PlotQA-SE AP@strict 0.031 0.105 0.038 0.073 0.005 0.133 AP@slight 16.49 0.260 0.468 0.194 0.042 0.596 AP@high 26.50 0.269 0.540 0.223 0.120 0.640 Table 5: Performance comparisons on number-centric chart OCR.\n4.2.5 More general OCR performance We utilize the sheet music, geometry, and chart benchmarks to verify GOT’s more general OCR performance. For the first two tasks, we separately render 100 and 180 additional samples as",
+    "[5] ultural heritage and optical music recognition plays an important role in achieving automatic recognition and transcription of sheet music [7, 38]. We choose the GrandStaff [39] dataset as the source to render. The dataset of polyphonic music scores provides the Humdrum **kern transcriptions from the excerpts of music. In addition to the existing approximately 10w image-text samples, we also extract some text samples to re-render via the Verovio Python Package. We mainly add new backgrounds from white to real paper styles and randomly add the title and author information. Note that we only render single-system sheet music due to we don’t have professionals in the relevant field and we do not know how to assemble single-system sheets to a full page. After rendering, we collect about 0.5M samples.\n• Geometric shape. Geometry is a key capability of LVLMs and is a necessary step towards AGI."
+   ],
+   "local": {
+    "text": "[2] [5]",
+    "sec": 5.27,
+    "usd": 0.0,
+    "in_tok": 1514,
+    "out_tok": 7,
+    "judge": {
+     "correct": 0,
+     "grounded": true,
+     "why": "청크 번호만 인용했고 논문명(GOT-OCR 2.0)을 명시하지 않음"
+    }
+   },
+   "claude": {
+    "text": "\"General OCR Theory: Towards OCR-2.0 via a Unified End-to-end Model\" 논문(GOT)이며, 일반 텍스트, 수식, 표, 차트, 악보, 기하 도형 등 모든 인공 광학 신호를 \"characters\"로 통칭해 인식 대상으로 다룹니다. [1][2]",
+    "sec": 3.89,
+    "usd": 0.01163,
+    "in_tok": 2604,
+    "out_tok": 122,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "GOT 논문을 정확히 지목했고 차트·악보·기하 도형을 characters로 통칭한다는 주장이 근거 [1][2]와 일치"
+    }
+   }
+  },
+  {
+   "qid": "q16",
+   "q": "Contextual Retrieval은 검색 실패를 얼마나 줄이며, reranking을 더하면 얼마나 줄이나?",
+   "gold": "49%, reranking 결합 시 67%",
+   "ctx_ids": [
+    "contextual-retrieval:1:1",
+    "contextual-retrieval:1:17",
+    "contextual-retrieval:1:19",
+    "contextual-retrieval:1:12",
+    "contextual-retrieval:1:15"
+   ],
+   "ctx_text": [
+    "[1] ions remove context when encoding information, which often results in the system failing to retrieve the relevant information from the knowledge base. In this post, we outline a method that dramatically improves the retrieval step in RAG. The method is called “Contextual Retrieval” and uses two sub-techniques: Contextual Embeddings and Contextual BM25. This method can reduce the number of failed retrievals by 49% and, when combined with reranking, by 67%. These represent significant improvements in retrieval accuracy, which directly translates to better performance in downstream tasks.\nYou can easily deploy your own Contextual Retrieval solution with Claude with our cookbook.\nA note on simply using a longer prompt",
+    "[2] ker, though we did not have time to test it. Our experiments showed that, across various domains, adding a reranking step further optimizes retrieval. Specifically, we found that Reranked Contextual Embedding and Contextual BM25 reduced the top-20-chunk retrieval failure rate by 67% (5.7% → 1.9%).\nCost and latency considerations One important consideration with reranking is the impact on latency and cost, especially when reranking a large number of chunks. Because reranking adds an extra step at runtime, it inevitably adds a small amount of latency, even though the reranker scores all the chunks in parallel. There is an inherent trade-off between reranking more chunks for better performance vs. reranking fewer for lower latency and cost. We recommend experimenting with different settings on your specific use case to find the right balance.\nConclusion",
+    "[3] s more effective than just the top-10 or top-5; - Adding context to chunks improves retrieval accuracy a lot; - Reranking is better than no reranking; - All these benefits stack: to maximize performance improvements, we can combine contextual embeddings (from Voyage or Gemini) with contextual BM25, plus a reranking step, and adding the 20 chunks to the prompt.\nWe encourage all developers working with knowledge bases to use our cookbook to experiment with these approaches to unlock new levels of performance.\nAppendix I Below is a breakdown of results across datasets, embedding providers, use of BM25 in addition to embeddings, use of contextual retrieval, and use of reranking for Retrievals @ 20.\nSee Appendix II for the breakdowns for Retrievals @ 10 and @ 5 as well as example questions and answers for each dataset.",
+    "[4] top 20 chunks. You can see the full results in the appendix - contextualizing improves performance in every embedding-source combination we evaluated. Performance improvements Our experiments showed that:\n- Contextual Embeddings reduced the top-20-chunk retrieval failure rate by 35% (5.7% → 3.7%).\n- Combining Contextual Embeddings and Contextual BM25 reduced the top-20-chunk retrieval failure rate by 49% (5.7% → 2.9%).\nImplementation considerations When implementing Contextual Retrieval, there are a few considerations to keep in mind:\n- Chunk boundaries: Consider how you split your documents into chunks. The choice of chunk size, chunk boundary, and chunk overlap can affect retrieval performance1.",
+    "[5] d by passing it the contextualized chunk and distinguishing between what is context and what is the chunk.\nFurther boosting performance with Reranking In a final step, we can combine Contextual Retrieval with another technique to give even more performance improvements. In traditional RAG, the AI system searches its knowledge base to find the potentially relevant information chunks. With large knowledge bases, this initial retrieval often returns a lot of chunks—sometimes hundreds—of varying relevance and importance.\nReranking is a commonly used filtering technique to ensure that only the most relevant chunks are passed to the model. Reranking provides better responses and reduces cost and latency because the model is processing less information. The key steps are:\n- Perform initial retrieval to get the top potentially relevant chunks (we used the top 150);"
+   ],
+   "local": {
+    "text": "Contextual Retrieval은 검색 실패율을 49%까지 감소시킬 수 있으며, 이를 reranking과 결합할 경우 추가로 18%의 감소 효과가 있다.[1]",
+    "sec": 8.0,
+    "usd": 0.0,
+    "in_tok": 1022,
+    "out_tok": 47,
+    "judge": {
+     "correct": 1,
+     "grounded": false,
+     "why": "49%는 맞으나 reranking 결합 시 67%를 밝히지 않았고, 근거에 없는 '추가 18% 감소'를 임의로 계산해 주장함"
+    }
+   },
+   "claude": {
+    "text": "Contextual Retrieval은 검색 실패 횟수를 49% 줄이며(top-20 청크 기준 실패율 5.7% → 2.9%), 여기에 reranking을 더하면 67%까지 줄입니다(5.7% → 1.9%). [1][2][4]",
+    "sec": 3.71,
+    "usd": 0.00952,
+    "in_tok": 2132,
+    "out_tok": 100,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "49%·67% 모두 정확하며 수치(5.7→2.9, 5.7→1.9)도 근거 [1][2][4]에 있음"
+    }
+   }
+  },
+  {
+   "qid": "q17",
+   "q": "Contextual Retrieval에서 청크마다 앞에 붙이는 맥락 설명은 보통 몇 토큰인가?",
+   "gold": "50~100 토큰",
+   "ctx_ids": [
+    "contextual-retrieval:1:9",
+    "contextual-retrieval:1:10",
+    "contextual-retrieval:1:2",
+    "contextual-retrieval:1:6",
+    "contextual-retrieval:1:11"
+   ],
+   "ctx_text": [
+    "[1] etical document embedding, and summary-based indexing (we evaluated and saw low performance). These methods differ from what is proposed in this post. Implementing Contextual Retrieval Of course, it would be far too much work to manually annotate the thousands or even millions of chunks in a knowledge base. To implement Contextual Retrieval, we turn to Claude. We’ve written a prompt that instructs the model to provide concise, chunk-specific context that explains the chunk using the context of the overall document. We used the following Claude 3 Haiku prompt to generate context for each chunk:\nThe resulting contextual text, usually 50-100 tokens, is prepended to the chunk before embedding it and before creating the BM25 index.\nHere’s what the preprocessing flow looks like in practice:\nIf you’re interested in using Contextual Retrieval, you can get started with our cookbook.",
+    "[2] Here’s what the preprocessing flow looks like in practice:\nIf you’re interested in using Contextual Retrieval, you can get started with our cookbook. Using Prompt Caching to reduce the costs of Contextual Retrieval Contextual Retrieval is uniquely possible at low cost with Claude, thanks to the special prompt caching feature we mentioned above. With prompt caching, you don’t need to pass in the reference document for every chunk. You simply load the document into the cache once and then reference the previously cached content. Assuming 800 token chunks, 8k token documents, 50 token context instructions, and 100 tokens of context per chunk, the one-time cost to generate contextualized chunks is $1.02 per million document tokens.\nMethodology",
+    "[3] n downstream tasks.\nYou can easily deploy your own Contextual Retrieval solution with Claude with our cookbook.\nA note on simply using a longer prompt Sometimes the simplest solution is the best. If your knowledge base is smaller than 200,000 tokens (about 500 pages of material), you can just include the entire knowledge base in the prompt that you give the model, with no need for RAG or similar methods.\nA few weeks ago, we released prompt caching for Claude, which makes this approach significantly faster and more cost-effective. Developers can now cache frequently used prompts between API calls, reducing latency by > 2x and costs by up to 90% (you can see how it works by reading our prompt caching cookbook).\nHowever, as your knowledge base grows, you'll need a more scalable solution. That’s where Contextual Retrieval comes in.\nA primer on RAG: scaling to larger knowledge bases",
+    "[4] e than a few hundred tokens; - Create TF-IDF encodings and semantic embeddings for these chunks; - Use BM25 to find top chunks based on exact matches; - Use embeddings to find top chunks based on semantic similarity; - Combine and deduplicate results from (3) and (4) using rank fusion techniques; - Add the top-K chunks to the prompt to generate the response.\nBy leveraging both BM25 and embedding models, traditional RAG systems can provide more comprehensive and accurate results, balancing precise term matching with broader semantic understanding.\nThis approach allows you to cost-effectively scale to enormous knowledge bases, far beyond what could fit in a single prompt. But these traditional RAG systems have a significant limitation: they often destroy context.\nThe context conundrum in traditional RAG",
+    "[5] structions, and 100 tokens of context per chunk, the one-time cost to generate contextualized chunks is $1.02 per million document tokens.\nMethodology We experimented across various knowledge domains (codebases, fiction, ArXiv papers, Science Papers), embedding models, retrieval strategies, and evaluation metrics. We’ve included a few examples of the questions and answers we used for each domain in Appendix II.\nThe graphs below show the average performance across all knowledge domains with the top-performing embedding configuration (Gemini Text 004) and retrieving the top-20-chunks. We use 1 minus recall@20 as our evaluation metric, which measures the percentage of relevant documents that fail to be retrieved within the top 20 chunks. You can see the full results in the appendix - contextualizing improves performance in every embedding-source combination we evaluated."
+   ],
+   "local": {
+    "text": "Contextual Retrieval에서 청크마다 앞에 붙이는 맥락 설명은 보통 50-100 토큰이다. [1]",
+    "sec": 2.95,
+    "usd": 0.0,
+    "in_tok": 1074,
+    "out_tok": 39,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "50~100 토큰을 정확히 답했고 근거 [1]에 그대로 있음"
+    }
+   },
+   "claude": {
+    "text": "청크마다 앞에 붙이는 맥락 텍스트는 보통 50~100 토큰이며, 이 텍스트를 청크에 덧붙인 뒤 임베딩하고 BM25 인덱스를 만듭니다. [1]",
+    "sec": 3.62,
+    "usd": 0.00971,
+    "in_tok": 2209,
+    "out_tok": 88,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "50~100 토큰과 임베딩·BM25 인덱스 전 앞에 붙인다는 내용이 근거 [1]과 일치"
+    }
+   }
+  },
+  {
+   "qid": "q18",
+   "q": "RapidOCR는 어떤 추론 엔진으로 PaddleOCR 모델을 돌리나?",
+   "gold": "ONNXRuntime(그 외 OpenVINO·PaddlePaddle·PyTorch 선택 가능)",
+   "ctx_ids": [
+    "rapidocr-readme:1:7",
+    "rapidocr-readme:1:4",
+    "rapidocr-readme:1:8",
+    "pms-ai-ocr:1:1",
+    "pms-ai-ocr:1:5"
+   ],
+   "ctx_text": [
+    "[1] for your work or study, we kindly ask you to give us a ⭐ Star to provide valuable support and encouragement! ### 🎥 Visualization <div align=\"center\"> <img src=\"https://github.com/RapidAI/RapidOCR/releases/download/v1.1.0/demo.gif\" alt=\"Demo\" width=\"100%\" height=\"100%\"> </div> ### 🛠️ Installation ```bash pip install rapidocr onnxruntime ``` ### 📋 Usage ```python from rapidocr import RapidOCR engine = RapidOCR() img_url = \"https://www.modelscope.cn/models/RapidAI/RapidOCR/resolve/master/resources/test_files/ch_en_num.jpg\" result = engine(img_url) print(result) result.vis(\"vis_result.jpg\") ``` ### 🐳 Docker Docker development environments are available for all supported inference engines:\n```bash # Build and test with ONNX Runtime (CPU) make build-onnxruntime-cpu make test-onnxruntime-cpu # Or use any engine: onnxruntime-gpu, tensorrt, paddle, openvino, pytorch, mnn make build-tensorrt",
+    "[2]  recognition. For other supported languages, please refer to the documentation: [Model List](https://rapidai.github.io/RapidOCRDocs/main/model_list/). **Project Origin:** Considering that [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR) still has room for optimization in engineering aspects, we innovatively converted the models in PaddleOCR into the highly compatible ONNX format to simplify and accelerate the inference deployment of OCR models on various terminal devices. Furthermore, we achieved seamless cross-platform porting based on multiple programming languages such as Python, C++, Java, and C#, enabling developers to get started easily and integrate efficiently.",
+    "[3] ake build-onnxruntime-cpu make test-onnxruntime-cpu # Or use any engine: onnxruntime-gpu, tensorrt, paddle, openvino, pytorch, mnn make build-tensorrt make shell-tensorrt ``` See [docker/README.md](./docker/README.md) for full setup instructions, GPU configuration, and troubleshooting.\n### 📚 Documentation Full documentation can be found on [docs](https://rapidai.github.io/RapidOCRDocs/), in Chinese.\n### 👥 Who use? ([more](https://github.com/RapidAI/RapidOCR/network/dependents)) - [Docling](https://github.com/DS4SD/docling) - [CnOCR](https://github.com/breezedeus/CnOCR) - [api-for-open-llm](https://github.com/xusenlinzy/api-for-open-llm) - [arknights-mower](https://github.com/ArkMowers/arknights-mower) - [pensieve](https://github.com/arkohut/pensieve) - [genshin_artifact_auxiliary](https://github.com/SkeathyTomas/genshin_artifact_auxiliary)",
+    "[4] ech: [DBNet, CRAFT] } - { name: 실전 툴킷, desc: \"검출 + 방향 분류 + 인식을 묶은 경량 파이프라인 PP-OCR 구조를 읽고 PaddleOCR·RapidOCR 로 직접 돌려 본다\", tech: [PaddleOCR, RapidOCR] } - { name: Transformer 인식, desc: \"CNN+RNN 대신 사전학습 Transformer 로 인식 — TrOCR 를 Hugging Face 로 추론\", tech: [TrOCR, Hugging Face] } - { name: 문서 구조화, desc: \"글자 위치·레이아웃까지 함께 다루는 Document AI — LayoutLMv3, OCR 없이 바로 구조를 뽑는 Donut\", tech: [LayoutLMv3, Donut] } - { name: End-to-end · VLM, desc: \"하나의 모델로 문서를 마크다운까지 — GOT-OCR 2.0, olmOCR, 범용 VLM(Claude 등)의 PDF 이해\", tech: [GOT-OCR 2.0, olmOCR] } - { name: 평가, desc: \"ICDAR 대회 과제·OCRBench·OmniDocBench 로 같은 기준에서 비교\", tech: [OCRBench, OmniDocBench] } - { name: 실습 적용, desc: \"그린가이드에서 분리배출 표시·제품명 OCR 을 분류 결과와 융합한 사례를 다시 읽고 개선점 찾기\", tech: [PP-OCRv5, RapidOCR] } diagram:\nlanes:\n- label: 입력 · 전처리 nodes:\n- { id: IN, title: 이미지 · PDF, sub: \"사진 · 스캔 · 화면 캡처\", kind: exist }",
+    "[5] 로 빠르고 정확한 영역 검출 | | 검출 | [CRAFT (2019)](https://arxiv.org/abs/1904.01941) | 문자 단위 영역·연결도로 휘어진 글자 검출 — [코드](https://github.com/clovaai/CRAFT-pytorch) | | 실전 시스템 | [PP-OCR (2020)](https://arxiv.org/abs/2009.09941) | 검출 + 방향 분류 + 인식 경량 파이프라인 설계 | ## 2. 오픈소스 툴킷 | 툴킷 | 특징 | |---|---| | [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR) · [문서](https://paddlepaddle.github.io/PaddleOCR/) | PP-OCRv5, 한국어 포함 다국어, 학습·배포 도구까지 | | [RapidOCR](https://github.com/RapidAI/RapidOCR) | PaddleOCR 모델을 ONNX Runtime 으로 가볍게 서빙 — 그린가이드가 쓰는 방식 | | [Tesseract](https://github.com/tesseract-ocr/tesseract) | 가장 오래된 오픈소스 OCR 엔진, LSTM 기반 | | [EasyOCR](https://github.com/JaidedAI/EasyOCR) | PyTorch 기반, 80여 개 언어, 설치가 간단 | | [docTR](https://github.com/mindee/doctr) | 문서용 검출·인식 모델 조합 라이브러리 | | [Surya](https://github.com/datalab-to/surya) | 다국어 OCR + 레이아웃·읽기 순서 분석 | ## 3. Transformer · 문서 AI | 주제 | 자료 | 핵심 |"
+   ],
+   "local": {
+    "text": "RapidOCR는 PaddleOCR의 모델을 ONNX Runtime으로 가볍게 서빙하여 추론을 수행합니다. [1]",
+    "sec": 8.45,
+    "usd": 0.0,
+    "in_tok": 1675,
+    "out_tok": 31,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "핵심인 ONNX Runtime을 맞혔고 근거 [5]·[2]에 있음, 다만 인용 [1]은 부정확하고 대체 엔진은 언급 안 함"
+    }
+   },
+   "claude": {
+    "text": "RapidOCR는 PaddleOCR 모델을 ONNX 형식으로 변환해 ONNX Runtime으로 가볍게 서빙합니다. [2][4] 설치 시에도 `onnxruntime`을 함께 설치하며, 그 외 onnxruntime-gpu, tensorrt, paddle, openvino, pytorch, mnn 등 다른 추론 엔진도 지원합니다. [1][3]",
+    "sec": 3.99,
+    "usd": 0.01403,
+    "in_tok": 3127,
+    "out_tok": 153,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "ONNX Runtime과 OpenVINO·Paddle·PyTorch 등 대체 엔진을 모두 맞혔고 주장은 근거에 있으나, 'ONNX Runtime 서빙' 인용은 [4]가 아닌 [5]임"
+    }
+   }
+  },
+  {
+   "qid": "q19",
+   "q": "Docling이 지원하는 입력 문서 형식에는 무엇이 있나?",
+   "gold": "PDF·DOCX·PPTX·XLSX·HTML·이미지 등",
+   "ctx_ids": [
+    "docling-readme:1:4",
+    "docling-readme:1:3",
+    "docling-readme:1:6",
+    "docling-readme:1:7",
+    "docling-readme:1:5"
+   ],
+   "ctx_text": [
+    "[1] & Keynote, WAV, MP3, WebVTT, Box Notes, email formats (EML, MSG), iCalendar (ICS), images (PNG, TIFF, JPEG, ...), LaTeX, DocLang, plain text, and more - 📑 Advanced PDF understanding incl. page layout, reading order, table structure, code, formulas, image classification, and more - 🧬 A unified, expressive [DoclingDocument][docling_document] representation format - ↪️ Various [export formats][supported_formats] and options, including Markdown, HTML, WebVTT, DocLang, [DocTags](https://arxiv.org/abs/2503.11576) and lossless JSON - 📜 Support for several application-specific XML schemas including [DocLang](https://doclang.ai), [USPTO](https://www.uspto.gov/patents) patents, [JATS](https://jats.nlm.nih.gov/) articles, and [XBRL](https://www.xbrl.org/) financial reports.\n- 🔒 Local execution capabilities for sensitive data and air-gapped environments",
+    "[2] ps://docling.ai/discord) [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/10101/badge)](https://www.bestpractices.dev/projects/10101) [![LF AI & Data](https://img.shields.io/badge/LF%20AI%20%26%20Data-003778?logo=linuxfoundation&logoColor=fff&color=0094ff&labelColor=003778)](https://lfaidata.foundation/projects/) ## What is Docling ? Docling simplifies document processing by parsing diverse formats — including advanced PDF understanding — and providing seamless integrations with the generative AI ecosystem.\n## Features - 🗂️ Parsing of [multiple document formats][supported_formats] including PDF, DOCX, PPTX, XLSX, HTML, EPUB, Apple Pages, Numbers & Keynote, WAV, MP3, WebVTT, Box Notes, email formats (EML, MSG), iCalendar (ICS), images (PNG, TIFF, JPEG, ...), LaTeX, DocLang, plain text, and more",
+    "[3] Simple and convenient CLI ### What's new - 🎬 Parsing of video files (MP4, AVI, MOV, MKV, and WebM) with an ASR transcript and representative keyframes - 📄 Parsing of ODF (OpenDocument Format) files for text documents (`.odt`), spreadsheets (`.ods`), and presentations (`.odp`) - 💼 Parsing of XBRL (eXtensible Business Reporting Language) documents for financial reports - 📧 Parsing of email files (`.eml`, `.msg`) - 📅 Parsing of calendar files (`.ics`, `.ical`, `.icalendar`, `.ifb`) with events, tasks, journal entries and free/busy times, with attendees, reminders and attachment names - 📚 Parsing of EPUB (Electronic Publication) files for e-books - 🍎 Parsing of Apple Pages (`.pages`) documents, Numbers (`.numbers`) spreadsheets and Keynote (`.key`) presentations - 📝 Parsing of plain-text files (`.txt`, `.text`) and Markdown supersets (`.qmd`, `.Rmd`)",
+    "[4] (`.numbers`) spreadsheets and Keynote (`.key`) presentations - 📝 Parsing of plain-text files (`.txt`, `.text`) and Markdown supersets (`.qmd`, `.Rmd`) - 📊 Chart understanding (Barchart, Piechart, LinePlot): convert them into tables or code and add detailed descriptions ### Coming soon - 📝 Metadata extraction, including title, authors, references & language - 📝 Complex chemistry understanding (Molecular structures) ## Quickstart ### 1. Install ```bash pip install docling ``` > **Note:** Python 3.9 support was dropped in docling version 2.70.0. Please use Python 3.10 or higher.\nWorks on macOS, Linux and Windows environments for both x86_64 and arm64 architectures.\nMore [detailed installation instructions](https://docling-project.github.io/docling/getting_started/installation/) are available in the docs.\n## 2. Convert a document (CLI) ```bash docling https://arxiv.org/pdf/2206.01062 ```",
+    "[5] h.gov/) articles, and [XBRL](https://www.xbrl.org/) financial reports.\n- 🔒 Local execution capabilities for sensitive data and air-gapped environments - 🤖 Plug-and-play [integrations][integrations] incl. LangChain, LlamaIndex, Crew AI & Haystack for agentic AI - 🔍 Extensive OCR support for scanned PDFs and images - 👓 Support for several Visual Language Models, such as ([GraniteDocling](https://huggingface.co/ibm-granite/granite-docling-258M)) - 🎙️ Audio support with Automatic Speech Recognition (ASR) models - 🔌 Connect to any agent using the [MCP server](https://docling-project.github.io/docling/usage/mcp/) - 🌐 Run Docling as a service with the [API server](https://docling-project.github.io/docling/usage/api_server/) (docling-serve) - 💻 Simple and convenient CLI ### What's new - 🎬 Parsing of video files (MP4, AVI, MOV, MKV, and WebM) with an ASR transcript and representative keyframes"
+   ],
+   "local": {
+    "text": "Docling은 PDF, DOCX, PPTX, XLSX, HTML, EPUB, Apple Pages, Numbers & Keynote, WAV, MP3, WebVTT, Box Notes, email formats (EML, MSG), iCalendar (ICS), 이미지 (PNG, TIFF, JPEG 등), LaTeX, DocLang, plain text뿐만 아니라 여러 비디오 파일 형식 (MP4, AVI, MOV, MKV, WebM)도 지원합니다. [1]",
+    "sec": 14.73,
+    "usd": 0.0,
+    "in_tok": 1378,
+    "out_tok": 103,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "PDF·DOCX·PPTX·XLSX·HTML·이미지를 모두 포함하고, 비디오 형식을 포함한 나머지 주장도 근거 [2]·[3]·[5]에 있음 (인용 [1]은 일부만 뒷받침)"
+    }
+   },
+   "claude": {
+    "text": "Docling은 PDF, DOCX, PPTX, XLSX, HTML, EPUB, Apple Pages·Numbers·Keynote, WAV, MP3, WebVTT, Box Notes, 이메일(EML, MSG), iCalendar(ICS), 이미지(PNG, TIFF, JPEG 등), LaTeX, DocLang, 일반 텍스트 등을 지원합니다 [2]. 또한 비디오(MP4, AVI, MOV, MKV, WebM), ODF(.odt, .ods, .odp), XBRL 문서, Markdown 상위 형식(.qmd, .Rmd)도 파싱할 수 있습니다 [3][4].",
+    "sec": 4.11,
+    "usd": 0.01315,
+    "in_tok": 2685,
+    "out_tok": 241,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "정답의 PDF·DOCX·PPTX·XLSX·HTML·이미지를 모두 포함하고 추가 형식도 근거 [2][3][4]에 있음"
+    }
+   }
+  },
+  {
+   "qid": "q20",
+   "q": "olmOCR로 PDF 100만 쪽을 변환하는 비용은 어느 정도인가?",
+   "gold": "100만 쪽당 200달러 미만",
+   "ctx_ids": [
+    "olmocr-readme:1:1",
+    "olmocr-readme:1:2",
+    "olmocr-readme:1:14",
+    "olmocr-readme:1:15",
+    "olmocr-readme:1:5"
+   ],
+   "ctx_text": [
+    "[1] a href=\"https://olmocr.allenai.org\"> <img alt=\"Demo\" src=\"https://img.shields.io/badge/Ai2-Demo-F0529C\"> </a> <a href=\"https://discord.gg/sZq3jTNVNG\"> <img alt=\"Discord\" src=\"https://img.shields.io/badge/Discord%20-%20blue?style=flat&logo=discord&label=Ai2&color=%235B65E9\"> </a> </p> A toolkit for converting PDFs and other image-based document formats into clean, readable, plain text format.\nTry the online demo: [https://olmocr.allenai.org/](https://olmocr.allenai.org/) Features:\n- Convert PDF, PNG, and JPEG based documents into clean Markdown - Support for equations, tables, handwriting, and complex formatting - Automatically removes headers and footers - Convert into text with a natural reading order, even in the presence of figures, multi-column layouts, and insets - Efficient, less than $200 USD per million pages converted - (Based on a 7B parameter VLM, so it requires a GPU) ### News",
+    "[2] -column layouts, and insets - Efficient, less than $200 USD per million pages converted - (Based on a 7B parameter VLM, so it requires a GPU) ### News - October 21, 2025 - v0.4.0 - [New model release](https://huggingface.co/allenai/olmOCR-2-7B-1025-FP8), boosts olmOCR-bench score by ~4 points using synthetic data and introduces RL training.\n- August 13, 2025 - v0.3.0 - [New model release](https://huggingface.co/allenai/olmOCR-7B-0825-FP8), fixes auto-rotation detection, and hallucinations on blank documents.\n- July 24, 2025 - v0.2.1 - [New model release](https://huggingface.co/allenai/olmOCR-7B-0725-FP8), scores 3 points higher on [olmOCR-Bench](https://github.com/allenai/olmocr/tree/main/olmocr/bench), also runs significantly faster because it's default FP8, and needs much fewer retries per document.",
+    "[3] -----------------------------------------------------------------------------------------------------------------------------------------------------| | [Cirrascale](https://ai2endpoints.cirrascale.ai/models/overview)            | $0.07             | $0.15              | `olmocr ./workspace --server https://ai2endpoints.cirrascale.ai/api --api_key sk-XXXXXXX --workers 1 --max_concurrent_requests 20 --model olmOCR-2-7B-1025 --pdfs tests/gnarly_pdfs/*.pdf`     | | [DeepInfra](https://deepinfra.com/)                                         | $0.09             | $0.19              | `olmocr ./workspace --server https://api.deepinfra.com/v1/openai --api_key DfXXXXXXX --workers 1 --max_concurrent_requests 20 --model allenai/olmOCR-2-7B-1025 --pdfs tests/gnarly_pdfs/*.pdf` |",
+    "[4] eepinfra.com/v1/openai --api_key DfXXXXXXX --workers 1 --max_concurrent_requests 20 --model allenai/olmOCR-2-7B-1025 --pdfs tests/gnarly_pdfs/*.pdf` | | [Parasail](https://www.saas.parasail.io/serverless?name=olmocr-7b-1025-fp8) | $0.10             | $0.20              | `olmocr ./workspace --server https://api.parasail.io/v1 --api_key psk-XXXXX --workers 1 --max_concurrent_requests 20 --model allenai/olmOCR-2-7B-1025 --pdfs tests/gnarly_pdfs/*.pdf`          | Notes on arguments - `--server`: Defines the OpenAI-compatible endpoint: ex `https://api.deepinfra.com/v1/openai` - `--api_key`: Your API key, bassed in via Authorization Bearer HTTP header - `--max_concurrent_requests`: Max concurrent requests that will be in-flight to the inference provider at one time",
+    "[5] <td>67.5</td> <td>60.6</td> <td>29.3</td> <td>93.6</td> <td>71.3</td> <td>77.1</td> <td>99.4</td> <td>72.0±1.1</td> </tr> <tr> <td>Marker 1.10.1</td> <td>83.8</td> <td>66.8</td> <td>72.9</td> <td>33.5</td> <td>86.6</td> <td>80.0</td> <td>85.7</td> <td>99.3</td> <td>76.1±1.1</td> </tr> <tr> <td>MinerU 2.5.4*</td> <td>76.6</td> <td>54.6</td> <td>84.9</td> <td>33.7</td> <td>96.6</td> <td>78.2</td> <td>83.5</td> <td>93.7</td> <td>75.2±1.1</td> </tr> <tr> <td>DeepSeek-OCR</td> <td>77.2</td> <td>73.6</td> <td>80.2</td> <td>33.3</td> <td>96.1</td> <td>66.4</td> <td>79.4</td> <td>99.8</td> <td>75.7±1.0</td> </tr> <tr> <td>Nanonets-OCR2-3B</td> <td>75.4</td> <td>46.1</td> <td>86.8</td> <td>40.9</td> <td>32.1</td> <td>81.9</td> <td>93.0</td> <td>99.6</td> <td>69.5±1.1</td> </tr> <tr> <td>PaddleOCR-VL*</td> <td>85.7</td> <td>71.0</td> <td>84.1</td> <td>37.8</td> <td>97.0</td> <td>79.9</td>"
+   ],
+   "local": {
+    "text": "olmOCR로 PDF 100만 페이지를 변환하는 비용은 약 $20,000 USD입니다. [1]",
+    "sec": 9.54,
+    "usd": 0.0,
+    "in_tok": 1798,
+    "out_tok": 34,
+    "judge": {
+     "correct": 0,
+     "grounded": false,
+     "why": "근거는 100만 쪽당 200달러 미만인데 후보는 20,000달러로 잘못 제시"
+    }
+   },
+   "claude": {
+    "text": "olmOCR는 100만 쪽을 변환하는 데 200달러(USD) 미만이 든다고 안내되어 있습니다(7B 파라미터 VLM 기반이라 GPU가 필요함). [1][2]",
+    "sec": 4.0,
+    "usd": 0.01208,
+    "in_tok": 2818,
+    "out_tok": 81,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "100만 쪽당 200달러 미만 및 7B VLM·GPU 필요 모두 근거 [1][2]와 일치"
+    }
+   }
+  },
+  {
+   "qid": "q21",
+   "q": "그린가이드 재질 분류기의 frozen test 세부(fine) 정확도는?",
+   "gold": "92.36% (대분류 95.66%)",
+   "ctx_ids": [
+    "pms-gg-classifier:7:0",
+    "pms-gg-classifier:6:0",
+    "pms-gg-classifier:2:0",
+    "pms-gg-classifier:4:0",
+    "pms-gg-release:1:1"
+   ],
+   "ctx_text": [
+    "[1] 평가 상세 | 셋 | 표본 | 대분류 | 세부 | | frozen test | 35,071 | 95.66% | 92.36% | | 실사용 사진 | 57 | 38.6% | 35.7% | 실사용 사진 평가는 표본이 작은 초기 결과다(목표 대분류 85% 이상).",
+    "[2] milestones 계층 분류 ONNX 서빙, true 평가셋 v1 동결, true 실사용 대분류 ≥ 85% 대분류 14 · 세부 25 의 계층 분류다. ImageNet 사전학습 ResNet18 백본에 계층형 분류 헤드를 붙이고, 세부 라벨이 확실한 데이터는 fine cross-entropy 로, 대분류만 확실한 약 2.3만 장은 세부 확률을 합산하는 roll-up logsumexp NLL 로 함께 학습한다. 라벨 품질이 섞인 데이터를 버리지 않고 쓰기 위한 설계다.\nAI-Hub·TACO·Open Images·Kaggle·실내 합성 이미지 221,567 장을 stratified 70/15/15 로 나눴고, frozen test 35,071 장에서 대분류 95.66% · 세부 92.36% 를 기록했다. 학습본은 ONNX + taxonomy.json 으로 내보내 Hugging Face Hub 에 발행하고, 모델 레지스트리에 등록하면 추론 서버가 무중단으로 교체한다.\n현재 과제는 데이터셋 사진과 실제 촬영 사진 사이의 도메인 갭이다. 추론 단계의 OCR·CLIP·VLM 증거 융합으로 보완하면서, 실사용 피드백을 학습 데이터로 되돌리는 루프를 만들고 있다.",
+    "[3] 개요 title: 재질 계층 분류 모델 summary: 그린가이드 재질 분류 — 대분류 14 · 세부 25 계층 분류, 22만 장 학습, test 정확도 대분류 95.7% · 세부 92.4%",
+    "[4] pipeline 수집, AI-Hub(bbox 크롭 약 11만 장 포함)·TACO·Open Images·Kaggle·실내 합성 이미지, AI-Hub, TACO 정제·벡터화, preprocessor 가 정제·중복 제거·manifest 생성, preprocessor taxonomy 매핑, 세부 라벨이 확실한 데이터는 fine CE, 대분류만 확실한 약 2.3만 장은 roll-up logsumexp NLL 로 동시 학습, hierarchical loss 학습, stratified 70/15/15 분할, 클래스 불균형 비율 3,330, PyTorch 평가, frozen test 35,071 장 + 실사용 골든셋 분리 평가, hier_evaluate 내보내기·발행, ONNX + taxonomy.json → HF Hub 업로드 → 레지스트리 등록 → 서버 리로드, ONNX, HF Hub",
+    "[5] 입력 게이트, 손이 화면 대부분이면 non_object, 일부면 마스킹 → 폐기물/ 비폐기물 이진 분류로 OOD 차단, MediaPipe Hands, MobileNet V3-Small 계층 분류, EXIF 회전 TTA → 세부 25 예측을 대분류 14 로 합산, 신뢰 도 게이트로 fine/coarse/etc 결정 + CAM, ResNet18 ONNX 증거 융합, 분리배출 표시(무색페트·HDPE 등)·제품명 OCR 과 CLIP 66 컨셉 제로샷 prior 를 log-linear 융합, PP-OCRv5, CLIP VLM 중재, 확신도가 낮거나 증거가 엇갈릴 때만 호출, 하루 최대 200회, CI aude Haiku 4.5 규정 결합, 지역 배출 규정(933행)-수거 일정과 결합해 안내, 업로드는 WebP 로 저장·피드백 수집, Supabase - next 비공개 테스트 차단 항목 해소 → beta.3 재검증 → 프로덕션 신청 다중재질 영역 경로를 계층 모델로 교체"
+   ],
+   "local": {
+    "text": "그린가이드 재질 분류기의 frozen test 세부(fine) 정확도는 92.4%입니다.[3]",
+    "sec": 7.49,
+    "usd": 0.0,
+    "in_tok": 1260,
+    "out_tok": 33,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "세부 정확도 92.4%는 정답 92.36%의 반올림 값이며 근거 [3]에 명시됨"
+    }
+   },
+   "claude": {
+    "text": "그린가이드 재질 분류기의 frozen test(35,071장) 세부(fine) 정확도는 92.36%입니다(대분류는 95.66%). [1][2]",
+    "sec": 3.53,
+    "usd": 0.0098,
+    "in_tok": 2297,
+    "out_tok": 62,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "세부 92.36%·대분류 95.66%·35,071장 모두 근거 [1][2]와 일치"
+    }
+   }
+  },
+  {
+   "qid": "q22",
+   "q": "그린가이드 분류기에서 대분류 라벨만 확실한 약 2.3만 장은 어떤 손실로 학습했나?",
+   "gold": "세부 확률을 합산하는 roll-up logsumexp NLL",
+   "ctx_ids": [
+    "pms-gg-classifier:6:0",
+    "pms-gg-classifier:4:0",
+    "pms-gg-classifier:2:0",
+    "pms-gg-classifier:3:0",
+    "pms-ai-ocr:1:8"
+   ],
+   "ctx_text": [
+    "[1] milestones 계층 분류 ONNX 서빙, true 평가셋 v1 동결, true 실사용 대분류 ≥ 85% 대분류 14 · 세부 25 의 계층 분류다. ImageNet 사전학습 ResNet18 백본에 계층형 분류 헤드를 붙이고, 세부 라벨이 확실한 데이터는 fine cross-entropy 로, 대분류만 확실한 약 2.3만 장은 세부 확률을 합산하는 roll-up logsumexp NLL 로 함께 학습한다. 라벨 품질이 섞인 데이터를 버리지 않고 쓰기 위한 설계다.\nAI-Hub·TACO·Open Images·Kaggle·실내 합성 이미지 221,567 장을 stratified 70/15/15 로 나눴고, frozen test 35,071 장에서 대분류 95.66% · 세부 92.36% 를 기록했다. 학습본은 ONNX + taxonomy.json 으로 내보내 Hugging Face Hub 에 발행하고, 모델 레지스트리에 등록하면 추론 서버가 무중단으로 교체한다.\n현재 과제는 데이터셋 사진과 실제 촬영 사진 사이의 도메인 갭이다. 추론 단계의 OCR·CLIP·VLM 증거 융합으로 보완하면서, 실사용 피드백을 학습 데이터로 되돌리는 루프를 만들고 있다.",
+    "[2] pipeline 수집, AI-Hub(bbox 크롭 약 11만 장 포함)·TACO·Open Images·Kaggle·실내 합성 이미지, AI-Hub, TACO 정제·벡터화, preprocessor 가 정제·중복 제거·manifest 생성, preprocessor taxonomy 매핑, 세부 라벨이 확실한 데이터는 fine CE, 대분류만 확실한 약 2.3만 장은 roll-up logsumexp NLL 로 동시 학습, hierarchical loss 학습, stratified 70/15/15 분할, 클래스 불균형 비율 3,330, PyTorch 평가, frozen test 35,071 장 + 실사용 골든셋 분리 평가, hier_evaluate 내보내기·발행, ONNX + taxonomy.json → HF Hub 업로드 → 레지스트리 등록 → 서버 리로드, ONNX, HF Hub",
+    "[3] 개요 title: 재질 계층 분류 모델 summary: 그린가이드 재질 분류 — 대분류 14 · 세부 25 계층 분류, 22만 장 학습, test 정확도 대분류 95.7% · 세부 92.4%",
+    "[4] stack Training: PyTorch 2.4, torchvision, scikit-learn Model: ResNet18 (ImageNet) + hierarchical head, ConvNeXt-Tiny (실험), DINOv2-small (구 앙상블) Loss: fine cross-entropy, roll-up logsumexp NLL Export: ONNX 1.17, taxonomy.json Data: AI-Hub, TACO, Open Images, Kaggle, synthetic indoor Registry: Hugging Face Hub, Supabase model_versions",
+    "[5] cBench](https://github.com/opendatalab/OmniDocBench) | 문서 파싱(레이아웃·표·수식) 종합 평가 | | [AI-Hub](https://www.aihub.or.kr/) | 한국어 글자체·공공문서 등 한국어 OCR 학습 데이터 | | [CLOVA OCR (네이버 클라우드)](https://www.ncloud.com/product/aiService/ocr) | 상용 한국어 OCR API — 결과 비교 기준 | <!-- details --> ## 실무 사례 — 그린가이드의 OCR 증거 융합 | 항목 | 내용 | |---|---| | 모델 | PP-OCRv5 한국어 모바일 (RapidOCR 로 서빙) | | 읽는 것 | 분리배출 표시(무색페트 · HDPE 등) · 제품명 | | 쓰는 시점 | 분류 확신도가 낮을 때, 스마트 촬영이면 항상 | | 결합 방식 | 분류 확률과 log-linear 융합 — 분리배출 표시가 읽히면 결과를 교체 | 다음 학습 과제: 같은 사진 묶음으로 PP-OCRv5 · TrOCR · VLM(Claude) 의 한글 표시 인식률을 비교해, 그린가이드 융합 단계의 개선 여지를 수치로 확인한다."
+   ],
+   "local": {
+    "text": "대분류만 확실한 약 2.3만 장은 세부 확률을 합산하는 roll-up logsumexp NLL 로 함께 학습한다. [1]",
+    "sec": 3.2,
+    "usd": 0.0,
+    "in_tok": 1320,
+    "out_tok": 43,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "roll-up logsumexp NLL을 정확히 제시했고 근거 [1]에 그대로 있음"
+    }
+   },
+   "claude": {
+    "text": "대분류만 확실한 약 2.3만 장은 세부 확률을 합산하는 roll-up logsumexp NLL 손실로 학습했고, 세부 라벨이 확실한 데이터에 쓰는 fine cross-entropy와 함께 동시에 학습했습니다. [1][2]",
+    "sec": 3.38,
+    "usd": 0.01082,
+    "in_tok": 2439,
+    "out_tok": 107,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "roll-up logsumexp NLL을 정확히 답했고, fine CE와의 동시 학습도 근거 [1][2]에 있음"
+    }
+   }
+  },
+  {
+   "qid": "q23",
+   "q": "그린가이드 분류기를 실사용 사진 57장으로 평가한 대분류 정확도는?",
+   "gold": "38.6% (세부 35.7%) — 도메인 갭",
+   "ctx_ids": [
+    "pms-gg-classifier:7:0",
+    "pms-gg-classifier:6:0",
+    "pms-gg-classifier:2:0",
+    "pms-ai-ocr:1:8",
+    "pms-ai-ocr:1:1"
+   ],
+   "ctx_text": [
+    "[1] 평가 상세 | 셋 | 표본 | 대분류 | 세부 | | frozen test | 35,071 | 95.66% | 92.36% | | 실사용 사진 | 57 | 38.6% | 35.7% | 실사용 사진 평가는 표본이 작은 초기 결과다(목표 대분류 85% 이상).",
+    "[2] milestones 계층 분류 ONNX 서빙, true 평가셋 v1 동결, true 실사용 대분류 ≥ 85% 대분류 14 · 세부 25 의 계층 분류다. ImageNet 사전학습 ResNet18 백본에 계층형 분류 헤드를 붙이고, 세부 라벨이 확실한 데이터는 fine cross-entropy 로, 대분류만 확실한 약 2.3만 장은 세부 확률을 합산하는 roll-up logsumexp NLL 로 함께 학습한다. 라벨 품질이 섞인 데이터를 버리지 않고 쓰기 위한 설계다.\nAI-Hub·TACO·Open Images·Kaggle·실내 합성 이미지 221,567 장을 stratified 70/15/15 로 나눴고, frozen test 35,071 장에서 대분류 95.66% · 세부 92.36% 를 기록했다. 학습본은 ONNX + taxonomy.json 으로 내보내 Hugging Face Hub 에 발행하고, 모델 레지스트리에 등록하면 추론 서버가 무중단으로 교체한다.\n현재 과제는 데이터셋 사진과 실제 촬영 사진 사이의 도메인 갭이다. 추론 단계의 OCR·CLIP·VLM 증거 융합으로 보완하면서, 실사용 피드백을 학습 데이터로 되돌리는 루프를 만들고 있다.",
+    "[3] 개요 title: 재질 계층 분류 모델 summary: 그린가이드 재질 분류 — 대분류 14 · 세부 25 계층 분류, 22만 장 학습, test 정확도 대분류 95.7% · 세부 92.4%",
+    "[4] cBench](https://github.com/opendatalab/OmniDocBench) | 문서 파싱(레이아웃·표·수식) 종합 평가 | | [AI-Hub](https://www.aihub.or.kr/) | 한국어 글자체·공공문서 등 한국어 OCR 학습 데이터 | | [CLOVA OCR (네이버 클라우드)](https://www.ncloud.com/product/aiService/ocr) | 상용 한국어 OCR API — 결과 비교 기준 | <!-- details --> ## 실무 사례 — 그린가이드의 OCR 증거 융합 | 항목 | 내용 | |---|---| | 모델 | PP-OCRv5 한국어 모바일 (RapidOCR 로 서빙) | | 읽는 것 | 분리배출 표시(무색페트 · HDPE 등) · 제품명 | | 쓰는 시점 | 분류 확신도가 낮을 때, 스마트 촬영이면 항상 | | 결합 방식 | 분류 확률과 log-linear 융합 — 분리배출 표시가 읽히면 결과를 교체 | 다음 학습 과제: 같은 사진 묶음으로 PP-OCRv5 · TrOCR · VLM(Claude) 의 한글 표시 인식률을 비교해, 그린가이드 융합 단계의 개선 여지를 수치로 확인한다.",
+    "[5] ech: [DBNet, CRAFT] } - { name: 실전 툴킷, desc: \"검출 + 방향 분류 + 인식을 묶은 경량 파이프라인 PP-OCR 구조를 읽고 PaddleOCR·RapidOCR 로 직접 돌려 본다\", tech: [PaddleOCR, RapidOCR] } - { name: Transformer 인식, desc: \"CNN+RNN 대신 사전학습 Transformer 로 인식 — TrOCR 를 Hugging Face 로 추론\", tech: [TrOCR, Hugging Face] } - { name: 문서 구조화, desc: \"글자 위치·레이아웃까지 함께 다루는 Document AI — LayoutLMv3, OCR 없이 바로 구조를 뽑는 Donut\", tech: [LayoutLMv3, Donut] } - { name: End-to-end · VLM, desc: \"하나의 모델로 문서를 마크다운까지 — GOT-OCR 2.0, olmOCR, 범용 VLM(Claude 등)의 PDF 이해\", tech: [GOT-OCR 2.0, olmOCR] } - { name: 평가, desc: \"ICDAR 대회 과제·OCRBench·OmniDocBench 로 같은 기준에서 비교\", tech: [OCRBench, OmniDocBench] } - { name: 실습 적용, desc: \"그린가이드에서 분리배출 표시·제품명 OCR 을 분류 결과와 융합한 사례를 다시 읽고 개선점 찾기\", tech: [PP-OCRv5, RapidOCR] } diagram:\nlanes:\n- label: 입력 · 전처리 nodes:\n- { id: IN, title: 이미지 · PDF, sub: \"사진 · 스캔 · 화면 캡처\", kind: exist }"
+   ],
+   "local": {
+    "text": "실사용 사진 57장으로 평가한 대분류 정확도는 38.6%이다.[1]",
+    "sec": 3.29,
+    "usd": 0.0,
+    "in_tok": 1488,
+    "out_tok": 31,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "질문이 요구한 대분류 38.6%를 정확히 제시했고 근거 [1]에 있음"
+    }
+   },
+   "claude": {
+    "text": "실사용 사진 57장 평가에서 대분류 정확도는 38.6%입니다(세부는 35.7%). 다만 표본이 작은 초기 결과이며, 목표는 대분류 85% 이상입니다. [1]",
+    "sec": 3.3,
+    "usd": 0.01153,
+    "in_tok": 2675,
+    "out_tok": 83,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "대분류 38.6%·세부 35.7%를 맞혔고, 표본이 작다는 점과 목표 85%도 근거 [1]에 있음 (도메인 갭 언급은 빠짐)"
+    }
+   }
+  },
+  {
+   "qid": "q24",
+   "q": "그린가이드 앱이 온디바이스 추론을 클라우드로 옮기면서 APK 크기는 어떻게 바뀌었나?",
+   "gold": "93.7MB → 69.4MB (Play 16KB 페이지 요건으로 onnxruntime 제거)",
+   "ctx_ids": [
+    "pms-gg-release:2:0",
+    "pms-gg-release:1:0",
+    "pms-gg-release:1:1",
+    "pms-ai-ocr:1:8",
+    "pms-ai-ocr:1:5"
+   ],
+   "ctx_text": [
+    "[1] ■ milestones 베타 1.0.0-beta.1, true Play 내부 테스트 v2 게시, 2026-10-04 비공개 Alpha 검토 제출, 2026-10-04 온디바이스 → 클라우드 추론 전환 (APK 93.7→69.4MB), true 프로덕션 신청 조건 충족 (테스터 12명·14일), true 프로덕션 출시 ■ 아키텍처 Flutter 앱 ——(JPEG 1600px)—— FastAPI 추론 서버 (HF Space, Docker :7860) /predict-hier · /predict-objects · /predict -with-regions /region-info · /feedback · /model/latest —— ONNX 모델 (빌드 시 HF Hub 에서 수신) —— Claude Haiku 4.5 (저확신 폴백) —— Supabase (업로드·피드백·지역 규정·모델 버전) ■ 설계 포인트 온디바이스 → 클라우드 전환: Play 16KB 페이지 요건으로 onnxruntime e 을 앱에서 제거 — APK 93.7MB → 69.4MB.\n멀티모델 캐스케이드: 쌓 게이트(손·이진)로 먼저 거르고, 비싼 증거(OCR·CLI P·VLM)는 필요할 때만.\n모델 핫 리로드: 새 버전을 HF Hub 에 발행하고 모델 레지스트리에 등록하면 /admin/reload-model` 로 무중단 교체.\n콜드 스타트 방지: GitHub Actions 가 12시간마다 Space·DB 를 깨운다.",
+    "[2] - 개요 title: 그린가이드 앱 · 추론 서버 summary: 사진 한 장으로 분리배출 방법을 알려 주는 앱 — 재질 판별 + 지 역별 배출 규정. Flutter 앱 · FastAPI 멀티모델 추론 서버 · Sup abase - stack Mobile: Flutter 3.44, Dart 3.12, camera, senso rs_plus, geolocator, sqflite Serving: FastAPI 0.115, uvicorn, onnxruntime 1 .19, Docker, Hugging Face Space Vision: ResNet18 hierarchical (ONNX), MobileNet tV3-Small gate, CLIP INT8 zero-shot, u2netp se gmentation, MediaPipe Hands OCR / VLM: PP-OCRv5 (RapidOCR), Claude Haiku 4 .5 fallback Data: Supabase Postgres, Supabase Storage, Web P 640px Ops: GitHub Actions keepalive, git subtree dep loy, HF Hub model registry - pipeline 스마트 촬영, 흔들림(가속도계) 측정 후 캡처, 긴 변 1600px JPEG 업로드 , 시군구 자동 감지, camera, sensors_plus, geolocator 입력 게이트, 손이 화면 대부분이면 non_object, 일부면 마스킹 → 폐기물/ 비폐기물 이진 분류로 OOD 차단, MediaPipe Hands, MobileNet V3-Small 계층 분류, EXIF 회전 TTA → 세부 25 예측을 대분류 14 로 합산, 신뢰",
+    "[3] 입력 게이트, 손이 화면 대부분이면 non_object, 일부면 마스킹 → 폐기물/ 비폐기물 이진 분류로 OOD 차단, MediaPipe Hands, MobileNet V3-Small 계층 분류, EXIF 회전 TTA → 세부 25 예측을 대분류 14 로 합산, 신뢰 도 게이트로 fine/coarse/etc 결정 + CAM, ResNet18 ONNX 증거 융합, 분리배출 표시(무색페트·HDPE 등)·제품명 OCR 과 CLIP 66 컨셉 제로샷 prior 를 log-linear 융합, PP-OCRv5, CLIP VLM 중재, 확신도가 낮거나 증거가 엇갈릴 때만 호출, 하루 최대 200회, CI aude Haiku 4.5 규정 결합, 지역 배출 규정(933행)-수거 일정과 결합해 안내, 업로드는 WebP 로 저장·피드백 수집, Supabase - next 비공개 테스트 차단 항목 해소 → beta.3 재검증 → 프로덕션 신청 다중재질 영역 경로를 계층 모델로 교체",
+    "[4] cBench](https://github.com/opendatalab/OmniDocBench) | 문서 파싱(레이아웃·표·수식) 종합 평가 | | [AI-Hub](https://www.aihub.or.kr/) | 한국어 글자체·공공문서 등 한국어 OCR 학습 데이터 | | [CLOVA OCR (네이버 클라우드)](https://www.ncloud.com/product/aiService/ocr) | 상용 한국어 OCR API — 결과 비교 기준 | <!-- details --> ## 실무 사례 — 그린가이드의 OCR 증거 융합 | 항목 | 내용 | |---|---| | 모델 | PP-OCRv5 한국어 모바일 (RapidOCR 로 서빙) | | 읽는 것 | 분리배출 표시(무색페트 · HDPE 등) · 제품명 | | 쓰는 시점 | 분류 확신도가 낮을 때, 스마트 촬영이면 항상 | | 결합 방식 | 분류 확률과 log-linear 융합 — 분리배출 표시가 읽히면 결과를 교체 | 다음 학습 과제: 같은 사진 묶음으로 PP-OCRv5 · TrOCR · VLM(Claude) 의 한글 표시 인식률을 비교해, 그린가이드 융합 단계의 개선 여지를 수치로 확인한다.",
+    "[5] 로 빠르고 정확한 영역 검출 | | 검출 | [CRAFT (2019)](https://arxiv.org/abs/1904.01941) | 문자 단위 영역·연결도로 휘어진 글자 검출 — [코드](https://github.com/clovaai/CRAFT-pytorch) | | 실전 시스템 | [PP-OCR (2020)](https://arxiv.org/abs/2009.09941) | 검출 + 방향 분류 + 인식 경량 파이프라인 설계 | ## 2. 오픈소스 툴킷 | 툴킷 | 특징 | |---|---| | [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR) · [문서](https://paddlepaddle.github.io/PaddleOCR/) | PP-OCRv5, 한국어 포함 다국어, 학습·배포 도구까지 | | [RapidOCR](https://github.com/RapidAI/RapidOCR) | PaddleOCR 모델을 ONNX Runtime 으로 가볍게 서빙 — 그린가이드가 쓰는 방식 | | [Tesseract](https://github.com/tesseract-ocr/tesseract) | 가장 오래된 오픈소스 OCR 엔진, LSTM 기반 | | [EasyOCR](https://github.com/JaidedAI/EasyOCR) | PyTorch 기반, 80여 개 언어, 설치가 간단 | | [docTR](https://github.com/mindee/doctr) | 문서용 검출·인식 모델 조합 라이브러리 | | [Surya](https://github.com/datalab-to/surya) | 다국어 OCR + 레이아웃·읽기 순서 분석 | ## 3. Transformer · 문서 AI | 주제 | 자료 | 핵심 |"
+   ],
+   "local": {
+    "text": "온디바이스 → 클라우드 전환으로 인해 APK의 크기가 93.7MB에서 69.4MB로 줄었습니다. [1]",
+    "sec": 4.69,
+    "usd": 0.0,
+    "in_tok": 2067,
+    "out_tok": 41,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "APK 93.7MB→69.4MB 감소를 정확히 제시, 근거 [1]에 명시됨 (onnxruntime 제거 사유는 생략)"
+    }
+   },
+   "claude": {
+    "text": "온디바이스에서 클라우드 추론으로 전환하면서 Play 16KB 페이지 요건 때문에 앱에서 onnxruntime을 제거했고, 그 결과 APK 크기가 93.7MB에서 69.4MB로 줄었습니다. [1]",
+    "sec": 3.37,
+    "usd": 0.01511,
+    "in_tok": 3529,
+    "out_tok": 100,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "93.7MB→69.4MB 감소와 16KB 페이지 요건에 따른 onnxruntime 제거를 모두 맞혔고 근거 [1]에 있음"
+    }
+   }
+  },
+  {
+   "qid": "q25",
+   "q": "그린가이드 추론 서버에서 VLM 중재는 언제, 하루 최대 몇 번 호출되나?",
+   "gold": "확신도가 낮거나 증거가 엇갈릴 때만, 하루 최대 200회",
+   "ctx_ids": [
+    "pms-gg-release:1:1",
+    "pms-gg-release:1:0",
+    "pms-gg-release:2:0",
+    "pms-ai-ocr:1:1",
+    "pms-ai-ocr:1:3"
+   ],
+   "ctx_text": [
+    "[1] 입력 게이트, 손이 화면 대부분이면 non_object, 일부면 마스킹 → 폐기물/ 비폐기물 이진 분류로 OOD 차단, MediaPipe Hands, MobileNet V3-Small 계층 분류, EXIF 회전 TTA → 세부 25 예측을 대분류 14 로 합산, 신뢰 도 게이트로 fine/coarse/etc 결정 + CAM, ResNet18 ONNX 증거 융합, 분리배출 표시(무색페트·HDPE 등)·제품명 OCR 과 CLIP 66 컨셉 제로샷 prior 를 log-linear 융합, PP-OCRv5, CLIP VLM 중재, 확신도가 낮거나 증거가 엇갈릴 때만 호출, 하루 최대 200회, CI aude Haiku 4.5 규정 결합, 지역 배출 규정(933행)-수거 일정과 결합해 안내, 업로드는 WebP 로 저장·피드백 수집, Supabase - next 비공개 테스트 차단 항목 해소 → beta.3 재검증 → 프로덕션 신청 다중재질 영역 경로를 계층 모델로 교체",
+    "[2] - 개요 title: 그린가이드 앱 · 추론 서버 summary: 사진 한 장으로 분리배출 방법을 알려 주는 앱 — 재질 판별 + 지 역별 배출 규정. Flutter 앱 · FastAPI 멀티모델 추론 서버 · Sup abase - stack Mobile: Flutter 3.44, Dart 3.12, camera, senso rs_plus, geolocator, sqflite Serving: FastAPI 0.115, uvicorn, onnxruntime 1 .19, Docker, Hugging Face Space Vision: ResNet18 hierarchical (ONNX), MobileNet tV3-Small gate, CLIP INT8 zero-shot, u2netp se gmentation, MediaPipe Hands OCR / VLM: PP-OCRv5 (RapidOCR), Claude Haiku 4 .5 fallback Data: Supabase Postgres, Supabase Storage, Web P 640px Ops: GitHub Actions keepalive, git subtree dep loy, HF Hub model registry - pipeline 스마트 촬영, 흔들림(가속도계) 측정 후 캡처, 긴 변 1600px JPEG 업로드 , 시군구 자동 감지, camera, sensors_plus, geolocator 입력 게이트, 손이 화면 대부분이면 non_object, 일부면 마스킹 → 폐기물/ 비폐기물 이진 분류로 OOD 차단, MediaPipe Hands, MobileNet V3-Small 계층 분류, EXIF 회전 TTA → 세부 25 예측을 대분류 14 로 합산, 신뢰",
+    "[3] ■ milestones 베타 1.0.0-beta.1, true Play 내부 테스트 v2 게시, 2026-10-04 비공개 Alpha 검토 제출, 2026-10-04 온디바이스 → 클라우드 추론 전환 (APK 93.7→69.4MB), true 프로덕션 신청 조건 충족 (테스터 12명·14일), true 프로덕션 출시 ■ 아키텍처 Flutter 앱 ——(JPEG 1600px)—— FastAPI 추론 서버 (HF Space, Docker :7860) /predict-hier · /predict-objects · /predict -with-regions /region-info · /feedback · /model/latest —— ONNX 모델 (빌드 시 HF Hub 에서 수신) —— Claude Haiku 4.5 (저확신 폴백) —— Supabase (업로드·피드백·지역 규정·모델 버전) ■ 설계 포인트 온디바이스 → 클라우드 전환: Play 16KB 페이지 요건으로 onnxruntime e 을 앱에서 제거 — APK 93.7MB → 69.4MB.\n멀티모델 캐스케이드: 쌓 게이트(손·이진)로 먼저 거르고, 비싼 증거(OCR·CLI P·VLM)는 필요할 때만.\n모델 핫 리로드: 새 버전을 HF Hub 에 발행하고 모델 레지스트리에 등록하면 /admin/reload-model` 로 무중단 교체.\n콜드 스타트 방지: GitHub Actions 가 12시간마다 Space·DB 를 깨운다.",
+    "[4] ech: [DBNet, CRAFT] } - { name: 실전 툴킷, desc: \"검출 + 방향 분류 + 인식을 묶은 경량 파이프라인 PP-OCR 구조를 읽고 PaddleOCR·RapidOCR 로 직접 돌려 본다\", tech: [PaddleOCR, RapidOCR] } - { name: Transformer 인식, desc: \"CNN+RNN 대신 사전학습 Transformer 로 인식 — TrOCR 를 Hugging Face 로 추론\", tech: [TrOCR, Hugging Face] } - { name: 문서 구조화, desc: \"글자 위치·레이아웃까지 함께 다루는 Document AI — LayoutLMv3, OCR 없이 바로 구조를 뽑는 Donut\", tech: [LayoutLMv3, Donut] } - { name: End-to-end · VLM, desc: \"하나의 모델로 문서를 마크다운까지 — GOT-OCR 2.0, olmOCR, 범용 VLM(Claude 등)의 PDF 이해\", tech: [GOT-OCR 2.0, olmOCR] } - { name: 평가, desc: \"ICDAR 대회 과제·OCRBench·OmniDocBench 로 같은 기준에서 비교\", tech: [OCRBench, OmniDocBench] } - { name: 실습 적용, desc: \"그린가이드에서 분리배출 표시·제품명 OCR 을 분류 결과와 융합한 사례를 다시 읽고 개선점 찾기\", tech: [PP-OCRv5, RapidOCR] } diagram:\nlanes:\n- label: 입력 · 전처리 nodes:\n- { id: IN, title: 이미지 · PDF, sub: \"사진 · 스캔 · 화면 캡처\", kind: exist }",
+    "[5] ges:\n- { from: IN, to: PRE } - { from: PRE, to: DET } - { from: DET, to: CLS } - { from: CLS, to: REC } - { from: REC, to: TK, style: iso, label: 묶음 } - { from: REC, to: LAY } - { from: LAY, to: OUT } - { from: IN, to: VLM, style: agent, label: \"OCR 단계 없이 한 번에\" } - { from: VLM, to: OUT, style: agent } next:\n- CRNN·DBNet 논문 읽고 PaddleOCR 로 한글 이미지 직접 추론 - TrOCR vs PP-OCRv5 한글 인식 비교 실험을 AI/ML Lab 에 정리 milestones:\n- { name: 실무 적용 — 그린가이드 OCR 증거 융합, done: true } - { name: 기초 논문 3편 (CRNN · DBNet · CRAFT) } - { name: 툴킷 실습 (PaddleOCR · RapidOCR · TrOCR) } - { name: 문서 구조화 · End-to-end 모델 비교 } --- OCR 은 **검출(글자가 어디 있나) → 인식(무슨 글자인가) → 구조화(문서에서 어떤 의미인가)** 세 단계로 발전해 왔고, 최근에는 이 단계를 하나의 모델로 처리하는 **OCR-free·VLM** 방식이 함께 쓰인다. 아래 자료는 이 흐름을 따라 기초 논문 → 실전 툴킷 → 문서 AI → End-to-end → 평가 순서로 모았다."
+   ],
+   "local": {
+    "text": "그린가이드 추론 서버에서는 확신도가 낮거나 증거가 엇갈릴 때만 CLIP VLM 중재를 호출하며, 이는 하루에 최대 200회까지 호출될 수 있습니다. [1]",
+    "sec": 5.08,
+    "usd": 0.0,
+    "in_tok": 2099,
+    "out_tok": 59,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "저확신·증거 충돌 시에만 호출, 하루 최대 200회 모두 일치 (VLM을 'CLIP VLM'으로 부른 것은 근거 [1]의 줄바꿈이 깨진 데서 생긴 오독)"
+    }
+   },
+   "claude": {
+    "text": "VLM 중재(Claude Haiku 4.5)는 확신도가 낮거나 증거가 엇갈릴 때만 호출되며, 하루 최대 200회까지 호출됩니다. [1]",
+    "sec": 3.37,
+    "usd": 0.01514,
+    "in_tok": 3602,
+    "out_tok": 74,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "호출 조건과 하루 최대 200회 모두 정답과 일치하며 근거 [1]·[3]에 Claude Haiku 4.5 포함 명시"
+    }
+   }
+  },
+  {
+   "qid": "q26",
+   "q": "그린가이드 추론 서버의 콜드 스타트는 어떻게 막나?",
+   "gold": "GitHub Actions 가 12시간마다 Space·DB 를 깨운다",
+   "ctx_ids": [
+    "pms-gg-release:2:0",
+    "pms-gg-release:1:1",
+    "pms-gg-release:1:0",
+    "pms-gg-classifier:6:0",
+    "pms-ai-ocr:1:1"
+   ],
+   "ctx_text": [
+    "[1] ■ milestones 베타 1.0.0-beta.1, true Play 내부 테스트 v2 게시, 2026-10-04 비공개 Alpha 검토 제출, 2026-10-04 온디바이스 → 클라우드 추론 전환 (APK 93.7→69.4MB), true 프로덕션 신청 조건 충족 (테스터 12명·14일), true 프로덕션 출시 ■ 아키텍처 Flutter 앱 ——(JPEG 1600px)—— FastAPI 추론 서버 (HF Space, Docker :7860) /predict-hier · /predict-objects · /predict -with-regions /region-info · /feedback · /model/latest —— ONNX 모델 (빌드 시 HF Hub 에서 수신) —— Claude Haiku 4.5 (저확신 폴백) —— Supabase (업로드·피드백·지역 규정·모델 버전) ■ 설계 포인트 온디바이스 → 클라우드 전환: Play 16KB 페이지 요건으로 onnxruntime e 을 앱에서 제거 — APK 93.7MB → 69.4MB.\n멀티모델 캐스케이드: 쌓 게이트(손·이진)로 먼저 거르고, 비싼 증거(OCR·CLI P·VLM)는 필요할 때만.\n모델 핫 리로드: 새 버전을 HF Hub 에 발행하고 모델 레지스트리에 등록하면 /admin/reload-model` 로 무중단 교체.\n콜드 스타트 방지: GitHub Actions 가 12시간마다 Space·DB 를 깨운다.",
+    "[2] 입력 게이트, 손이 화면 대부분이면 non_object, 일부면 마스킹 → 폐기물/ 비폐기물 이진 분류로 OOD 차단, MediaPipe Hands, MobileNet V3-Small 계층 분류, EXIF 회전 TTA → 세부 25 예측을 대분류 14 로 합산, 신뢰 도 게이트로 fine/coarse/etc 결정 + CAM, ResNet18 ONNX 증거 융합, 분리배출 표시(무색페트·HDPE 등)·제품명 OCR 과 CLIP 66 컨셉 제로샷 prior 를 log-linear 융합, PP-OCRv5, CLIP VLM 중재, 확신도가 낮거나 증거가 엇갈릴 때만 호출, 하루 최대 200회, CI aude Haiku 4.5 규정 결합, 지역 배출 규정(933행)-수거 일정과 결합해 안내, 업로드는 WebP 로 저장·피드백 수집, Supabase - next 비공개 테스트 차단 항목 해소 → beta.3 재검증 → 프로덕션 신청 다중재질 영역 경로를 계층 모델로 교체",
+    "[3] - 개요 title: 그린가이드 앱 · 추론 서버 summary: 사진 한 장으로 분리배출 방법을 알려 주는 앱 — 재질 판별 + 지 역별 배출 규정. Flutter 앱 · FastAPI 멀티모델 추론 서버 · Sup abase - stack Mobile: Flutter 3.44, Dart 3.12, camera, senso rs_plus, geolocator, sqflite Serving: FastAPI 0.115, uvicorn, onnxruntime 1 .19, Docker, Hugging Face Space Vision: ResNet18 hierarchical (ONNX), MobileNet tV3-Small gate, CLIP INT8 zero-shot, u2netp se gmentation, MediaPipe Hands OCR / VLM: PP-OCRv5 (RapidOCR), Claude Haiku 4 .5 fallback Data: Supabase Postgres, Supabase Storage, Web P 640px Ops: GitHub Actions keepalive, git subtree dep loy, HF Hub model registry - pipeline 스마트 촬영, 흔들림(가속도계) 측정 후 캡처, 긴 변 1600px JPEG 업로드 , 시군구 자동 감지, camera, sensors_plus, geolocator 입력 게이트, 손이 화면 대부분이면 non_object, 일부면 마스킹 → 폐기물/ 비폐기물 이진 분류로 OOD 차단, MediaPipe Hands, MobileNet V3-Small 계층 분류, EXIF 회전 TTA → 세부 25 예측을 대분류 14 로 합산, 신뢰",
+    "[4] milestones 계층 분류 ONNX 서빙, true 평가셋 v1 동결, true 실사용 대분류 ≥ 85% 대분류 14 · 세부 25 의 계층 분류다. ImageNet 사전학습 ResNet18 백본에 계층형 분류 헤드를 붙이고, 세부 라벨이 확실한 데이터는 fine cross-entropy 로, 대분류만 확실한 약 2.3만 장은 세부 확률을 합산하는 roll-up logsumexp NLL 로 함께 학습한다. 라벨 품질이 섞인 데이터를 버리지 않고 쓰기 위한 설계다.\nAI-Hub·TACO·Open Images·Kaggle·실내 합성 이미지 221,567 장을 stratified 70/15/15 로 나눴고, frozen test 35,071 장에서 대분류 95.66% · 세부 92.36% 를 기록했다. 학습본은 ONNX + taxonomy.json 으로 내보내 Hugging Face Hub 에 발행하고, 모델 레지스트리에 등록하면 추론 서버가 무중단으로 교체한다.\n현재 과제는 데이터셋 사진과 실제 촬영 사진 사이의 도메인 갭이다. 추론 단계의 OCR·CLIP·VLM 증거 융합으로 보완하면서, 실사용 피드백을 학습 데이터로 되돌리는 루프를 만들고 있다.",
+    "[5] ech: [DBNet, CRAFT] } - { name: 실전 툴킷, desc: \"검출 + 방향 분류 + 인식을 묶은 경량 파이프라인 PP-OCR 구조를 읽고 PaddleOCR·RapidOCR 로 직접 돌려 본다\", tech: [PaddleOCR, RapidOCR] } - { name: Transformer 인식, desc: \"CNN+RNN 대신 사전학습 Transformer 로 인식 — TrOCR 를 Hugging Face 로 추론\", tech: [TrOCR, Hugging Face] } - { name: 문서 구조화, desc: \"글자 위치·레이아웃까지 함께 다루는 Document AI — LayoutLMv3, OCR 없이 바로 구조를 뽑는 Donut\", tech: [LayoutLMv3, Donut] } - { name: End-to-end · VLM, desc: \"하나의 모델로 문서를 마크다운까지 — GOT-OCR 2.0, olmOCR, 범용 VLM(Claude 등)의 PDF 이해\", tech: [GOT-OCR 2.0, olmOCR] } - { name: 평가, desc: \"ICDAR 대회 과제·OCRBench·OmniDocBench 로 같은 기준에서 비교\", tech: [OCRBench, OmniDocBench] } - { name: 실습 적용, desc: \"그린가이드에서 분리배출 표시·제품명 OCR 을 분류 결과와 융합한 사례를 다시 읽고 개선점 찾기\", tech: [PP-OCRv5, RapidOCR] } diagram:\nlanes:\n- label: 입력 · 전처리 nodes:\n- { id: IN, title: 이미지 · PDF, sub: \"사진 · 스캔 · 화면 캡처\", kind: exist }"
+   ],
+   "local": {
+    "text": "콜드 스타트 방지为了保持对话的一致性，我会根据提供的文档内容重新组织答案：\n\n那绿指南推理服务器是如何防止冷启动的？[1] 中提到，“GitHub Actions 每隔 12 小时唤醒一次 Space 和数据库”，以此来防止冷启动。",
+    "sec": 5.15,
+    "usd": 0.0,
+    "in_tok": 2080,
+    "out_tok": 67,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "GitHub Actions 12시간 주기 Space·DB 깨우기를 정확히 언급(답변이 중국어로 작성됨)"
+    }
+   },
+   "claude": {
+    "text": "GitHub Actions가 12시간마다 Hugging Face Space와 DB를 깨워서 콜드 스타트를 방지한다. [1]",
+    "sec": 3.23,
+    "usd": 0.01468,
+    "in_tok": 3538,
+    "out_tok": 53,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "GitHub Actions 12시간 주기로 Space·DB를 깨운다는 핵심이 근거 [1]과 일치"
+    }
+   }
+  },
+  {
+   "qid": "q27",
+   "q": "AI/ML Lab 웹 데모의 시각화 스택은 무엇인가?",
+   "gold": "Recharts 3.8, KaTeX, Canvas API",
+   "ctx_ids": [
+    "pms-ml-lab:1:0",
+    "pms-ai-ocr:1:3",
+    "layoutlmv3:1:5",
+    "layoutlmv3:5:1",
+    "pms-ai-ocr:1:0"
+   ],
+   "ctx_text": [
+    "[1] ■ 개요 title: AI/ML Lab summary: 딥러닝·머신러닝 이론과 실습 — 모든 수식을 브라우저 TypeScr ipt 로 재구현한 인터랙티브 데모 link: https://ai-ml-lab-neon.vercel.app embed: https://ai-ml-lab-neon.vercel.app ■ stack Web: Next.js 16 (App Router), React 19, TypeSc ript 5, Tailwind 4 Visualization: Recharts 3.8, KaTeX, Canvas API Notebook: PyTorch 2.11, NumPy, Matplotlib, Jup yter Lab Deploy: Vercel ■ pipeline 노트북 실험, PyTorch·NumPy 로 개념 실험 (로컬 전용), Jupyter , PyTorch TS 재구현, 활성화 함수·역전파·옵티마이저·선형회귀·CNN 연산을 TypeScri pt 로 직접 구현, TypeScript 인터랙티브 데모, 파라미터를 바꾸며 그래프·수식으로 확인 (React hooks 데 모), Recharts, KaTeX 배포, lint·build 확인 후 Vercel 배포, Vercel ■ next 다음 실험 주제 선정 노트북 ↔ 웹 자동 연동 ■ milestones 실험 시각화 웹 배포, true 딥러닝 실습 4종 (선형회귀·활성화·역전파·최적화), true 머신러닝 실습 (R 기초), true ■ 커리큘럼 | 트랙 | 이론 | 실습 | | AI · 딥러닝 | 수식 · 코드 · 상세 | 선형회귀 · 활성화 함수 · 역전 파 · 최적화 | | 머신러닝 · 빅데이터분석 | 코드 · 상세 | R 기초 |",
+    "[2] ges:\n- { from: IN, to: PRE } - { from: PRE, to: DET } - { from: DET, to: CLS } - { from: CLS, to: REC } - { from: REC, to: TK, style: iso, label: 묶음 } - { from: REC, to: LAY } - { from: LAY, to: OUT } - { from: IN, to: VLM, style: agent, label: \"OCR 단계 없이 한 번에\" } - { from: VLM, to: OUT, style: agent } next:\n- CRNN·DBNet 논문 읽고 PaddleOCR 로 한글 이미지 직접 추론 - TrOCR vs PP-OCRv5 한글 인식 비교 실험을 AI/ML Lab 에 정리 milestones:\n- { name: 실무 적용 — 그린가이드 OCR 증거 융합, done: true } - { name: 기초 논문 3편 (CRNN · DBNet · CRAFT) } - { name: 툴킷 실습 (PaddleOCR · RapidOCR · TrOCR) } - { name: 문서 구조화 · End-to-end 모델 비교 } --- OCR 은 **검출(글자가 어디 있나) → 인식(무슨 글자인가) → 구조화(문서에서 어떤 의미인가)** 세 단계로 발전해 왔고, 최근에는 이 단계를 하나의 모델로 처리하는 **OCR-free·VLM** 방식이 함께 쓰인다. 아래 자료는 이 흐름을 따라 기초 논문 → 실전 툴킷 → 문서 AI → End-to-end → 평가 순서로 모았다.",
+    "[3] mic papers, which is important for industrial applications and academic research [8].\nSelf-supervised pre-training techniques have made rapid progress in representation learning due to their successful applications of reconstructive pre-training objectives. In NLP research, BERT firstly proposed “masked language modeling” (MLM) to learn bidirectional representations by predicting the original vocabulary id of a randomly masked word token based on its context [9]. Whereas most performant multimodal pre-trained Document AI models use the MLM proposed by BERT for text modality, they differ in pretraining objectives for image modality as depicted in Figure 2. For example, DocFormer learns to reconstruct image pixels through a CNN decoder [2], which tends to learn noisy details rather than high-level structures such as document layouts [43, 45]. SelfDoc",
+    "[4] ng [28].\nModel Parameters Modality Image Embedding FUNSD CORD RVL-CDIP DocVQA F1↑ F1↑ Accuracy↑ ANLS↑ BERTBASE [9] 110M T None 60.26 89.68 89.81 63.72 RoBERTaBASE [36] 125M T None 66.48 93.54 90.06 66.42 BROSBASE [17] 110M T+L None 83.05 95.73 - - LiLTBASE [50] - T+L None 88.41 96.07 95.68* - LayoutLMBASE [54] 160M T+L+I (R) ResNet-101 (fine-tune) 79.27 - 94.42 - SelfDoc [31] - T+L+I (R) ResNeXt-101 83.36 - 92.81 - UDoc [14] 272M T+L+I (R) ResNet-50 87.93 98.94† 95.05 - TILTBASE [40] 230M T+L+I (R) U-Net - 95.11 95.25 83.92‡ XYLayoutLMBASE [15] - T+L+I (G) ResNeXt-101 83.35 - - - LayoutLMv2BASE [56] 200M T+L+I (G) ResNeXt101-FPN 82.76 94.95 95.25 78.08 DocFormerBASE [2] 183M T+L+I (G) ResNet-50 83.34 96.33 96.17 - LayoutLMv3BASE (Ours) 133M T+L+I (P) Linear 90.29 96.56 95.44 78.76 BERTLARGE [9] 340M T None 65.63 90.25 89.92 67.45 RoBERTaLARGE [36] 355M T None 70.72 93.80 90.11 69.52",
+    "[5] --title: AI OCR status: active summary: 텍스트 검출 → 인식 → 문서 구조화까지, 고전 파이프라인에서 OCR-free·VLM 까지 이어지는 학습 자료 모음과 실습 연결 stack:\nDetection: [DBNet, CRAFT] Recognition: [CRNN + CTC, TrOCR] Toolkit: [PaddleOCR (PP-OCRv5), RapidOCR, Tesseract, EasyOCR, docTR, Surya] Document AI: [LayoutLMv3, Donut, Docling, Marker] End-to-end / VLM: [GOT-OCR 2.0, olmOCR, Claude PDF support] Benchmark / Data: [ICDAR RRC, OCRBench, OmniDocBench, AI-Hub] pipeline:\n- { name: 기초 — 인식, desc: \"CRNN + CTC 로 이미지 한 줄을 문자열로 바꾸는 기본 구조, 인식 모델 비교 기준(CLOVA 분석 논문)\", tech: [CRNN, CTC] } - { name: 기초 — 검출, desc: \"글자가 있는 영역 찾기 — DBNet(미분 가능한 이진화), CRAFT(문자 단위 영역)\", tech: [DBNet, CRAFT] } - { name: 실전 툴킷, desc: \"검출 + 방향 분류 + 인식을 묶은 경량 파이프라인 PP-OCR 구조를 읽고 PaddleOCR·RapidOCR 로 직접 돌려 본다\", tech: [PaddleOCR, RapidOCR] }"
+   ],
+   "local": {
+    "text": "AI/ML Lab 웹 데모의 시각화 스택은 Recharts 3.8, KaTeX 및 Canvas API입니다.[1]",
+    "sec": 4.7,
+    "usd": 0.0,
+    "in_tok": 2131,
+    "out_tok": 34,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "Recharts 3.8·KaTeX·Canvas API 모두 일치하며 근거 [1]에 명시"
+    }
+   },
+   "claude": {
+    "text": "AI/ML Lab 웹 데모의 시각화 스택은 Recharts 3.8, KaTeX, Canvas API이다. [1]",
+    "sec": 3.21,
+    "usd": 0.01445,
+    "in_tok": 3484,
+    "out_tok": 52,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "Recharts 3.8·KaTeX·Canvas API 모두 일치, 근거 [1]에 명시"
+    }
+   }
+  },
+  {
+   "qid": "q28",
+   "q": "eharness 수집기는 어느 주소로 훅 이벤트를 받나?",
+   "gold": "127.0.0.1:7477/hook (post-event.sh 가 POST)",
+   "ctx_ids": [
+    "pms-eharness:1:1",
+    "pms-eharness:1:0",
+    "pms-eharness:1:2",
+    "trocr:6:4",
+    "pms-gg-release:1:1"
+   ],
+   "ctx_text": [
+    "[1] 7, JSONL event bus] Scheduling: [tick scheduler, claude -p headless] Telemetry: [OpenTelemetry (OTLP), otelcol] UI: [single-file HTML dashboard, cmux] Governance: [charter / map / decisions (append-only)] pipeline:\n- { name: 훅 실행, desc: \"SessionStart·PreToolUse·Stop 등 12종 이벤트에 command 훅 44개. 관측 전용 — 항상 exit 0, 차단하지 않음\", tech: [Claude Code Hooks, bash] } - { name: 수집, desc: \"post-event.sh 가 stdin 을 127.0.0.1:7477/hook 으로 POST\", tech: [curl, collector.py] } - { name: 이벤트 버스, desc: \"일자별 JSONL 에 메타데이터만 append (본문 미기록)\", tech: [JSONL] } - { name: 병합, desc: \"세션 파일·transcript·statusline 상태(ctx·비용)를 읽기 전용으로 합침, 3초 주기 계산\", tech: [/api/sessions] } - { name: 관제 화면, desc: \"타일·세션 스윔레인 타임라인·ctx 게이지·cmux 트리·최대 24분할\", tech: [HTML dashboard] } - { name: 예약 실행, desc: \"tick 이 실행 시각이 된 작업을 1회씩 실행 — 프롬프트형(claude -p)·명령형, 중복 실행 잠금, 계정 한도 소진 시 건너뜀\", tech: [launchd, tick] }",
+    "[2] --title: eharness status: active summary: 여러 Claude Code 세션을 한 화면에서 지켜보고 조율하는 관제 도구 repo: ~/tools/eharness images:\n- { src: /images/claude-engineering/eharness/01.png, caption: \"분할 뷰 — 세션 카드 24칸, 역할 배지와 턴·도구·실패 막대 (식별 정보 흐림)\" } - { src: /images/claude-engineering/eharness/02.png, caption: \"활동 타임라인 — 세션별 스윔레인에 턴·도구 실행·실패를 최근 1시간 축으로\" } - { src: /images/claude-engineering/eharness/03.png, caption: \"세션 목록 트리 — 리더·팀원 계층, 상태, 컨텍스트 게이지, 비용, 턴\" } - { src: /images/claude-engineering/eharness/04.png, caption: \"전체 지표 타일 — 동시 실행 세션 · 누적 비용 · 이벤트/분 · 도구 실패 · 평균 컨텍스트 사용률\" } stack:\nRuntime: [Python 3.9 stdlib, Bash hooks, launchd / systemd] Observation: [Claude Code Hooks ×12 events, HTTP collector :7477, JSONL event bus] Scheduling: [tick scheduler, claude -p headless] Telemetry: [OpenTelemetry (OTLP), otelcol] UI: [single-file HTML dashboard, cmux]",
+    "[3] tech: [HTML dashboard] } - { name: 예약 실행, desc: \"tick 이 실행 시각이 된 작업을 1회씩 실행 — 프롬프트형(claude -p)·명령형, 중복 실행 잠금, 계정 한도 소진 시 건너뜀\", tech: [launchd, tick] } - { name: 표준 관측 내보내기, desc: \"이벤트 버스를 OpenTelemetry(OTLP) span·metric 으로 변환\", tech: [OpenTelemetry] } next:\n- 자체 평가표 8개 항목 합계 60/80점 달성 milestones:\n- { name: 관측 수집기·훅 연결, done: true } - { name: tick 예약 실행기, done: true } - { name: OpenTelemetry 내보내기, done: true } - { name: 재부팅 재개 주입, done: true } - { name: 점수표 v11 60/80 } --- eharness 는 한 컴퓨터에서 동시에 도는 Claude Code 세션 수십 개를 한 화면에 모아 본다. 누가 무엇을 하는지, 막힌 곳은 없는지, 비용은 얼마인지 보인다.\n세션을 리더와 팀원으로 묶어 일을 나눠 맡기고, 예약 작업을 대신 돌린다. 지켜보기만 하고 세션을 멈추게 하지는 않는다.",
+    "[4] e standard CRNN, an end-to-end architecture combined by CNN and RNN. The convolutional layers are used to extract the visual features and convert them to sequence by concatenating the columns, while the recurrent layers predict the per-frame labels. They use a CTC decoding strategy to remove the repeated symbols and all the blanks from the labels to achieve the ﬁnal prediction.\n(Su and Lu 2014) used the Histogram of Oriented Gradient (HOG) features extracted from the image patches in the same column of the input image, instead of the features from the CNN network. A BiLSTM is then trained for labeling the sequential data with the CTC technique to ﬁnd the best match. (Gao et al. 2019) extracted the feature by the densely connected network incorporating the residual attention block and capture the contextual information and sequential dependency by the CNN network. They compute",
+    "[5] 입력 게이트, 손이 화면 대부분이면 non_object, 일부면 마스킹 → 폐기물/ 비폐기물 이진 분류로 OOD 차단, MediaPipe Hands, MobileNet V3-Small 계층 분류, EXIF 회전 TTA → 세부 25 예측을 대분류 14 로 합산, 신뢰 도 게이트로 fine/coarse/etc 결정 + CAM, ResNet18 ONNX 증거 융합, 분리배출 표시(무색페트·HDPE 등)·제품명 OCR 과 CLIP 66 컨셉 제로샷 prior 를 log-linear 융합, PP-OCRv5, CLIP VLM 중재, 확신도가 낮거나 증거가 엇갈릴 때만 호출, 하루 최대 200회, CI aude Haiku 4.5 규정 결합, 지역 배출 규정(933행)-수거 일정과 결합해 안내, 업로드는 WebP 로 저장·피드백 수집, Supabase - next 비공개 테스트 차단 항목 해소 → beta.3 재검증 → 프로덕션 신청 다중재질 영역 경로를 계층 모델로 교체"
+   ],
+   "local": {
+    "text": "eharness 수집기는 127.0.0.1:7477/hook 주소로 post-event.sh 스크립트가 훅 이벤트를 POST 요청으로 보내는 것을 설명하고 있습니다.[1]",
+    "sec": 4.27,
+    "usd": 0.0,
+    "in_tok": 1761,
+    "out_tok": 54,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "127.0.0.1:7477/hook 및 post-event.sh POST 모두 근거 [1]과 일치"
+    }
+   },
+   "claude": {
+    "text": "수집기는 post-event.sh가 stdin으로 받은 훅 이벤트를 `127.0.0.1:7477/hook`으로 POST하는 방식으로 받습니다. [1]",
+    "sec": 3.24,
+    "usd": 0.01296,
+    "in_tok": 3069,
+    "out_tok": 69,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "주소 127.0.0.1:7477/hook과 post-event.sh POST 모두 근거 [1]과 일치"
+    }
+   }
+  },
+  {
+   "qid": "q29",
+   "q": "eharness 훅은 몇 개이고, 도구 실행을 차단하나?",
+   "gold": "12종 이벤트에 command 훅 44개, 관측 전용이라 항상 exit 0 으로 차단하지 않음",
+   "ctx_ids": [
+    "pms-eharness:1:1",
+    "pms-eharness:1:0",
+    "pms-eharness:1:2",
+    "pms-ai-ocr:1:7",
+    "rapidocr-readme:1:1"
+   ],
+   "ctx_text": [
+    "[1] 7, JSONL event bus] Scheduling: [tick scheduler, claude -p headless] Telemetry: [OpenTelemetry (OTLP), otelcol] UI: [single-file HTML dashboard, cmux] Governance: [charter / map / decisions (append-only)] pipeline:\n- { name: 훅 실행, desc: \"SessionStart·PreToolUse·Stop 등 12종 이벤트에 command 훅 44개. 관측 전용 — 항상 exit 0, 차단하지 않음\", tech: [Claude Code Hooks, bash] } - { name: 수집, desc: \"post-event.sh 가 stdin 을 127.0.0.1:7477/hook 으로 POST\", tech: [curl, collector.py] } - { name: 이벤트 버스, desc: \"일자별 JSONL 에 메타데이터만 append (본문 미기록)\", tech: [JSONL] } - { name: 병합, desc: \"세션 파일·transcript·statusline 상태(ctx·비용)를 읽기 전용으로 합침, 3초 주기 계산\", tech: [/api/sessions] } - { name: 관제 화면, desc: \"타일·세션 스윔레인 타임라인·ctx 게이지·cmux 트리·최대 24분할\", tech: [HTML dashboard] } - { name: 예약 실행, desc: \"tick 이 실행 시각이 된 작업을 1회씩 실행 — 프롬프트형(claude -p)·명령형, 중복 실행 잠금, 계정 한도 소진 시 건너뜀\", tech: [launchd, tick] }",
+    "[2] --title: eharness status: active summary: 여러 Claude Code 세션을 한 화면에서 지켜보고 조율하는 관제 도구 repo: ~/tools/eharness images:\n- { src: /images/claude-engineering/eharness/01.png, caption: \"분할 뷰 — 세션 카드 24칸, 역할 배지와 턴·도구·실패 막대 (식별 정보 흐림)\" } - { src: /images/claude-engineering/eharness/02.png, caption: \"활동 타임라인 — 세션별 스윔레인에 턴·도구 실행·실패를 최근 1시간 축으로\" } - { src: /images/claude-engineering/eharness/03.png, caption: \"세션 목록 트리 — 리더·팀원 계층, 상태, 컨텍스트 게이지, 비용, 턴\" } - { src: /images/claude-engineering/eharness/04.png, caption: \"전체 지표 타일 — 동시 실행 세션 · 누적 비용 · 이벤트/분 · 도구 실패 · 평균 컨텍스트 사용률\" } stack:\nRuntime: [Python 3.9 stdlib, Bash hooks, launchd / systemd] Observation: [Claude Code Hooks ×12 events, HTTP collector :7477, JSONL event bus] Scheduling: [tick scheduler, claude -p headless] Telemetry: [OpenTelemetry (OTLP), otelcol] UI: [single-file HTML dashboard, cmux]",
+    "[3] tech: [HTML dashboard] } - { name: 예약 실행, desc: \"tick 이 실행 시각이 된 작업을 1회씩 실행 — 프롬프트형(claude -p)·명령형, 중복 실행 잠금, 계정 한도 소진 시 건너뜀\", tech: [launchd, tick] } - { name: 표준 관측 내보내기, desc: \"이벤트 버스를 OpenTelemetry(OTLP) span·metric 으로 변환\", tech: [OpenTelemetry] } next:\n- 자체 평가표 8개 항목 합계 60/80점 달성 milestones:\n- { name: 관측 수집기·훅 연결, done: true } - { name: tick 예약 실행기, done: true } - { name: OpenTelemetry 내보내기, done: true } - { name: 재부팅 재개 주입, done: true } - { name: 점수표 v11 60/80 } --- eharness 는 한 컴퓨터에서 동시에 도는 Claude Code 세션 수십 개를 한 화면에 모아 본다. 누가 무엇을 하는지, 막힌 곳은 없는지, 비용은 얼마인지 보인다.\n세션을 리더와 팀원으로 묶어 일을 나눠 맡기고, 예약 작업을 대신 돌린다. 지켜보기만 하고 세션을 멈추게 하지는 않는다.",
+    "[4] ocling-project/docling) · [Marker](https://github.com/datalab-to/marker) | PDF·문서를 마크다운·JSON 으로 변환하는 도구 | ## 4. End-to-end · VLM | 자료 | 핵심 | |---|---| | [GOT-OCR 2.0 (2024)](https://arxiv.org/abs/2409.01704) · [코드](https://github.com/Ucas-HaoranWei/GOT-OCR2.0) | 글자·표·수식·악보까지 하나의 모델로 — \"OCR-2.0\" | | [olmOCR](https://github.com/allenai/olmocr) | VLM 으로 PDF 를 깨끗한 텍스트로 변환하는 도구 (AI2) | | [Claude PDF 지원](https://docs.claude.com/en/docs/build-with-claude/pdf-support) | 범용 VLM 이 PDF 의 글자·표·그림을 함께 읽는 방식 | ## 5. 평가 · 데이터 | 자료 | 용도 | |---|---| | [ICDAR Robust Reading Competition](https://rrc.cvc.uab.es/) | 장면 글자 검출·인식의 표준 대회·데이터셋 | | [OCRBench](https://github.com/Yuliang-Liu/MultimodalOCR) | 대형 멀티모달 모델의 OCR 능력 평가 | | [OmniDocBench](https://github.com/opendatalab/OmniDocBench) | 문서 파싱(레이아웃·표·수식) 종합 평가 | | [AI-Hub](https://www.aihub.or.kr/) | 한국어 글자체·공공문서 등 한국어 OCR 학습 데이터 |",
+    "[5] =\"_blank\"><img src=\"https://img.shields.io/badge/%F0%9F%A6%9E%20ClawHub-RapidOCR%20Skill-blue?link=https%3A%2F%2Fclawhub.ai%2Frapidai%2Frapidocr\"></a> <a href=\"https://huggingface.co/spaces/RapidAI/RapidOCRv3\" target=\"_blank\"><img src=\"https://img.shields.io/badge/%F0%9F%A4%97-Hugging Face Demo-blue\"></a> <a href=\"https://www.modelscope.cn/studios/RapidAI/RapidOCRv3.0.0/summary\" target=\"_blank\"><img src=\"https://img.shields.io/badge/魔搭-Demo-blue\"></a> <a href=\"https://colab.research.google.com/github/RapidAI/RapidOCR/blob/main/assets/RapidOCRDemo.ipynb\" target=\"_blank\"><img src=\"https://raw.githubusercontent.com/RapidAI/RapidOCR/main/assets/colab-badge.svg\" alt=\"Open in Colab\"></a> <a href=\"\"><img src=\"https://img.shields.io/badge/Python->=3.8-aff.svg\"></a> <a href=\"\"><img src=\"https://img.shields.io/badge/OS-Linux%2C%20Win%2C%20Mac-pink.svg\"></a>"
+   ],
+   "local": {
+    "text": "eharness의 훅은 44개 있으며, 이는 모든 세션에서 일어날 수 있는 12종의 이벤트에 대해 설정되어 있습니다. 이러한 훅들은 차단하지 않으며, 항상 exit 0을 반환합니다.[1]",
+    "sec": 2.73,
+    "usd": 0.0,
+    "in_tok": 2013,
+    "out_tok": 60,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "12종 이벤트·44개 훅·exit 0 비차단을 모두 맞혔고 [1]과 일치함"
+    }
+   },
+   "claude": {
+    "text": "eharness는 12종 이벤트에 command 훅 44개를 연결해 두었고, 관측 전용이라 항상 exit 0으로 끝나며 도구 실행을 차단하지 않습니다. [1]",
+    "sec": 3.39,
+    "usd": 0.01448,
+    "in_tok": 3428,
+    "out_tok": 77,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "12종 이벤트·훅 44개·exit 0 비차단 모두 정답과 일치하며 근거 [1]에 명시"
+    }
+   }
+  },
+  {
+   "qid": "q30",
+   "q": "그린가이드는 OCR로 읽은 분리배출 표시를 분류 결과와 어떻게 결합하나?",
+   "gold": "분류 확률과 log-linear 융합, 분리배출 표시가 읽히면 결과 교체",
+   "ctx_ids": [
+    "pms-ai-ocr:1:4",
+    "pms-ai-ocr:1:8",
+    "pms-ai-ocr:1:1",
+    "pms-gg-release:1:1",
+    "pms-gg-release:1:0"
+   ],
+   "ctx_text": [
+    "[1] 조화(문서에서 어떤 의미인가)** 세 단계로 발전해 왔고, 최근에는 이 단계를 하나의 모델로 처리하는 **OCR-free·VLM** 방식이 함께 쓰인다. 아래 자료는 이 흐름을 따라 기초 논문 → 실전 툴킷 → 문서 AI → End-to-end → 평가 순서로 모았다. 이미 그린가이드에서 **PP-OCRv5(한국어 모바일 모델)를 RapidOCR 로 서빙**해, 분리배출 표시와 제품명을 읽고 분류 결과와 log-linear 로 융합하고 있다. 학습은 이 실무 사례를 기준점으로 삼는다.\n## 1. 기초 논문 | 주제 | 자료 | 핵심 | |---|---|---| | 인식 | [CRNN (2015)](https://arxiv.org/abs/1507.05717) | CNN + RNN + CTC, 문자열 인식의 기본 구조 | | 인식 비교 | [What Is Wrong With Scene Text Recognition Model Comparisons? (2019)](https://arxiv.org/abs/1904.01906) | 인식 모델을 4단계 모듈로 나눠 공정 비교 — CLOVA AI · [코드](https://github.com/clovaai/deep-text-recognition-benchmark) | | 검출 | [DBNet (2019)](https://arxiv.org/abs/1911.08947) | 미분 가능한 이진화로 빠르고 정확한 영역 검출 | | 검출 | [CRAFT (2019)](https://arxiv.org/abs/1904.01941) | 문자 단위 영역·연결도로 휘어진 글자 검출 — [코드](https://github.com/clovaai/CRAFT-pytorch) |",
+    "[2] cBench](https://github.com/opendatalab/OmniDocBench) | 문서 파싱(레이아웃·표·수식) 종합 평가 | | [AI-Hub](https://www.aihub.or.kr/) | 한국어 글자체·공공문서 등 한국어 OCR 학습 데이터 | | [CLOVA OCR (네이버 클라우드)](https://www.ncloud.com/product/aiService/ocr) | 상용 한국어 OCR API — 결과 비교 기준 | <!-- details --> ## 실무 사례 — 그린가이드의 OCR 증거 융합 | 항목 | 내용 | |---|---| | 모델 | PP-OCRv5 한국어 모바일 (RapidOCR 로 서빙) | | 읽는 것 | 분리배출 표시(무색페트 · HDPE 등) · 제품명 | | 쓰는 시점 | 분류 확신도가 낮을 때, 스마트 촬영이면 항상 | | 결합 방식 | 분류 확률과 log-linear 융합 — 분리배출 표시가 읽히면 결과를 교체 | 다음 학습 과제: 같은 사진 묶음으로 PP-OCRv5 · TrOCR · VLM(Claude) 의 한글 표시 인식률을 비교해, 그린가이드 융합 단계의 개선 여지를 수치로 확인한다.",
+    "[3] ech: [DBNet, CRAFT] } - { name: 실전 툴킷, desc: \"검출 + 방향 분류 + 인식을 묶은 경량 파이프라인 PP-OCR 구조를 읽고 PaddleOCR·RapidOCR 로 직접 돌려 본다\", tech: [PaddleOCR, RapidOCR] } - { name: Transformer 인식, desc: \"CNN+RNN 대신 사전학습 Transformer 로 인식 — TrOCR 를 Hugging Face 로 추론\", tech: [TrOCR, Hugging Face] } - { name: 문서 구조화, desc: \"글자 위치·레이아웃까지 함께 다루는 Document AI — LayoutLMv3, OCR 없이 바로 구조를 뽑는 Donut\", tech: [LayoutLMv3, Donut] } - { name: End-to-end · VLM, desc: \"하나의 모델로 문서를 마크다운까지 — GOT-OCR 2.0, olmOCR, 범용 VLM(Claude 등)의 PDF 이해\", tech: [GOT-OCR 2.0, olmOCR] } - { name: 평가, desc: \"ICDAR 대회 과제·OCRBench·OmniDocBench 로 같은 기준에서 비교\", tech: [OCRBench, OmniDocBench] } - { name: 실습 적용, desc: \"그린가이드에서 분리배출 표시·제품명 OCR 을 분류 결과와 융합한 사례를 다시 읽고 개선점 찾기\", tech: [PP-OCRv5, RapidOCR] } diagram:\nlanes:\n- label: 입력 · 전처리 nodes:\n- { id: IN, title: 이미지 · PDF, sub: \"사진 · 스캔 · 화면 캡처\", kind: exist }",
+    "[4] 입력 게이트, 손이 화면 대부분이면 non_object, 일부면 마스킹 → 폐기물/ 비폐기물 이진 분류로 OOD 차단, MediaPipe Hands, MobileNet V3-Small 계층 분류, EXIF 회전 TTA → 세부 25 예측을 대분류 14 로 합산, 신뢰 도 게이트로 fine/coarse/etc 결정 + CAM, ResNet18 ONNX 증거 융합, 분리배출 표시(무색페트·HDPE 등)·제품명 OCR 과 CLIP 66 컨셉 제로샷 prior 를 log-linear 융합, PP-OCRv5, CLIP VLM 중재, 확신도가 낮거나 증거가 엇갈릴 때만 호출, 하루 최대 200회, CI aude Haiku 4.5 규정 결합, 지역 배출 규정(933행)-수거 일정과 결합해 안내, 업로드는 WebP 로 저장·피드백 수집, Supabase - next 비공개 테스트 차단 항목 해소 → beta.3 재검증 → 프로덕션 신청 다중재질 영역 경로를 계층 모델로 교체",
+    "[5] - 개요 title: 그린가이드 앱 · 추론 서버 summary: 사진 한 장으로 분리배출 방법을 알려 주는 앱 — 재질 판별 + 지 역별 배출 규정. Flutter 앱 · FastAPI 멀티모델 추론 서버 · Sup abase - stack Mobile: Flutter 3.44, Dart 3.12, camera, senso rs_plus, geolocator, sqflite Serving: FastAPI 0.115, uvicorn, onnxruntime 1 .19, Docker, Hugging Face Space Vision: ResNet18 hierarchical (ONNX), MobileNet tV3-Small gate, CLIP INT8 zero-shot, u2netp se gmentation, MediaPipe Hands OCR / VLM: PP-OCRv5 (RapidOCR), Claude Haiku 4 .5 fallback Data: Supabase Postgres, Supabase Storage, Web P 640px Ops: GitHub Actions keepalive, git subtree dep loy, HF Hub model registry - pipeline 스마트 촬영, 흔들림(가속도계) 측정 후 캡처, 긴 변 1600px JPEG 업로드 , 시군구 자동 감지, camera, sensors_plus, geolocator 입력 게이트, 손이 화면 대부분이면 non_object, 일부면 마스킹 → 폐기물/ 비폐기물 이진 분류로 OOD 차단, MediaPipe Hands, MobileNet V3-Small 계층 분류, EXIF 회전 TTA → 세부 25 예측을 대분류 14 로 합산, 신뢰"
+   ],
+   "local": {
+    "text": "그린가이드에서는 PP-OCRv5 한국어 모바일 모델을 RapidOCR으로 서빙해 분리배출 표시(무색페트 · HDPE 등)와 제품명을 읽고, 이 결과를 분류 확률과 log-linear 융합하여 최종 결과를 도출한다. [1]",
+    "sec": 5.27,
+    "usd": 0.0,
+    "in_tok": 2077,
+    "out_tok": 75,
+    "judge": {
+     "correct": 1,
+     "grounded": true,
+     "why": "log-linear 융합은 맞혔으나 분리배출 표시가 읽히면 결과를 교체한다는 핵심 누락"
+    }
+   },
+   "claude": {
+    "text": "OCR로 읽은 분리배출 표시(무색페트·HDPE 등)와 제품명을 분류 확률과 log-linear 방식으로 융합하며, 분리배출 표시가 읽히면 분류 결과를 그 표시 기준으로 교체합니다. 이 OCR 증거는 분류 확신도가 낮을 때, 그리고 스마트 촬영일 때는 항상 사용됩니다. [2][4]",
+    "sec": 3.61,
+    "usd": 0.01593,
+    "in_tok": 3597,
+    "out_tok": 155,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "log-linear 융합과 표시 인식 시 결과 교체를 모두 맞혔고, 사용 시점 설명까지 근거 [2]에 있음"
+    }
+   }
+  }
+ ]
+}

@@ -1,0 +1,161 @@
+[
+ {
+  "id": "crnn",
+  "kind": "pdf",
+  "url": "https://arxiv.org/pdf/1507.05717",
+  "title": "CRNN (2015)",
+  "group": "public"
+ },
+ {
+  "id": "str-compare",
+  "kind": "pdf",
+  "url": "https://arxiv.org/pdf/1904.01906",
+  "title": "What Is Wrong With Scene Text Recognition Model Comparisons? (2019)",
+  "group": "public"
+ },
+ {
+  "id": "dbnet",
+  "kind": "pdf",
+  "url": "https://arxiv.org/pdf/1911.08947",
+  "title": "DBNet (2019)",
+  "group": "public"
+ },
+ {
+  "id": "craft",
+  "kind": "pdf",
+  "url": "https://arxiv.org/pdf/1904.01941",
+  "title": "CRAFT (2019)",
+  "group": "public"
+ },
+ {
+  "id": "ppocr",
+  "kind": "pdf",
+  "url": "https://arxiv.org/pdf/2009.09941",
+  "title": "PP-OCR (2020)",
+  "group": "public"
+ },
+ {
+  "id": "trocr",
+  "kind": "pdf",
+  "url": "https://arxiv.org/pdf/2109.10282",
+  "title": "TrOCR (2021)",
+  "group": "public"
+ },
+ {
+  "id": "donut",
+  "kind": "pdf",
+  "url": "https://arxiv.org/pdf/2111.15664",
+  "title": "Donut (2021)",
+  "group": "public"
+ },
+ {
+  "id": "layoutlmv3",
+  "kind": "pdf",
+  "url": "https://arxiv.org/pdf/2204.08387",
+  "title": "LayoutLMv3 (2022)",
+  "group": "public"
+ },
+ {
+  "id": "got-ocr2",
+  "kind": "pdf",
+  "url": "https://arxiv.org/pdf/2409.01704",
+  "title": "GOT-OCR 2.0 (2024)",
+  "group": "public"
+ },
+ {
+  "id": "contextual-retrieval",
+  "kind": "url",
+  "url": "https://www.anthropic.com/news/contextual-retrieval",
+  "title": "Anthropic — Introducing Contextual Retrieval",
+  "group": "public"
+ },
+ {
+  "id": "rapidocr-readme",
+  "kind": "url",
+  "url": "https://raw.githubusercontent.com/RapidAI/RapidOCR/main/README.md",
+  "title": "RapidOCR README",
+  "group": "public"
+ },
+ {
+  "id": "docling-readme",
+  "kind": "url",
+  "url": "https://raw.githubusercontent.com/docling-project/docling/main/README.md",
+  "title": "Docling README",
+  "group": "public"
+ },
+ {
+  "id": "olmocr-readme",
+  "kind": "url",
+  "url": "https://raw.githubusercontent.com/allenai/olmocr/main/README.md",
+  "title": "olmOCR README",
+  "group": "public"
+ },
+ {
+  "id": "pms-ai-ocr",
+  "kind": "md",
+  "path": "~/projects/pms/content/ai-ocr/ai-ocr.md",
+  "title": "AI OCR 학습 노트",
+  "group": "personal"
+ },
+ {
+  "id": "pms-gg-classifier",
+  "kind": "md",
+  "path": "~/projects/pms/content/green-guide/classifier.md",
+  "title": "그린가이드 분류기",
+  "group": "personal",
+  "as": "pptx"
+ },
+ {
+  "id": "pms-gg-release",
+  "kind": "md",
+  "path": "~/projects/pms/content/green-guide/app-release.md",
+  "title": "그린가이드 앱 출시",
+  "group": "personal",
+  "as": "scan"
+ },
+ {
+  "id": "pms-ml-lab",
+  "kind": "md",
+  "path": "~/projects/pms/content/training-center/ml-lab.md",
+  "title": "AI/ML Lab",
+  "group": "personal",
+  "as": "scan"
+ },
+ {
+  "id": "pms-eharness",
+  "kind": "md",
+  "path": "~/projects/pms/content/claude-engineering/eharness.md",
+  "title": "eharness 관제 하네스",
+  "group": "personal"
+ },
+ {
+  "id": "vercel",
+  "kind": "url",
+  "url": "https://ethan-pms.vercel.app/",
+  "title": "Ethan PMS",
+  "group": "user"
+ },
+ {
+  "id": "arxiv-2411-18241",
+  "kind": "pdf",
+  "url": "https://arxiv.org/pdf/2411.18241",
+  "title": "Exploration of LLM Multi-Agent Application Implementation Based on LangGraph+CrewAI",
+  "group": "user"
+ },
+ {
+  "id": "video-pnaktfplkoo",
+  "kind": "video",
+  "url": "https://www.youtube.com/watch?v=PnaKtFPlKoo",
+  "duration": 1590,
+  "title": "맥도날드에서 랩으로 주문하는 존박(with 로꼬)",
+  "group": "user"
+ },
+ {
+  "id": "upload-arxiv-2411-18241",
+  "kind": "file",
+  "path": "upload:arxiv-2411-18241.pdf",
+  "sha256": "597c4965c2e865aa856e4c3b1e6bf228f3364e66b763237083f856fb6bb7137d",
+  "title": "arxiv-2411-18241",
+  "group": "user"
+ }
+]

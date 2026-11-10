@@ -1,0 +1,320 @@
+{
+ "name": "RAG 개념 채점표",
+ "rubric": "항목당 10점 = 구현 4 + 측정 4 + 한계 인식 2. 점수·감점 사유는 사람(또는 Claude)이 판단해 이 파일에 적고, 근거 수치는 reports/ 결과 파일에서 매번 다시 읽는다. 채점 때 본 근거 값(seen)과 지금 값이 다르거나 기다리던 실험 결과(expects)가 생기면 화면에 '재채점 필요'가 뜬다.",
+ "how_to_update": "① 실험을 돌려 reports/ 에 결과 파일을 남긴다 → ② 관리자 「성능 보고서」의 재채점 표시 확인 → ③ 이 파일의 score·gap·next 고치기 → ④ uv run python -m aiocr.scorecard --snapshot \"<무엇을 했나>\" (seen 갱신 + history 한 줄)",
+ "items": [
+  {
+   "id": "rag",
+   "term": "RAG",
+   "def": "검색한 문서 조각을 근거로 LLM 이 답을 생성하는 방식",
+   "score": {
+    "impl": 4,
+    "measure": 3,
+    "limits": 2
+   },
+   "did": "수집→답변 전 구간 + 근거 점수 게이트·숫자/언어 가드·재생성·Claude 폴백 + trace + 회귀 게이트 + 데스크톱 앱",
+   "gap": "본 평가셋 30문항 — 한 문항이 0.033 을 움직인다",
+   "next": {
+    "do": "본 평가셋을 60문항 이상으로 늘리고 게이트 기준선 재설정",
+    "gain": 1,
+    "expects": null
+   },
+   "evidence": [
+    {
+     "label": "회귀 게이트 통과",
+     "path": "gate.json/pass",
+     "seen": true
+    },
+    {
+     "label": "본 평가 문항 수",
+     "path": "gate.json/n/base30.hit@1",
+     "seen": 30
+    },
+    {
+     "label": "합성 dev 문항 수",
+     "path": "gate.json/n/synth_dev.hit@1",
+     "seen": 87
+    }
+   ]
+  },
+  {
+   "id": "ocr",
+   "term": "OCR",
+   "def": "이미지 속 글자를 텍스트로 바꾸는 기술",
+   "score": {
+    "impl": 3,
+    "measure": 3,
+    "limits": 1
+   },
+   "did": "글자 없는 쪽만 OCR · RapidOCR(PP-OCRv5) 와 qwen2.5vl:7b 두 엔진을 같은 문서로 비교",
+   "gap": "표·다단 레이아웃 파싱 없음(PyMuPDF 평문) — 설계만",
+   "next": {
+    "do": "Docling 등 레이아웃 파싱을 표 있는 PDF 에 적용해 표 질문 정답률 비교",
+    "gain": 2,
+    "expects": "layout_eval.json"
+   },
+   "evidence": [
+    {
+     "label": "CER · VLM (gg-release)",
+     "path": "ocr_eval.json/pms-gg-release/vlm/cer",
+     "seen": 0.0167
+    },
+    {
+     "label": "CER · RapidOCR (gg-release)",
+     "path": "ocr_eval.json/pms-gg-release/rapidocr/cer",
+     "seen": 0.1083
+    }
+   ]
+  },
+  {
+   "id": "cer",
+   "term": "CER",
+   "def": "문자 오류율. 정답 대비 틀린 글자 비율",
+   "score": {
+    "impl": 3,
+    "measure": 2,
+    "limits": 1
+   },
+   "did": "엔진별 CER 과 쪽당 시간을 함께 측정",
+   "gap": "합성 스캔 2문서뿐 · VLM CER 0.000 은 표본이 작아 일반화 불가",
+   "next": {
+    "do": "실스캔·사진 표본 10쪽 이상에 정답 텍스트를 달아 CER 재측정(문서별 분포 포함)",
+    "gain": 2,
+    "expects": "ocr_eval_v2.json"
+   },
+   "evidence": [
+    {
+     "label": "CER · VLM (ml-lab)",
+     "path": "ocr_eval.json/pms-ml-lab/vlm/cer",
+     "seen": 0.0
+    },
+    {
+     "label": "CER · RapidOCR (ml-lab)",
+     "path": "ocr_eval.json/pms-ml-lab/rapidocr/cer",
+     "seen": 0.2148
+    }
+   ]
+  },
+  {
+   "id": "chunk",
+   "term": "청킹",
+   "def": "문서를 검색 단위 조각으로 나누는 일",
+   "score": {
+    "impl": 3,
+    "measure": 0,
+    "limits": 2
+   },
+   "did": "줄 단위 누적 900자 · 150자 겹침 · (문서, 쪽) 메타",
+   "gap": "크기·겹침 비교 실험 없음 · 제목 단위 청킹은 계획만",
+   "next": {
+    "do": "500/900/1300자 × 겹침 0/150 으로 Recall@5·MRR 비교",
+    "gain": 3,
+    "expects": "chunk_ablation.json"
+   },
+   "evidence": []
+  },
+  {
+   "id": "densesparse",
+   "term": "dense / sparse",
+   "def": "의미 벡터 검색 / 단어 가중치 기반 검색",
+   "score": {
+    "impl": 4,
+    "measure": 3,
+    "limits": 1
+   },
+   "did": "bge-m3 ONNX 한 번 추론으로 dense 1024 + 학습형 sparse 를 만들어 따로 측정",
+   "gap": "sparse 단독이 약하고 원인 분석(질문 유형별) 없음",
+   "next": {
+    "do": "출처 유형(by_src)별로 sparse 가 이기는 질문을 골라 원인 정리",
+    "gain": 1,
+    "expects": null
+   },
+   "evidence": [
+    {
+     "label": "Hit@1 · dense",
+     "path": "retrieval.json/vlm_base|dense/hit@1",
+     "seen": 0.4
+    },
+    {
+     "label": "Hit@1 · sparse",
+     "path": "retrieval.json/vlm_base|sparse/hit@1",
+     "seen": 0.233
+    }
+   ]
+  },
+  {
+   "id": "rrf",
+   "term": "RRF",
+   "def": "여러 검색 결과를 순위 역수 합으로 섞는 방식",
+   "score": {
+    "impl": 3,
+    "measure": 1,
+    "limits": 1
+   },
+   "did": "dense·sparse 를 RRF 로 섞는 hybrid 구현·측정",
+   "gap": "가중치 미실험 · hybrid Recall@5 가 dense 보다 낮다",
+   "next": {
+    "do": "dense:sparse 가중 RRF(1:0.3~1:1)·k 값 실험 — 재색인 불필요",
+    "gain": 3,
+    "expects": "rrf_weights.json"
+   },
+   "evidence": [
+    {
+     "label": "Recall@5 · dense",
+     "path": "retrieval.json/vlm_base|dense/recall@5",
+     "seen": 0.867
+    },
+    {
+     "label": "Recall@5 · hybrid",
+     "path": "retrieval.json/vlm_base|hybrid/recall@5",
+     "seen": 0.8
+    }
+   ]
+  },
+  {
+   "id": "rerank",
+   "term": "reranker",
+   "def": "후보를 질문과 함께 다시 읽어 순위를 매기는 모델",
+   "score": {
+    "impl": 4,
+    "measure": 4,
+    "limits": 1
+   },
+   "did": "bge-reranker-v2-m3 로 top30→5 재정렬 — 가장 큰 상승",
+   "gap": "질문당 약 2초(CPU) 지연, 후보 수(pool)별 비용·이득 곡선 없음",
+   "next": {
+    "do": "pool 10/20/30/50 별 Hit@1·지연 곡선",
+    "gain": 1,
+    "expects": "rerank_pool.json"
+   },
+   "evidence": [
+    {
+     "label": "Hit@1 · hybrid",
+     "path": "retrieval.json/vlm_base|hybrid/hit@1",
+     "seen": 0.4
+    },
+    {
+     "label": "Hit@1 · hybrid+rerank",
+     "path": "retrieval.json/vlm_base|hybrid+rerank/hit@1",
+     "seen": 0.8
+    },
+    {
+     "label": "초/질문 · rerank",
+     "path": "retrieval.json/vlm_base|hybrid+rerank/sec_per_q",
+     "seen": 2.07
+    }
+   ]
+  },
+  {
+   "id": "contextual",
+   "term": "contextual retrieval",
+   "def": "청크 앞에 문서 속 맥락 문장을 붙여 색인하는 기법",
+   "score": {
+    "impl": 4,
+    "measure": 3,
+    "limits": 1
+   },
+   "did": "청크마다 맥락 1~2문장(qwen2.5:7b, 캐시)을 붙여 dense·sparse 모두 색인",
+   "gap": "rerank 뒤에는 Hit@1 이득이 없다(오히려 소폭 하락) — 원인 미분석",
+   "next": {
+    "do": "rerank 입력에서 맥락 문장을 빼고 재정렬해 비교",
+    "gain": 1,
+    "expects": "ctx_rerank.json"
+   },
+   "evidence": [
+    {
+     "label": "Hit@1 · dense (맥락 없음)",
+     "path": "retrieval.json/vlm_base|dense/hit@1",
+     "seen": 0.4
+    },
+    {
+     "label": "Hit@1 · dense (맥락)",
+     "path": "retrieval.json/vlm_ctx|dense/hit@1",
+     "seen": 0.533
+    },
+    {
+     "label": "Hit@1 · rerank (맥락)",
+     "path": "retrieval.json/vlm_ctx|hybrid+rerank/hit@1",
+     "seen": 0.767
+    },
+    {
+     "label": "Recall@5 · rerank (맥락)",
+     "path": "retrieval.json/vlm_ctx|hybrid+rerank/recall@5",
+     "seen": 1.0
+    }
+   ]
+  },
+  {
+   "id": "metrics",
+   "term": "Hit@1 / Recall@5 / MRR@10",
+   "def": "첫 결과 정답률 / 상위 5개 안 정답률 / 정답 순위 역수 평균",
+   "score": {
+    "impl": 4,
+    "measure": 3,
+    "limits": 1
+   },
+   "did": "세 지표 + 질문당 시간 · 출처 유형별 분해(by_src)",
+   "gap": "표본이 작은데 신뢰구간 없음",
+   "next": {
+    "do": "부트스트랩 95% 신뢰구간을 retrieval.json 에 추가",
+    "gain": 1,
+    "expects": null
+   },
+   "evidence": [
+    {
+     "label": "MRR@10 · 최고 조합",
+     "path": "retrieval.json/vlm_base|hybrid+rerank/mrr@10",
+     "seen": 0.869
+    },
+    {
+     "label": "평가 문항 수",
+     "path": "retrieval.json/vlm_base|dense/n",
+     "seen": 30
+    }
+   ]
+  },
+  {
+   "id": "ablation",
+   "term": "ablation",
+   "def": "구성요소를 하나씩 켜고 끄며 기여를 재는 실험",
+   "score": {
+    "impl": 4,
+    "measure": 3,
+    "limits": 1
+   },
+   "did": "OCR 2 × 맥락 2 × 검색 4 = 16조합 · 답변 모델 2 · 가드 on/off",
+   "gap": "청크 크기·RRF 가중치·top-k 축 없음",
+   "next": {
+    "do": "청킹·RRF 실험(위 항목)이 끝나면 축으로 편입",
+    "gain": 1,
+    "expects": null
+   },
+   "evidence": [
+    {
+     "label": "검색 조합 수",
+     "path": "retrieval.json/#count",
+     "seen": 16
+    }
+   ]
+  }
+ ],
+ "history": [
+  {
+   "when": "2026-11-11T01:18",
+   "total": 73,
+   "scores": {
+    "rag": 9,
+    "ocr": 7,
+    "cer": 6,
+    "chunk": 5,
+    "densesparse": 8,
+    "rrf": 5,
+    "rerank": 9,
+    "contextual": 8,
+    "metrics": 8,
+    "ablation": 8
+   },
+   "note": "첫 채점 — 10개념 기준(구현4·측정4·한계2)"
+  }
+ ]
+}

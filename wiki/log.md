@@ -1,0 +1,31 @@
+- 2026-11-10 ingest crnn → raw/crnn.pdf (1,057,798 B)
+- 2026-11-10 ingest str-compare → raw/str-compare.pdf (1,413,897 B)
+- 2026-11-10 ingest dbnet → raw/dbnet.pdf (3,965,537 B)
+- 2026-11-10 ingest craft → raw/craft.pdf (4,715,050 B)
+- 2026-11-10 ingest ppocr → raw/ppocr.pdf (4,410,053 B)
+- 2026-11-10 ingest trocr → raw/trocr.pdf (431,293 B)
+- 2026-11-10 ingest donut → raw/donut.pdf (7,105,978 B)
+- 2026-11-10 ingest layoutlmv3 → raw/layoutlmv3.pdf (1,245,765 B)
+- 2026-11-10 ingest got-ocr2 → raw/got-ocr2.pdf (7,264,105 B)
+- 2026-11-10 ingest contextual-retrieval → raw/contextual-retrieval.html (205,194 B)
+- 2026-11-10 ingest rapidocr-readme → raw/rapidocr-readme.md (11,938 B)
+- 2026-11-10 ingest docling-readme → raw/docling-readme.md (8,768 B)
+- 2026-11-10 ingest olmocr-readme → raw/olmocr-readme.md (22,320 B)
+- 2026-11-10 ingest pms-ai-ocr → raw/pms-ai-ocr.md (8,712 B)
+- 2026-11-10 ingest pms-gg-classifier → raw/pms-gg-classifier.pptx (36,333 B)
+- 2026-11-10 ingest pms-gg-release → raw/pms-gg-release.scan.pdf (485,961 B)
+- 2026-11-10 ingest pms-ml-lab → raw/pms-ml-lab.scan.pdf (233,078 B)
+- 2026-11-10 ingest pms-eharness → raw/pms-eharness.md (2,998 B)
+- 2026-11-10 ingest pms-mcp → raw/pms-mcp.md (1,998 B)
+- 2026-11-10 ingest vercel → raw/vercel.html (162,831 B) · 앱 URL 추가
+- 2026-11-10 ingest upload-8e434b → raw/upload-8e434b.md (183 B) · 앱 추가
+- 2026-11-10 remove upload-8e434b · 앱 삭제
+- 2026-11-10 ingest youtube-watch → raw/youtube-watch.html (1,554,836 B) · 앱 추가
+- 2026-11-10 remove youtube-watch · 앱 삭제
+- 2026-11-10 ingest video-pnaktfplkoo → raw/video-pnaktfplkoo.video.json (45,826 B) · 앱 추가
+- 2026-11-10 ingest arxiv-2411-18241 → raw/arxiv-2411-18241.pdf (553,816 B) · 앱 추가
+- 2026-11-10 remove video-pnaktfplkoo · 앱 삭제
+- 2026-11-10 ingest video-pnaktfplkoo → raw/video-pnaktfplkoo.video.json (42,271 B) · 앱 추가
+- 2026-11-10 ingest upload-arxiv-2411-18241 → raw/upload-arxiv-2411-18241.pdf (553,816 B) · 앱 추가
+- 2026-11-11 ingest video-pnaktfplkoo-2 → raw/video-pnaktfplkoo-2.video.json (5,538 B) · 앱 추가
+- 2026-11-11 remove video-pnaktfplkoo-2 · 앱 삭제

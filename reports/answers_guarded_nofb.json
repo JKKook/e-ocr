@@ -1,0 +1,581 @@
+{
+ "fallback": false,
+ "items": [
+  {
+   "qid": "q01",
+   "q": "CRNN 모델의 파라미터 수는 얼마인가?",
+   "gold": "8.3M — 비교한 다른 모델(304M·490M)보다 훨씬 작다",
+   "local": {
+    "text": "CRNN 모델의 파라미터 수는 8.3백만개입니다.[1]",
+    "sec": 15.05,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": true,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "8.3M 핵심 수치 일치, 근거 [1]에 명시"
+    }
+   }
+  },
+  {
+   "qid": "q02",
+   "q": "Which layer of CRNN converts the per-frame predictions into the final label sequence?",
+   "gold": "The transcription layer (CTC-based)",
+   "local": {
+    "text": "CRNN의 transcription layer가 각 프레임의 예측을 최종 레이블 시퀀스로 변환합니다.[3] [1]",
+    "sec": 3.97,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "transcription layer를 정확히 지목했고, [1]·[2]·[3]의 근거와 일치함 (CTC 언급은 없으나 부가 정보)"
+    }
+   }
+  },
+  {
+   "qid": "q03",
+   "q": "ResNet-18 백본의 DBNet은 MSRA-TD500에서 속도와 F-measure가 얼마인가?",
+   "gold": "F-measure 82.8, 62 FPS",
+   "local": {
+    "text": "ResNet-18 백본의 DBNet은 MSRA-TD500 데이터셋에서 F-measure 82.8과 함께 62 FPS의 속도를 달성합니다. [1]",
+    "sec": 5.96,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "F-measure 82.8과 62 FPS 모두 정답과 일치하며 근거 [1]에 명시됨"
+    }
+   }
+  },
+  {
+   "qid": "q04",
+   "q": "이진화 단계를 분할 네트워크 안에 넣어 함께 학습할 수 있게 만든 모듈은?",
+   "gold": "Differentiable Binarization(DB) 모듈",
+   "local": {
+    "text": "이진화 단계를 분할 네트워크 안에 넣어 함께 학습할 수 있게 만든 모듈은 Differentiable Binarization (DB) 모듈입니다.[1]",
+    "sec": 5.46,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "DB 모듈을 정확히 지목했고 근거 [1]·[2]·[4]에 명시됨"
+    }
+   }
+  },
+  {
+   "qid": "q05",
+   "q": "CRAFT가 글자 영역 점수 외에 예측하는, 인접 문자 사이의 연결을 나타내는 점수는?",
+   "gold": "affinity score",
+   "local": {
+    "text": "CRAFT는 인접 문자 사이의 연결을 나타내는 가산점(score)과 지역화(region score)를 예측합니다.[3]",
+    "sec": 7.87,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "low",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 0,
+     "grounded": false,
+     "why": "'affinity score'를 명시하지 않고 근거에 없는 '가산점'으로 답함"
+    }
+   }
+  },
+  {
+   "qid": "q06",
+   "q": "CRAFT는 문자 단위 정답이 없는 실제 데이터로 어떻게 학습하나?",
+   "gold": "단어 단위 주석에서 중간 모델로 문자 단위 의사 정답을 만드는 weakly-supervised 학습",
+   "local": {
+    "text": "CRAFT는 실데이터에서 단어 단위의 어노테이션이 주어지지만 문자 단위의 어노테이션이 없을 경우, 임시 모델로부터 퍼소니 Ground Truth를 생성하여 약간 감독학습 방식으로 학습합니다.[2]",
+    "sec": 6.49,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "단어 단위 주석과 중간 모델의 문자 단위 의사 정답 생성, weakly-supervised 학습을 모두 언급함(용어 오역 있음)"
+    }
+   }
+  },
+  {
+   "qid": "q07",
+   "q": "PP-OCR 전체 모델 크기는 중국어 6622자 인식 기준 얼마인가?",
+   "gold": "3.5M (영숫자 63개 인식은 2.8M)",
+   "local": {
+    "text": "PP-OCR의 전체 모델 크기는 중국어 6622자를 인식하는 경우 3.5M입니다.[1]",
+    "sec": 5.0,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "중국어 6622자 기준 3.5M을 정확히 제시했고 근거 [1]과 일치함"
+    }
+   }
+  },
+  {
+   "qid": "q08",
+   "q": "PP-OCR의 방향 분류기 학습에는 이미지가 몇 장 쓰였나?",
+   "gold": "60만 장(600K)",
+   "local": {
+    "text": "PP-OCR의 방향 분류기 학습에는 600K장의 훈련 이미지와 310K장의 검증 이미지가 사용되었습니다.[2]",
+    "sec": 5.16,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "600K 훈련 이미지를 정확히 제시했고 310K 검증 이미지도 근거 [1][2]에 있음"
+    }
+   }
+  },
+  {
+   "qid": "q09",
+   "q": "장면 글자 인식 모델을 공정하게 비교하려고 몇 단계 모듈로 나눴고 각 단계는 무엇인가?",
+   "gold": "4단계 — Transformation, Feature extraction, Sequence modeling, Prediction",
+   "local": {
+    "text": "장면 글자 인식 모델을 공정하게 비교하기 위해 4단계 모듈로 나누었습니다. 각 단계는 변환(Transformation), 특징 추출(FEATURE Extraction), 시퀀스 모델링(SEQUENCE Modeling), 예측(Prediction)으로 구성됩니다.[1]",
+    "sec": 8.16,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "4단계(Trans·Feat·Seq·Pred)를 모두 맞혔고 근거 [4]에 명시됨, 다만 인용 [1]은 표 청크로 부정확"
+    }
+   }
+  },
+  {
+   "qid": "q10",
+   "q": "TrOCR의 인코더와 디코더는 각각 어떤 사전학습 모델로 초기화했나?",
+   "gold": "인코더는 BEiT/DeiT, 디코더는 RoBERTa/MiniLM",
+   "local": {
+    "text": "TrOCR의 인코더는 DeiT 및 BEiT 모델을 사용하여 사전학습된 ViT 스타일의 모델로 초기화하며, 디코더는 RoBERTa와 MiniLM 모델을 사용하여 사전학습된 BERT 스타일의 모델로 초기화합니다. [2][3]",
+    "sec": 5.43,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "인코더 DeiT/BEiT, 디코더 RoBERTa/MiniLM을 모두 맞혔고 근거 [1][2][3]에 있음"
+    }
+   }
+  },
+  {
+   "qid": "q11",
+   "q": "Donut 사전학습에 쓰는 합성 문서 생성기의 이름은?",
+   "gold": "SynthDoG",
+   "local": {
+    "text": "Donut 사전학습에 사용된 합성 문서 생성기의 이름은 SynthDoG입니다.[1]",
+    "sec": 4.08,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "SynthDoG를 정확히 답했고 근거 [1]에 명시됨"
+    }
+   }
+  },
+  {
+   "qid": "q12",
+   "q": "LayoutLMv3에서 텍스트 단어와 이미지 패치의 대응 관계를 배우는 사전학습 목표는?",
+   "gold": "Word-Patch Alignment(WPA)",
+   "local": {
+    "text": "LayoutLMv3에서는 Word-Patch Alignment (WPA) 목적을 통해 텍스트 단어와 이미지 패치의 대응 관계를 학습합니다. 이 목적은 텍스트 단어가 마스킹되었는지를 예측하여 해당하는 이미지 패치가 마스킹되었는지를 예측하도록 모델을 학습시킵니다.[1]",
+    "sec": 5.28,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 2,
+     "grounded": false,
+     "why": "WPA는 맞혔으나 '텍스트 단어의 마스킹 여부를 예측'한다는 설명은 근거에 없는 왜곡임(근거: 텍스트 단어에 대응하는 이미지 패치의 마스킹 여부를 예측)"
+    }
+   }
+  },
+  {
+   "qid": "q13",
+   "q": "LayoutLMv3는 문서 이미지 특징을 CNN 없이 어떻게 입력하나?",
+   "gold": "이미지 패치의 linear projection 을 단어 토큰과 함께 입력",
+   "local": {
+    "text": "LayoutLMv3는 문서 이미지를 𝐻×𝑊 크기로 리사이즈한 후, 이 이미지를 𝑃×𝑃 크기의 패치로 나누고, 이를 𝐷 차원으로 선형 변환하여 평탄화시킵니다. [1]",
+    "sec": 5.05,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 1,
+     "grounded": true,
+     "why": "패치 선형 투영은 맞혔으나 단어 토큰과 함께 멀티모달 Transformer에 입력한다는 점 누락"
+    }
+   }
+  },
+  {
+   "qid": "q14",
+   "q": "GOT 모델의 파라미터 수와 구조는?",
+   "gold": "580M, 고압축 인코더 + 긴 문맥 디코더의 end-to-end 모델",
+   "local": {
+    "text": "GOT은 약 580M개의 파라미터를 가지고 있으며, 시각 인코더와 언어 디코커 패러다임을 사용합니다. 인코더는 대략 80M개의 파라미터로 구성되어 있고 1024×1024 입력 크기를 가집니다.[3] [1]",
+    "sec": 5.82,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 1,
+     "grounded": true,
+     "why": "580M과 인코더-디코더 구조는 맞혔으나 고압축 인코더·긴 문맥 디코더라는 핵심 특징이 빠짐"
+    }
+   }
+  },
+  {
+   "qid": "q15",
+   "q": "Which paper treats charts, sheet music and geometric shapes as characters to read?",
+   "gold": "GOT-OCR 2.0 (General OCR Theory)",
+   "local": {
+    "text": "General OCR Theory 논문에서 charts, sheet music, 그리고 geometric shapes를 인식할 수 있는 \"characters\"로 언급하고 있습니다.[2][4][5]",
+    "sec": 8.37,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": true,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "General OCR Theory 논문을 정확히 지목했고, 차트·악보·기하 도형을 characters로 본다는 내용이 근거 [1][2][3]에 있음"
+    }
+   }
+  },
+  {
+   "qid": "q16",
+   "q": "Contextual Retrieval은 검색 실패를 얼마나 줄이며, reranking을 더하면 얼마나 줄이나?",
+   "gold": "49%, reranking 결합 시 67%",
+   "local": {
+    "text": "Contextual Retrieval은 검색 실패율을 49%까지 줄일 수 있으며, reranking과 함께 사용할 경우 추가로 18% 감소시킬 수 있습니다. [1]",
+    "sec": 7.02,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {
+     "numbers": [
+      "18"
+     ]
+    },
+    "retried": true,
+    "judge": {
+     "correct": 1,
+     "grounded": false,
+     "why": "49%는 맞지만 reranking 결합 시 67%를 '추가 18%'로 바꿔 말했고, 이 수치는 근거에 없음"
+    }
+   }
+  },
+  {
+   "qid": "q17",
+   "q": "Contextual Retrieval에서 청크마다 앞에 붙이는 맥락 설명은 보통 몇 토큰인가?",
+   "gold": "50~100 토큰",
+   "local": {
+    "text": "Contextual Retrieval에서 청크마다 앞에 붙이는 맥락 설명은 보통 50-100 토큰이다. [1]",
+    "sec": 4.11,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "근거 [1]의 'usually 50-100 tokens'와 정답이 일치"
+    }
+   }
+  },
+  {
+   "qid": "q18",
+   "q": "RapidOCR는 어떤 추론 엔진으로 PaddleOCR 모델을 돌리나?",
+   "gold": "ONNXRuntime(그 외 OpenVINO·PaddlePaddle·PyTorch 선택 가능)",
+   "local": {
+    "text": "RapidOCR는 PaddleOCR의 모델을 ONNX Runtime으로 가볍게 서빙하여 추론을 수행합니다. [1]",
+    "sec": 5.88,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "핵심인 ONNX Runtime을 맞힘(대체 엔진 언급은 없음), 근거 [5]의 서술과 일치"
+    }
+   }
+  },
+  {
+   "qid": "q19",
+   "q": "Docling이 지원하는 입력 문서 형식에는 무엇이 있나?",
+   "gold": "PDF·DOCX·PPTX·XLSX·HTML·이미지 등",
+   "local": {
+    "text": "Docling은 PDF, DOCX, PPTX, XLSX, HTML, EPUB, Apple Pages, Numbers & Keynote, WAV, MP3, WebVTT, Box Notes, email formats (EML, MSG), iCalendar (ICS), 이미지 (PNG, TIFF, JPEG 등), LaTeX, DocLang, plain text뿐만 아니라 여러 비디오 파일 형식 (MP4, AVI, MOV, MKV, WebM)도 지원합니다. [1]",
+    "sec": 6.26,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "PDF·DOCX·PPTX·XLSX·HTML·이미지를 모두 포함하며 나열한 형식은 모두 근거 [2]·[3]·[5]에 있음 (인용 [1]은 일부 형식만 담음)"
+    }
+   }
+  },
+  {
+   "qid": "q20",
+   "q": "olmOCR로 PDF 100만 쪽을 변환하는 비용은 어느 정도인가?",
+   "gold": "100만 쪽당 200달러 미만",
+   "local": {
+    "text": "olmOCR로 PDF 100만 페이지를 변환하는 비용은 약 $200 USD 이하입니다.[1]",
+    "sec": 10.68,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": true,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "근거 [1]의 '100만 쪽당 200달러 미만'과 일치"
+    }
+   }
+  },
+  {
+   "qid": "q21",
+   "q": "그린가이드 재질 분류기의 frozen test 세부(fine) 정확도는?",
+   "gold": "92.36% (대분류 95.66%)",
+   "local": {
+    "text": "그린가이드 재질 분류기의 frozen test 세부(fine) 정확도는 92.4%입니다.[3]",
+    "sec": 4.71,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "세부 92.36%를 반올림한 92.4%로 답했고, 이 값은 근거 [3]에 그대로 있음"
+    }
+   }
+  },
+  {
+   "qid": "q22",
+   "q": "그린가이드 분류기에서 대분류 라벨만 확실한 약 2.3만 장은 어떤 손실로 학습했나?",
+   "gold": "세부 확률을 합산하는 roll-up logsumexp NLL",
+   "local": {
+    "text": "대분류만 확실한 약 2.3만 장은 세부 확률을 합산하는 roll-up logsumexp NLL 로 함께 학습한다. [1]",
+    "sec": 5.09,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "세부 확률 합산 roll-up logsumexp NLL을 정확히 제시, 근거 [1]에 그대로 있음"
+    }
+   }
+  },
+  {
+   "qid": "q23",
+   "q": "그린가이드 분류기를 실사용 사진 57장으로 평가한 대분류 정확도는?",
+   "gold": "38.6% (세부 35.7%) — 도메인 갭",
+   "local": {
+    "text": "실사용 사진 57장으로 평가한 대분류 정확도는 38.6%이다.[1]",
+    "sec": 5.14,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "질문이 묻는 대분류 38.6%를 정확히 답했고 근거 [1] 표와 일치"
+    }
+   }
+  },
+  {
+   "qid": "q24",
+   "q": "그린가이드 앱이 온디바이스 추론을 클라우드로 옮기면서 APK 크기는 어떻게 바뀌었나?",
+   "gold": "93.7MB → 69.4MB (Play 16KB 페이지 요건으로 onnxruntime 제거)",
+   "local": {
+    "text": "온디바이스 → 클라우드 전환으로 인해 APK의 크기가 93.7MB에서 69.4MB로 줄었습니다. [1]",
+    "sec": 6.56,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "APK 93.7MB→69.4MB 감소를 정확히 제시했고 근거 [1]과 일치함 (16KB 페이지 요건으로 onnxruntime을 제거했다는 이유는 빠졌지만 질문의 핵심은 크기 변화)"
+    }
+   }
+  },
+  {
+   "qid": "q25",
+   "q": "그린가이드 추론 서버에서 VLM 중재는 언제, 하루 최대 몇 번 호출되나?",
+   "gold": "확신도가 낮거나 증거가 엇갈릴 때만, 하루 최대 200회",
+   "local": {
+    "text": "그린가이드 추론 서버에서는 확신도가 낮거나 증거가 엇갈릴 때만 CLIP VLM 중재를 호출하며, 이는 하루에 최대 200회까지 호출될 수 있습니다. [1]",
+    "sec": 6.95,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "저확신·증거 불일치 시에만, 하루 최대 200회를 모두 맞힘 (단 'CLIP VLM'은 청크 경계를 잘못 읽은 표현으로, 실제 VLM은 Claude Haiku 4.5)"
+    }
+   }
+  },
+  {
+   "qid": "q26",
+   "q": "그린가이드 추론 서버의 콜드 스타트는 어떻게 막나?",
+   "gold": "GitHub Actions 가 12시간마다 Space·DB 를 깨운다",
+   "local": {
+    "text": "콜드 스타트 방지為了保持对话的一致性我将使用提供的文档内容作答。\n\n그린가이드 추론 서버의 콜드启动是通过GitHub Actions每12小时唤醒一次Space和DB来防止的。[3]",
+    "sec": 10.91,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {
+     "lang": "為了保持对话的一致性我将"
+    },
+    "retried": true,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "GitHub Actions 12시간 주기 Space·DB 깨우기는 [1]에 근거함(인용 [3]은 부정확, 중국어 혼용)"
+    }
+   }
+  },
+  {
+   "qid": "q27",
+   "q": "AI/ML Lab 웹 데모의 시각화 스택은 무엇인가?",
+   "gold": "Recharts 3.8, KaTeX, Canvas API",
+   "local": {
+    "text": "AI/ML Lab 웹 데모의 시각화 스택은 Recharts 3.8, KaTeX 및 Canvas API를 사용하고 있습니다.[1]",
+    "sec": 6.1,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "Recharts 3.8·KaTeX·Canvas API 모두 일치, 근거 [1]에 명시"
+    }
+   }
+  },
+  {
+   "qid": "q28",
+   "q": "eharness 수집기는 어느 주소로 훅 이벤트를 받나?",
+   "gold": "127.0.0.1:7477/hook (post-event.sh 가 POST)",
+   "local": {
+    "text": "eharness 수집기는 127.0.0.1:7477/hook 주소로 post-event.sh 스크립트가 stdin을 POST 요청으로 보냄.[1]",
+    "sec": 6.2,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "low",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "127.0.0.1:7477/hook와 post-event.sh POST를 모두 맞혔고 근거 [1]과 일치"
+    }
+   }
+  },
+  {
+   "qid": "q29",
+   "q": "eharness 훅은 몇 개이고, 도구 실행을 차단하나?",
+   "gold": "12종 이벤트에 command 훅 44개, 관측 전용이라 항상 exit 0 으로 차단하지 않음",
+   "local": {
+    "text": "eharness의 훅은 44개 있으며, 이는 모든 세션에서 일어날 수 있는 12종의 이벤트에 대해 설정되어 있습니다. 이러한 훅들은 차단하지 않으며, 항상 exit 0을 반환합니다.[1]",
+    "sec": 6.87,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 2,
+     "grounded": true,
+     "why": "12종 이벤트·훅 44개·exit 0으로 차단하지 않음을 모두 맞혔고 근거 [1]과 일치함"
+    }
+   }
+  },
+  {
+   "qid": "q30",
+   "q": "그린가이드는 OCR로 읽은 분리배출 표시를 분류 결과와 어떻게 결합하나?",
+   "gold": "분류 확률과 log-linear 융합, 분리배출 표시가 읽히면 결과 교체",
+   "local": {
+    "text": "그린가이드에서는 PP-OCRv5 한국어 모바일 모델을 RapidOCR으로 서빙해 분리배출 표시(무색페트 · HDPE 등)와 제품명을 읽고, 이 결과를 분류 확률과 log-linear 융합하여 최종 결과를 도출한다. [1]",
+    "sec": 7.21,
+    "usd": 0.0,
+    "llm": "local",
+    "confidence": "high",
+    "issues": {},
+    "retried": false,
+    "judge": {
+     "correct": 1,
+     "grounded": true,
+     "why": "log-linear 융합은 맞혔으나 분리배출 표시가 읽히면 결과를 교체한다는 핵심 누락"
+    }
+   }
+  }
+ ]
+}

@@ -1,0 +1,108 @@
+{
+  "name": "영상 대본 번역·원문 유지 정책",
+  "version": 2,
+  "decided": "2026-11-11 사용자 결정(6분류 · 외국어는 원문+번역 병기 · 자막 오류는 원문 유지+추정 병기 · 이 파일이 SSOT) · v2(11-11): 판별 모델 Claude, 추정은 같은 언어 표기만",
+  "scope": "영상 대본(사람 자막·자동 자막·STT). 판별기(ingest.label_transcript) · 색인 표시(ingest.windows) · 대화 답변(pipeline) · 보고서(docreport) · 읽기 화면 범례(desktop)가 모두 이 파일만 읽는다.",
+  "line_kinds": [
+    {
+      "id": "speech",
+      "label": "대화·설명",
+      "translate": "allow",
+      "rule": "요약·의역·번역해도 된다.",
+      "mark": [
+        "",
+        ""
+      ],
+      "examples": [
+        "미국에 계실 때 맥도날드 자주 가 보셨어요?"
+      ]
+    },
+    {
+      "id": "lyrics",
+      "label": "가사",
+      "translate": "never",
+      "rule": "노래·랩 가사는 번역·의역·맞춤법 교정 없이 원문 그대로 따옴표로 인용하고, 뜻을 풀어야 하면 인용 뒤에 따로 설명한다.",
+      "mark": [
+        "♪ ",
+        " ♪"
+      ],
+      "detect": "멜로디·박자에 맞춰 부르는 줄. 자동 자막에서는 [음악] 표시가 몰린 구간에 많다.",
+      "examples": [
+        "안녕하세요 주문 좀 받아주세요 / 버거 들어주세요 감자튀김은 짭짤하게"
+      ]
+    },
+    {
+      "id": "foreign",
+      "label": "외국어 원문 발화",
+      "translate": "pair",
+      "rule": "외국어로 말한 문장은 원문을 따옴표로 살리고 번역은 괄호로 병기한다. 예: \"Can I get a Big Mac meal?\"(빅맥 세트 주세요)",
+      "mark": [
+        "〔",
+        "〕"
+      ],
+      "detect": "한국어 대본 안에서 영어 등 외국어로 말한 문장(낱말 하나가 아니라 문장·구).",
+      "examples": [
+        "Can I get a Big Mac meal?"
+      ]
+    },
+    {
+      "id": "cue",
+      "label": "효과·음악 표시",
+      "translate": "drop",
+      "rule": "[음악]·[웃음] 같은 표시는 내용이 아니다. 답변·요약·키워드·검색 가중에 쓰지 않는다.",
+      "mark": [
+        "",
+        ""
+      ],
+      "pattern": "^\\s*(\\[[^\\]]{1,8}\\]\\s*)+$",
+      "examples": [
+        "[음악]",
+        "[웃음]"
+      ]
+    }
+  ],
+  "span_kinds": [
+    {
+      "id": "proper",
+      "label": "고유명·상표",
+      "translate": "never",
+      "rule": "사람·장소·브랜드·제품 이름은 근거의 표기를 바꾸지 않는다(번역·음차 변경 금지).",
+      "examples": [
+        "맥도날드",
+        "Big Mac",
+        "로꼬",
+        "존박"
+      ]
+    },
+    {
+      "id": "garbled",
+      "label": "자막 오류 의심",
+      "translate": "never",
+      "rule": "자막이 잘못 받아 적은 것으로 보이는 말은 고치지 않고 원문을 그대로 두되, 추정 표기를 [자막 원문, ○○로 추정] 형식으로 병기한다. 가사 안의 오류도 같다.",
+      "mark": " [?→{guess}]",
+      "examples": [
+        {
+          "orig": "맥다노스",
+          "guess": "맥도날드"
+        },
+        {
+          "orig": "Let츠 go",
+          "guess": "Let's go"
+        }
+      ]
+    }
+  ],
+  "detector": {
+    "batch": 28,
+    "music_window_sec": 15,
+    "prompt": "아래는 영상 대본의 줄이다(번호·시각·내용). 줄마다 분류가 기본값 speech(대화·설명)가 아닌 줄만 JSON 배열로 답하라.\n분류: lyrics(노래·랩 가사 — 멜로디·박자에 맞춰 부름) · foreign(외국어로 말한 문장).\n또 각 줄의 고유명·상표(proper)와 자막이 잘못 받아 적은 듯한 말(garbled: 원문 orig 와 추정 guess)을 함께 적어라. 없으면 빈 배열.\n형식: [{\"i\": <번호>, \"kind\": \"speech|lyrics|foreign\", \"proper\": [\"...\"], \"garbled\": [{\"orig\": \"...\", \"guess\": \"...\"}]}]\ngarbled 의 guess 는 같은 언어로 쓴 올바른 표기다(번역 금지, 예: 맥다노스→맥도날드). proper 는 이름 낱말만(문장 금지). 줄 내용을 바꾸거나 번역하지 마라. 해당 없는 줄은 넣지 마라.",
+    "model": "claude",
+    "model_note": "로컬 7B 는 가사·대화를 뒤바꾸고 자막 오류 '추정'을 영어로 번역해 버려(11-11 실측) 판별은 Claude Sonnet. 문서를 넣을 때 한 번만 든다. 'local' 로 바꾸면 qwen2.5:7b.",
+    "batch_claude": 120,
+    "checks": {
+      "proper_max_chars": 20,
+      "foreign_min_latin_ratio": 0.5,
+      "garbled_same_script": true
+    }
+  }
+}

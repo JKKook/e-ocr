@@ -1,0 +1,30 @@
+{"qid":"q01","src":"pdf","q":"CRNN 모델의 파라미터 수는 얼마인가?","answer":"8.3M — 비교한 다른 모델(304M·490M)보다 훨씬 작다","gold":{"doc":"crnn","evidence":"8.3M"}}
+{"qid":"q02","src":"pdf","q":"Which layer of CRNN converts the per-frame predictions into the final label sequence?","answer":"The transcription layer (CTC-based)","gold":{"doc":"crnn","evidence":"transcription layer"}}
+{"qid":"q03","src":"pdf","q":"ResNet-18 백본의 DBNet은 MSRA-TD500에서 속도와 F-measure가 얼마인가?","answer":"F-measure 82.8, 62 FPS","gold":{"doc":"dbnet","evidence":"62 FPS"}}
+{"qid":"q04","src":"pdf","q":"이진화 단계를 분할 네트워크 안에 넣어 함께 학습할 수 있게 만든 모듈은?","answer":"Differentiable Binarization(DB) 모듈","gold":{"doc":"dbnet","evidence":"Differentiable Binarization"}}
+{"qid":"q05","src":"pdf","q":"CRAFT가 글자 영역 점수 외에 예측하는, 인접 문자 사이의 연결을 나타내는 점수는?","answer":"affinity score","gold":{"doc":"craft","evidence":"affinity score"}}
+{"qid":"q06","src":"pdf","q":"CRAFT는 문자 단위 정답이 없는 실제 데이터로 어떻게 학습하나?","answer":"단어 단위 주석에서 중간 모델로 문자 단위 의사 정답을 만드는 weakly-supervised 학습","gold":{"doc":"craft","evidence":"weakly-supervised"}}
+{"qid":"q07","src":"pdf","q":"PP-OCR 전체 모델 크기는 중국어 6622자 인식 기준 얼마인가?","answer":"3.5M (영숫자 63개 인식은 2.8M)","gold":{"doc":"ppocr","evidence":"3.5M for recognizing 6622"}}
+{"qid":"q08","src":"pdf","q":"PP-OCR의 방향 분류기 학습에는 이미지가 몇 장 쓰였나?","answer":"60만 장(600K)","gold":{"doc":"ppocr","evidence":"600K images"}}
+{"qid":"q09","src":"pdf","q":"장면 글자 인식 모델을 공정하게 비교하려고 몇 단계 모듈로 나눴고 각 단계는 무엇인가?","answer":"4단계 — Transformation, Feature extraction, Sequence modeling, Prediction","gold":{"doc":"str-compare","evidence":"four stages"}}
+{"qid":"q10","src":"pdf","q":"TrOCR의 인코더와 디코더는 각각 어떤 사전학습 모델로 초기화했나?","answer":"인코더는 BEiT/DeiT, 디코더는 RoBERTa/MiniLM","gold":{"doc":"trocr","evidence":"RoBERTa"}}
+{"qid":"q11","src":"pdf","q":"Donut 사전학습에 쓰는 합성 문서 생성기의 이름은?","answer":"SynthDoG","gold":{"doc":"donut","evidence":"SynthDoG"}}
+{"qid":"q12","src":"pdf","q":"LayoutLMv3에서 텍스트 단어와 이미지 패치의 대응 관계를 배우는 사전학습 목표는?","answer":"Word-Patch Alignment(WPA)","gold":{"doc":"layoutlmv3","evidence":"Word-Patch Alignment"}}
+{"qid":"q13","src":"pdf","q":"LayoutLMv3는 문서 이미지 특징을 CNN 없이 어떻게 입력하나?","answer":"이미지 패치의 linear projection 을 단어 토큰과 함께 입력","gold":{"doc":"layoutlmv3","evidence":"linear projection"}}
+{"qid":"q14","src":"pdf","q":"GOT 모델의 파라미터 수와 구조는?","answer":"580M, 고압축 인코더 + 긴 문맥 디코더의 end-to-end 모델","gold":{"doc":"got-ocr2","evidence":"580M parameters"}}
+{"qid":"q15","src":"pdf","q":"Which paper treats charts, sheet music and geometric shapes as characters to read?","answer":"GOT-OCR 2.0 (General OCR Theory)","gold":{"doc":"got-ocr2","evidence":"sheet music"}}
+{"qid":"q16","src":"html","q":"Contextual Retrieval은 검색 실패를 얼마나 줄이며, reranking을 더하면 얼마나 줄이나?","answer":"49%, reranking 결합 시 67%","gold":{"doc":"contextual-retrieval","evidence":"by 49%"}}
+{"qid":"q17","src":"html","q":"Contextual Retrieval에서 청크마다 앞에 붙이는 맥락 설명은 보통 몇 토큰인가?","answer":"50~100 토큰","gold":{"doc":"contextual-retrieval","evidence":"50-100 tokens"}}
+{"qid":"q18","src":"md","q":"RapidOCR는 어떤 추론 엔진으로 PaddleOCR 모델을 돌리나?","answer":"ONNXRuntime(그 외 OpenVINO·PaddlePaddle·PyTorch 선택 가능)","gold":{"doc":"rapidocr-readme","evidence":"ONNXRuntime"}}
+{"qid":"q19","src":"md","q":"Docling이 지원하는 입력 문서 형식에는 무엇이 있나?","answer":"PDF·DOCX·PPTX·XLSX·HTML·이미지 등","gold":{"doc":"docling-readme","evidence":"PPTX"}}
+{"qid":"q20","src":"md","q":"olmOCR로 PDF 100만 쪽을 변환하는 비용은 어느 정도인가?","answer":"100만 쪽당 200달러 미만","gold":{"doc":"olmocr-readme","evidence":"per million pages"}}
+{"qid":"q21","src":"pptx","q":"그린가이드 재질 분류기의 frozen test 세부(fine) 정확도는?","answer":"92.36% (대분류 95.66%)","gold":{"doc":"pms-gg-classifier","evidence":"92.36%"}}
+{"qid":"q22","src":"pptx","q":"그린가이드 분류기에서 대분류 라벨만 확실한 약 2.3만 장은 어떤 손실로 학습했나?","answer":"세부 확률을 합산하는 roll-up logsumexp NLL","gold":{"doc":"pms-gg-classifier","evidence":"roll-up logsumexp"}}
+{"qid":"q23","src":"pptx","q":"그린가이드 분류기를 실사용 사진 57장으로 평가한 대분류 정확도는?","answer":"38.6% (세부 35.7%) — 도메인 갭","gold":{"doc":"pms-gg-classifier","evidence":"38.6%"}}
+{"qid":"q24","src":"scan","q":"그린가이드 앱이 온디바이스 추론을 클라우드로 옮기면서 APK 크기는 어떻게 바뀌었나?","answer":"93.7MB → 69.4MB (Play 16KB 페이지 요건으로 onnxruntime 제거)","gold":{"doc":"pms-gg-release","pages":[2]}}
+{"qid":"q25","src":"scan","q":"그린가이드 추론 서버에서 VLM 중재는 언제, 하루 최대 몇 번 호출되나?","answer":"확신도가 낮거나 증거가 엇갈릴 때만, 하루 최대 200회","gold":{"doc":"pms-gg-release","pages":[1]}}
+{"qid":"q26","src":"scan","q":"그린가이드 추론 서버의 콜드 스타트는 어떻게 막나?","answer":"GitHub Actions 가 12시간마다 Space·DB 를 깨운다","gold":{"doc":"pms-gg-release","pages":[2]}}
+{"qid":"q27","src":"scan","q":"AI/ML Lab 웹 데모의 시각화 스택은 무엇인가?","answer":"Recharts 3.8, KaTeX, Canvas API","gold":{"doc":"pms-ml-lab","pages":[1]}}
+{"qid":"q28","src":"md","q":"eharness 수집기는 어느 주소로 훅 이벤트를 받나?","answer":"127.0.0.1:7477/hook (post-event.sh 가 POST)","gold":{"doc":"pms-eharness","evidence":"7477"}}
+{"qid":"q29","src":"md","q":"eharness 훅은 몇 개이고, 도구 실행을 차단하나?","answer":"12종 이벤트에 command 훅 44개, 관측 전용이라 항상 exit 0 으로 차단하지 않음","gold":{"doc":"pms-eharness","evidence":"44개"}}
+{"qid":"q30","src":"md","q":"그린가이드는 OCR로 읽은 분리배출 표시를 분류 결과와 어떻게 결합하나?","answer":"분류 확률과 log-linear 융합, 분리배출 표시가 읽히면 결과 교체","gold":{"doc":"pms-ai-ocr","evidence":"log-linear"}}

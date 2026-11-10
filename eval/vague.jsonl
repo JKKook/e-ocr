@@ -1,0 +1,12 @@
+{"qid": "v01", "q": "DBNet의 핵심 아이디어는?", "doc": "dbnet"}
+{"qid": "v02", "q": "CRNN은 어떤 구조야?", "doc": "crnn"}
+{"qid": "v03", "q": "Donut은 뭐야?", "doc": "donut"}
+{"qid": "v04", "q": "contextual retrieval이 뭐야?", "doc": "contextual-retrieval"}
+{"qid": "v05", "q": "RapidOCR 설치는 어떻게 해?", "doc": "rapidocr-readme"}
+{"qid": "v06", "q": "그린가이드 앱은 뭐야?", "doc": "pms-gg-release"}
+{"qid": "v07", "q": "eharness가 뭐야?", "doc": "pms-eharness"}
+{"qid": "v08", "q": "ML Lab에서는 뭘 할 수 있어?", "doc": "pms-ml-lab"}
+{"qid": "v09", "q": "TrOCR 장점 알려줘", "doc": "trocr"}
+{"qid": "v10", "q": "GOT-OCR2.0 요약해줘", "doc": "got-ocr2"}
+{"qid": "v11", "q": "Docling으로 뭘 할 수 있어?", "doc": "docling-readme"}
+{"qid": "v12", "q": "재질 분류 모델은 어떻게 학습했어?", "doc": "pms-gg-classifier"}

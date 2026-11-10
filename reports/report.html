@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI OCR RAG 실험 보고서</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+
+:root{
+  --bg:#F5F7F5; --surface:#FFFFFF; --ink:#1B2320; --muted:#5E6A64; --line:#D5DCD7; --line-soft:#E7ECE8;
+  --accent:#B8700A; --accent-soft:#FBEFD9; --busy:#2E7D5B; --busy-soft:#DDF0E6; --code-bg:#EEF2EF;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121715; --surface:#1A211D; --ink:#E4E9E5; --muted:#98A39D; --line:#2C3531; --line-soft:#222A26;
+    --accent:#E8A33C; --accent-soft:#3A2C13; --busy:#5CC493; --busy-soft:#1C3529; --code-bg:#1F2723;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121715; --surface:#1A211D; --ink:#E4E9E5; --muted:#98A39D; --line:#2C3531; --line-soft:#222A26;
+  --accent:#E8A33C; --accent-soft:#3A2C13; --busy:#5CC493; --busy-soft:#1C3529; --code-bg:#1F2723;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;font-size:15.5px;line-height:1.7;margin:0;word-break:keep-all}
+.mono,code,pre,table,.eyebrow,.stage-no{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+.wrap{max-width:1040px;margin:0 auto;padding:56px 24px 96px}
+.narrow{max-width:700px}
+header{border-bottom:1px solid var(--line);padding-bottom:28px;margin-bottom:40px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:500;margin:0 0 12px}
+h1{font-size:34px;line-height:1.2;font-weight:600;margin:0 0 14px;text-wrap:balance;letter-spacing:-.01em}
+.lede{font-size:17px;color:var(--muted);margin:0;max-width:700px}
+.meta{display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:20px;font-size:12.5px;color:var(--muted)}
+.meta span b{color:var(--ink);font-weight:500}
+h2{font-size:22px;font-weight:600;margin:56px 0 14px;letter-spacing:-.01em;text-wrap:balance;display:flex;align-items:baseline;gap:14px}
+h3{font-size:16px;font-weight:600;margin:28px 0 8px}
+p{margin:0 0 14px}
+ul,ol{padding-left:20px;margin:0 0 14px}li{margin:4px 0}
+li>ul{margin-top:4px}
+code{background:var(--code-bg);padding:1px 6px;border-radius:3px;font-size:.88em}
+pre{background:var(--code-bg);border:1px solid var(--line-soft);border-radius:6px;padding:14px 16px;font-size:13px;line-height:1.55;overflow-x:auto;margin:12px 0 18px}
+pre code{background:none;padding:0;font-size:inherit}
+.stage-no{display:inline-block;min-width:34px;padding:2px 8px;border:1px solid var(--accent);color:var(--accent);border-radius:3px;font-size:12px;letter-spacing:.06em;text-align:center;line-height:1.5}
+.tablewrap{overflow-x:auto;margin:14px 0 22px;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13px;line-height:1.5;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+th{font-weight:500;color:var(--muted);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;background:var(--code-bg)}
+tr:last-child td{border-bottom:none}
+td.k{white-space:nowrap;font-weight:500}
+td code{white-space:nowrap}
+.num{text-align:right;white-space:nowrap}
+.pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11.5px;font-weight:500;line-height:1.6;white-space:nowrap}
+.ok{background:var(--busy-soft);color:var(--busy)}
+.warn{background:var(--accent-soft);color:var(--accent)}
+.no{background:var(--code-bg);color:var(--muted)}
+figure{margin:20px 0 28px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:18px 18px 12px;overflow-x:auto}
+figure svg{display:block;max-width:100%;height:auto;min-width:720px;color:var(--ink)}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.5}
+figure.chart{margin:0;padding:14px 14px 10px}
+figure.chart svg{min-width:0;width:100%}
+figure.chart path:hover,figure.chart rect:hover{opacity:.8}
+.tsum{display:grid;grid-template-columns:52px 1fr;gap:4px 10px;margin:10px 0 4px;padding:10px 12px;background:var(--code-bg);border-radius:4px;font-size:12.5px;line-height:1.5}
+.tsum dt{color:var(--accent);font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.06em;padding-top:2px}
+.tsum dd{margin:0;color:var(--ink);min-width:0;word-break:normal;overflow-wrap:anywhere}
+.tsum dd .ok,.tsum dd .warn,.tsum dd .no{margin-left:6px}
+.ctitle{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:10px;row-gap:4px;align-items:baseline;margin:0 0 10px;padding-bottom:8px;border-bottom:1px solid var(--line-soft)}
+.ctitle .no{grid-row:1;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;color:var(--accent);border:1px solid var(--accent);border-radius:3px;padding:1px 6px;letter-spacing:.06em}
+.ctitle h4{grid-row:1;margin:0;font-size:14px;font-weight:600;color:var(--ink)}
+.ctitle span.d{grid-column:2;grid-row:2;font-size:12px;color:var(--muted);line-height:1.5;min-width:0;word-break:normal;overflow-wrap:anywhere}
+.ctitle h4{min-width:0;word-break:normal;overflow-wrap:anywhere}
+figure.chart{min-width:0;overflow-x:visible}
+figure.chart figcaption{word-break:normal;overflow-wrap:anywhere}
+.tag{display:inline-block;margin:1px 4px 1px 0;padding:0 7px;border:1px solid var(--line);border-radius:3px;background:var(--surface);font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;line-height:1.7;color:var(--ink);white-space:normal;overflow-wrap:anywhere;max-width:100%}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin:14px 0 20px}
+.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin:14px 0 20px}
+@media (max-width:820px){.grid5{grid-template-columns:repeat(2,1fr)}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px 18px;min-width:0}
+.card h4{margin:0 0 6px;font-size:14px;font-weight:600}
+.card p{margin:0;font-size:13.5px;color:var(--muted)}
+.card.exist{border-style:dashed}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:14px 0 20px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:14px 0 20px}
+@media (max-width:820px){.grid3,.grid4{grid-template-columns:repeat(2,1fr)}}
+.sub{font-size:15px;font-weight:600;margin:32px 0 8px;padding-top:14px;border-top:1px solid var(--line-soft)}
+.card .ex{display:block;margin-top:8px;padding:8px 10px;background:var(--code-bg);border-radius:4px;font-size:12.5px;color:var(--ink);line-height:1.5}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 16px}
+.stat .n{font-size:22px;font-weight:600;letter-spacing:-.01em;line-height:1.2;margin:4px 0 2px}
+.stat .l{font-size:12px;color:var(--muted)}
+.card .lk{display:block;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;color:var(--accent);letter-spacing:.06em;margin-bottom:4px}
+.tldr{border-left:2px solid var(--accent);padding:2px 0 2px 16px;margin:0 0 8px}
+.tldr h3{margin:0 0 8px;font-size:14px;font-weight:600}
+.tldr ol{margin:0}
+.decision{border-left:2px solid var(--accent);padding:2px 0 2px 16px;margin:14px 0 20px}
+.decision p{margin:0 0 6px}
+.decision .q{font-weight:600}
+.refs li{font-size:13px;word-break:break-all}
+footer{margin-top:64px;padding-top:18px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){a{transition:color .15s}}
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-soft)}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.seg{display:flex;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:5;background:var(--bg);padding:12px 0;margin:0 0 12px;border-bottom:1px solid var(--line-soft)}
+.seg button{font-family:inherit;font-size:13px;line-height:1.5;padding:5px 14px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--muted);cursor:pointer}
+.seg button.on{border-color:var(--accent);color:var(--accent);background:var(--accent-soft);font-weight:500}
+.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0 6px}
+@media (max-width:820px){.ba{grid-template-columns:1fr}}
+.ba>div{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px 14px;min-width:0}
+.ba .before{border-style:dashed}
+.ba .lk{display:block;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.06em;margin-bottom:6px;color:var(--muted)}
+.ba .after .lk{color:var(--busy)}
+.ba pre{margin:0;padding:10px 12px;font-size:12px;line-height:1.5;white-space:pre-wrap;word-break:break-all;overflow-wrap:anywhere;border:none}
+.ban{font-size:13px;color:var(--muted);margin:4px 0 22px}
+
+
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:56px 96px}
+</style>
+<div class="wrap">
+<header>
+  <p class="eyebrow">AI OCR RAG · 개인 프로젝트 · 실험 보고서</p>
+  <h1>스캔 문서까지 읽는 로컬 RAG, 기법별 기여 측정</h1>
+  <p class="lede">OCR 논문·기술 문서와 개인 프로젝트 문서 18개(스캔 PDF·pptx 포함)를 로컬에서 색인하고, 검색 기법을 하나씩 켤 때마다 30문항 평가셋 점수가 어떻게 바뀌는지 쟀다. 가장 큰 개선은 reranker였고, sparse를 섞은 hybrid는 dense 단독보다 낫지 않았다.</p>
+  <div class="meta">
+    <span>상태 <b>v1.0 · 실측 완료</b></span>
+    <span>작성 <b>2026-11-10</b> · 갱신 <b>2026-11-10</b></span>
+    <span>저장소 <b><code>~/projects/ai-ocr</code></b></span>
+    <span>머신 <b>Apple M5 Pro · 48GB · 전부 로컬(답변 비교만 Claude)</b></span>
+  </div>
+</header>
+
+<div class="narrow">
+<div class="tldr">
+  <h3>결론 다섯 줄</h3>
+  <ol>
+    <li><b>reranker가 가장 크게 기여했다.</b> hybrid 다음에 bge-reranker-v2-m3를 붙이자 Hit@1이 0.40에서 0.80로 +40%p 올랐다. 대가는 질문당 약 2초다.</li>
+    <li><b>contextual retrieval은 dense 검색을 끌어올렸다.</b> 청크마다 맥락 문장을 붙이자 dense Hit@1이 +13%p, Recall@5가 0.87에서 0.97로 올랐다. reranker까지 켠 조합에서는 Recall@5가 1.00에 이르렀지만, Hit@1은 한 문항 차이로 낮아졌다.</li>
+    <li><b>bge-m3 sparse는 약했고 RRF hybrid는 dense를 넘지 못했다.</b> sparse Hit@1은 0.23였다. 같은 가중치로 섞으면 dense의 순위를 희석한다. 회사 데이터에서 본 경향이 여기서도 재현됐다.</li>
+    <li><b>VLM OCR이 더 정확하지만 70배 느리다.</b> qwen2.5vl의 CER은 1.7%·0.0%, RapidOCR은 10.8%·21.5%였다. 그래도 reranker를 쓰면 두 엔진 모두 스캔 문항 4개를 모두 찾았다.</li>
+    <li><b>답변은 Claude가 정확했고, 로컬 7B는 숫자를 지어냈다.</b> 점수는 1.00 대 0.83, 근거 충실도는 1.00 대 0.87였다. Claude 비용은 30문항에 $0.36다.</li>
+  </ol>
+</div>
+</div>
+
+<div class="narrow"><h2><span class="stage-no">01</span>파이프라인</h2></div>
+<figure><svg viewBox="0 0 760 300" role="img" aria-label="수집부터 보고서까지 12단계 파이프라인. 주황 상자는 LLM 호출 지점.">
+<defs><marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+<g font-family="IBM Plex Mono, ui-monospace, monospace" font-size="12" fill="currentColor">
+<rect x="16" y="16" width="160" height="54" rx="4" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<text x="26" y="38" font-weight="500">수집</text><text x="26" y="57" font-size="10.5" fill="var(--muted)">wiki/raw · 18문서</text>
+<line x1="176" y1="43.0" x2="206" y2="43.0" stroke="currentColor" stroke-width="1.2" marker-end="url(#arw)"/>
+<rect x="206" y="16" width="160" height="54" rx="4" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<text x="216" y="38" font-weight="500">파싱</text><text x="216" y="57" font-size="10.5" fill="var(--muted)">PDF·pptx·html·md</text>
+<line x1="366" y1="43.0" x2="396" y2="43.0" stroke="currentColor" stroke-width="1.2" marker-end="url(#arw)"/>
+<rect x="396" y="16" width="160" height="54" rx="4" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.3"/>
+<text x="406" y="38" font-weight="500">OCR</text><text x="406" y="57" font-size="10.5" fill="var(--muted)">RapidOCR | qwen2.5vl</text>
+<line x1="556" y1="43.0" x2="586" y2="43.0" stroke="currentColor" stroke-width="1.2" marker-end="url(#arw)"/>
+<rect x="586" y="16" width="160" height="54" rx="4" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<text x="596" y="38" font-weight="500">청킹</text><text x="596" y="57" font-size="10.5" fill="var(--muted)">900자 · 797청크</text>
+<line x1="666.0" y1="70" x2="666.0" y2="112" stroke="currentColor" stroke-width="1.2" marker-end="url(#arw)"/>
+<rect x="586" y="112" width="160" height="54" rx="4" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.3"/>
+<text x="596" y="134" font-weight="500">맥락 부착</text><text x="596" y="153" font-size="10.5" fill="var(--muted)">qwen2.5:7b · 청크당 2.9s</text>
+<line x1="586" y1="139.0" x2="556" y2="139.0" stroke="currentColor" stroke-width="1.2" marker-end="url(#arw)"/>
+<rect x="396" y="112" width="160" height="54" rx="4" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<text x="406" y="134" font-weight="500">임베딩</text><text x="406" y="153" font-size="10.5" fill="var(--muted)">bge-m3 ONNX dense+sparse</text>
+<line x1="396" y1="139.0" x2="366" y2="139.0" stroke="currentColor" stroke-width="1.2" marker-end="url(#arw)"/>
+<rect x="206" y="112" width="160" height="54" rx="4" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<text x="216" y="134" font-weight="500">Qdrant</text><text x="216" y="153" font-size="10.5" fill="var(--muted)">named vectors</text>
+<line x1="206" y1="139.0" x2="176" y2="139.0" stroke="currentColor" stroke-width="1.2" marker-end="url(#arw)"/>
+<rect x="16" y="112" width="160" height="54" rx="4" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<text x="26" y="134" font-weight="500">검색</text><text x="26" y="153" font-size="10.5" fill="var(--muted)">dense · sparse · RRF</text>
+<line x1="96.0" y1="166" x2="96.0" y2="208" stroke="currentColor" stroke-width="1.2" marker-end="url(#arw)"/>
+<rect x="16" y="208" width="160" height="54" rx="4" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<text x="26" y="230" font-weight="500">rerank</text><text x="26" y="249" font-size="10.5" fill="var(--muted)">bge-reranker-v2-m3 · top30→5</text>
+<line x1="176" y1="235.0" x2="206" y2="235.0" stroke="currentColor" stroke-width="1.2" marker-end="url(#arw)"/>
+<rect x="206" y="208" width="160" height="54" rx="4" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.3"/>
+<text x="216" y="230" font-weight="500">답변</text><text x="216" y="249" font-size="10.5" fill="var(--muted)">qwen2.5:7b | Sonnet</text>
+<line x1="366" y1="235.0" x2="396" y2="235.0" stroke="currentColor" stroke-width="1.2" marker-end="url(#arw)"/>
+<rect x="396" y="208" width="160" height="54" rx="4" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.3"/>
+<text x="406" y="230" font-weight="500">채점</text><text x="406" y="249" font-size="10.5" fill="var(--muted)">Opus · 정답 대비 0/1/2</text>
+<line x1="556" y1="235.0" x2="586" y2="235.0" stroke="currentColor" stroke-width="1.2" marker-end="url(#arw)"/>
+<rect x="586" y="208" width="160" height="54" rx="4" fill="none" stroke="currentColor" stroke-width="1.3"/>
+<text x="596" y="230" font-weight="500">보고서</text><text x="596" y="249" font-size="10.5" fill="var(--muted)">이 문서</text>
+</g></svg>
+<figcaption>실선 화살표 = 처리 순서(ㄹ자로 읽는다) · 주황 상자 = LLM 호출 지점(OCR의 VLM 경로, 맥락 생성, 답변, 채점) · 회색 둘째 줄 = 실제 구현과 수치. 맥락 생성·답변·OCR LLM은 Ollama 로컬 모델이고, 답변 비교와 채점만 Claude를 쓴다.</figcaption>
+</figure>
+<div class="tablewrap"><table>
+<thead><tr><th>단계</th><th>선택</th><th>이유</th></tr></thead><tbody>
+<tr><td class="k">수집</td><td><code>wiki/raw/</code> 원문 보관 + <code>index.md</code>·<code>log.md</code> (llm-wiki 패턴)</td><td>원문을 바꾸지 않고 남겨 두어야 다시 파싱하고 출처를 추적할 수 있다. 위키 요약 페이지는 색인하지 않는다.</td></tr>
+<tr><td class="k">파싱</td><td>텍스트 레이어가 있으면 그대로 쓰고, 20자 미만인 페이지만 OCR</td><td>디지털 PDF까지 OCR하면 오류만 늘어난다.</td></tr>
+<tr><td class="k">임베딩</td><td>bge-m3 ONNX를 한 번 추론해 dense 1024와 학습형 sparse를 함께 얻음</td><td>torch 없이 CPU로 797청크를 1분 42초에 처리하고, 한국어·영어를 교차 검색할 수 있다.</td></tr>
+<tr><td class="k">벡터 DB</td><td>Qdrant named vector(dense + sparse), 서버 측 RRF</td><td>hybrid를 질의 한 번으로 처리하고 Docker 컨테이너 하나로 띄운다.</td></tr>
+<tr><td class="k">rerank</td><td>RRF 상위 30개를 cross-encoder로 재정렬해 상위 5개를 씀</td><td>bi-encoder가 놓치는 질문과 청크의 상호작용을 반영한다.</td></tr>
+</tbody></table></div>
+
+<div class="narrow"><h2><span class="stage-no">02</span>말뭉치와 평가셋</h2></div>
+<div class="grid4">
+  <div class="stat"><div class="n">18</div><div class="l">문서 · arXiv 9 · URL 4 · 개인 5</div></div>
+  <div class="stat"><div class="n">797</div><div class="l">청크 · 900자 · 150자 겹침</div></div>
+  <div class="stat"><div class="n">30</div><div class="l">평가 문항 · 한국어 28 · 영어 2</div></div>
+  <div class="stat"><div class="n">html 2 · md 6 · pdf 15 · pptx 3 · scan 4</div><div class="l">원문 형식별 문항 수</div></div>
+</div>
+<div class="narrow"><p>정답 판정 기준: 검색된 청크가 정답 문서이면서 근거 문구를 담고 있으면 정답으로 친다(공백 무시). 스캔 문서는 OCR 오류로 문구가 깨질 수 있어 문서와 페이지가 맞으면 정답으로 친다. 그래야 두 OCR 엔진을 같은 기준으로 비교할 수 있다. 질문 대부분을 한국어로 써서, 영어 논문을 한국어 질문으로 찾는 교차 언어 검색도 함께 시험했다.</p></div>
+
+<div class="narrow"><h2><span class="stage-no">03</span>OCR — RapidOCR vs 비전 LLM</h2></div>
+<div class="grid4">
+  <div class="stat"><span class="pill warn">RapidOCR</span><div class="n">10.8% · 21.5%</div><div class="l">CER (문서 2개)</div></div>
+  <div class="stat"><span class="pill ok">qwen2.5vl:7b</span><div class="n">1.7% · 0.0%</div><div class="l">CER (문서 2개)</div></div>
+  <div class="stat"><span class="pill warn">RapidOCR</span><div class="n">0.52s</div><div class="l">페이지당 (첫 문서 13.33s는 모델 로드 포함)</div></div>
+  <div class="stat"><span class="pill ok">qwen2.5vl:7b</span><div class="n">35s</div><div class="l">페이지당</div></div>
+</div>
+<div class="tablewrap"><table><thead><tr><th>문서</th><th>엔진</th><th class="num">CER</th><th class="num">초/페이지</th></tr></thead><tbody>
+<tr><td class="k"><code>pms-gg-release</code></td><td class="">rapidocr</td><td class=" num">0.108</td><td class=" num">13.330</td></tr>
+<tr><td class="k"><code>pms-gg-release</code></td><td class="">vlm</td><td class=" num">0.017</td><td class=" num">36.050</td></tr>
+<tr><td class="k"><code>pms-ml-lab</code></td><td class="">rapidocr</td><td class=" num">0.215</td><td class=" num">0.520</td></tr>
+<tr><td class="k"><code>pms-ml-lab</code></td><td class="">vlm</td><td class=" num">0.000</td><td class=" num">34.860</td></tr>
+</tbody></table></div>
+<div class="narrow"><p>스캔 문서는 개인 문서 마크다운을 A4 150dpi 이미지로 렌더링하고 ±1.2° 회전, 잡음, 흐림을 넣어 만들었다. 정답 텍스트가 있으니 CER을 정확히 잴 수 있다. 실제 스캔보다 깨끗하므로 이 CER은 하한으로 읽어야 한다. RapidOCR의 오류는 긴 줄 끝이 잘리는 것, 붙여 쓴 한국어 띄어쓰기가 사라지는 것, 표 구조가 무너지는 것에 몰렸다.</p></div>
+
+<div class="narrow"><h2><span class="stage-no">04</span>검색 — 기법별 기여 (ablation)</h2></div>
+<figure class="chart"><svg viewBox="0 0 760 332" role="img" aria-label="검색 방식 8가지의 Hit@1(진한 막대)과 Recall@5(옅은 막대) 비교">
+<g font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11.5" fill="currentColor">
+<line x1="230" y1="20" x2="230" y2="306" stroke="var(--line)" stroke-width="1"/><text x="230" y="322" text-anchor="middle" fill="var(--muted)">0.00</text>
+<line x1="340.0" y1="20" x2="340.0" y2="306" stroke="var(--line)" stroke-width="1"/><text x="340.0" y="322" text-anchor="middle" fill="var(--muted)">0.25</text>
+<line x1="450.0" y1="20" x2="450.0" y2="306" stroke="var(--line)" stroke-width="1"/><text x="450.0" y="322" text-anchor="middle" fill="var(--muted)">0.50</text>
+<line x1="560.0" y1="20" x2="560.0" y2="306" stroke="var(--line)" stroke-width="1"/><text x="560.0" y="322" text-anchor="middle" fill="var(--muted)">0.75</text>
+<line x1="670" y1="20" x2="670" y2="306" stroke="var(--line)" stroke-width="1"/><text x="670" y="322" text-anchor="middle" fill="var(--muted)">1.00</text>
+<text x="220" y="41" text-anchor="end">맥락 X · dense</text>
+<rect x="230" y="28" width="381.5" height="22" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width=".8"/>
+<rect x="230" y="34" width="176.0" height="10" fill="var(--accent)"/>
+<text x="617.5" y="43" fill="var(--muted)">0.40 / 0.87</text>
+<text x="220" y="75" text-anchor="end">맥락 X · sparse</text>
+<rect x="230" y="62" width="278.5" height="22" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width=".8"/>
+<rect x="230" y="68" width="102.5" height="10" fill="var(--accent)"/>
+<text x="514.5" y="77" fill="var(--muted)">0.23 / 0.63</text>
+<text x="220" y="109" text-anchor="end">맥락 X · hybrid (RRF)</text>
+<rect x="230" y="96" width="352.0" height="22" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width=".8"/>
+<rect x="230" y="102" width="176.0" height="10" fill="var(--accent)"/>
+<text x="588.0" y="111" fill="var(--muted)">0.40 / 0.80</text>
+<text x="220" y="143" text-anchor="end">맥락 X · hybrid + rerank</text>
+<rect x="230" y="130" width="425.5" height="22" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width=".8"/>
+<rect x="230" y="136" width="352.0" height="10" fill="var(--accent)"/>
+<text x="661.5" y="145" fill="var(--muted)">0.80 / 0.97</text>
+<line x1="20" y1="160" x2="740" y2="160" stroke="var(--line)" stroke-dasharray="4 3"/>
+<text x="220" y="177" text-anchor="end">맥락 O · dense</text>
+<rect x="230" y="164" width="425.5" height="22" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width=".8"/>
+<rect x="230" y="170" width="234.5" height="10" fill="var(--accent)"/>
+<text x="661.5" y="179" fill="var(--muted)">0.53 / 0.97</text>
+<text x="220" y="211" text-anchor="end">맥락 O · sparse</text>
+<rect x="230" y="198" width="278.5" height="22" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width=".8"/>
+<rect x="230" y="204" width="161.5" height="10" fill="var(--accent)"/>
+<text x="514.5" y="213" fill="var(--muted)">0.37 / 0.63</text>
+<text x="220" y="245" text-anchor="end">맥락 O · hybrid (RRF)</text>
+<rect x="230" y="232" width="366.5" height="22" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width=".8"/>
+<rect x="230" y="238" width="220.0" height="10" fill="var(--accent)"/>
+<text x="602.5" y="247" fill="var(--muted)">0.50 / 0.83</text>
+<text x="220" y="279" text-anchor="end">맥락 O · hybrid + rerank</text>
+<rect x="230" y="266" width="440.0" height="22" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width=".8"/>
+<rect x="230" y="272" width="337.5" height="10" fill="var(--accent)"/>
+<text x="676.0" y="281" fill="var(--muted)">0.77 / 1.00</text>
+</g></svg>
+<figcaption>진한 막대 = Hit@1(첫 결과가 정답) · 옅은 막대 = Recall@5(상위 5개 안에 정답) · 숫자는 Hit@1 / Recall@5. 위 네 줄은 맥락 없음, 아래 네 줄은 contextual retrieval(OCR = qwen2.5vl). n=30이라 한 문항이 0.033이다.</figcaption>
+</figure>
+<div class="tablewrap"><table><thead><tr><th>컬렉션</th><th>검색</th><th class="num">Hit@1</th><th class="num">Recall@5</th><th class="num">MRR@10</th><th class="num">스캔 R@5</th><th class="num">초/질문</th></tr></thead><tbody>
+<tr><td class="k"><code>rapidocr_base</code></td><td class="">dense</td><td class=" num">0.367</td><td class=" num">0.833</td><td class=" num">0.557</td><td class=" num">0.500</td><td class=" num">0.060</td></tr>
+<tr><td class="k"><code>rapidocr_base</code></td><td class="">sparse</td><td class=" num">0.233</td><td class=" num">0.600</td><td class=" num">0.421</td><td class=" num">0.750</td><td class=" num">0.030</td></tr>
+<tr><td class="k"><code>rapidocr_base</code></td><td class="">hybrid (RRF)</td><td class=" num">0.400</td><td class=" num">0.767</td><td class=" num">0.558</td><td class=" num">0.750</td><td class=" num">0.030</td></tr>
+<tr><td class="k"><code>rapidocr_base</code></td><td class="">hybrid + rerank</td><td class=" num">0.800</td><td class=" num">0.967</td><td class=" num">0.869</td><td class=" num">1.000</td><td class=" num">2.210</td></tr>
+<tr><td class="k"><code>vlm_base</code></td><td class="">dense</td><td class=" num">0.400</td><td class=" num">0.867</td><td class=" num">0.591</td><td class=" num">0.750</td><td class=" num">0.040</td></tr>
+<tr><td class="k"><code>vlm_base</code></td><td class="">sparse</td><td class=" num">0.233</td><td class=" num">0.633</td><td class=" num">0.422</td><td class=" num">1.000</td><td class=" num">0.040</td></tr>
+<tr><td class="k"><code>vlm_base</code></td><td class="">hybrid (RRF)</td><td class=" num">0.400</td><td class=" num">0.800</td><td class=" num">0.565</td><td class=" num">1.000</td><td class=" num">0.030</td></tr>
+<tr><td class="k"><code>vlm_base</code></td><td class="">hybrid + rerank</td><td class=" num">0.800</td><td class=" num">0.967</td><td class=" num">0.869</td><td class=" num">1.000</td><td class=" num">2.070</td></tr>
+<tr><td class="k"><code>rapidocr_ctx</code></td><td class="">dense</td><td class=" num">0.533</td><td class=" num">0.967</td><td class=" num">0.716</td><td class=" num">1.000</td><td class=" num">0.030</td></tr>
+<tr><td class="k"><code>rapidocr_ctx</code></td><td class="">sparse</td><td class=" num">0.367</td><td class=" num">0.600</td><td class=" num">0.479</td><td class=" num">0.750</td><td class=" num">0.040</td></tr>
+<tr><td class="k"><code>rapidocr_ctx</code></td><td class="">hybrid (RRF)</td><td class=" num">0.533</td><td class=" num">0.833</td><td class=" num">0.674</td><td class=" num">1.000</td><td class=" num">0.030</td></tr>
+<tr><td class="k"><code>rapidocr_ctx</code></td><td class="">hybrid + rerank</td><td class=" num">0.767</td><td class=" num">1.000</td><td class=" num">0.862</td><td class=" num">1.000</td><td class=" num">2.420</td></tr>
+<tr><td class="k"><code>vlm_ctx</code></td><td class="">dense</td><td class=" num">0.533</td><td class=" num">0.967</td><td class=" num">0.711</td><td class=" num">1.000</td><td class=" num">0.040</td></tr>
+<tr><td class="k"><code>vlm_ctx</code></td><td class="">sparse</td><td class=" num">0.367</td><td class=" num">0.633</td><td class=" num">0.492</td><td class=" num">1.000</td><td class=" num">0.040</td></tr>
+<tr><td class="k"><code>vlm_ctx</code></td><td class="">hybrid (RRF)</td><td class=" num">0.500</td><td class=" num">0.833</td><td class=" num">0.660</td><td class=" num">1.000</td><td class=" num">0.030</td></tr>
+<tr><td class="k"><code>vlm_ctx</code></td><td class="">hybrid + rerank</td><td class=" num">0.767</td><td class=" num">1.000</td><td class=" num">0.862</td><td class=" num">1.000</td><td class=" num">2.370</td></tr>
+</tbody></table></div>
+<div class="narrow">
+<div class="decision"><p class="q">운영에 쓴다면 어떤 조합인가?</p><p>contextual + hybrid + rerank 조합은 Recall@5가 1.00로 답변 생성(상위 5개 사용)에 가장 유리하다. 맥락 생성은 색인할 때 한 번만 든다(797청크, 로컬 38분). 지연을 줄여야 하면 contextual + dense만 써도 Recall@5가 0.97이고 질의당 0.04초다. 다만 sparse의 RRF 가중치는 낮추거나 빼는 쪽을 먼저 실험해야 한다.</p></div>
+</div>
+
+<div class="narrow"><h2><span class="stage-no">05</span>답변 — 로컬 7B vs Claude</h2></div>
+<div class="ba">
+  <div class="before"><span class="lk">LOCAL · qwen2.5:7b (Ollama)</span><pre>정답 점수   0.83  (완전 정답 23/30)
+근거 충실   0.87
+평균 지연   6.9s
+비용        $0 (전기료 제외)</pre></div>
+  <div class="after"><span class="lk">CLAUDE · Sonnet (claude -p)</span><pre>정답 점수   1.00  (완전 정답 30/30)
+근거 충실   1.00
+평균 지연   3.7s
+비용        $0.36 / 30문항 (API 환산)</pre></div>
+</div>
+<p class="ban">같은 상위 5개 근거(vlm_ctx, hybrid + rerank)와 같은 시스템 프롬프트를 주고, Claude Opus가 정답 대비 0/1/2점과 근거 충실 여부를 매겼다.</p>
+<div class="tablewrap"><table><thead><tr><th>문항</th><th>정답</th><th>로컬 답(앞부분)</th><th>판정</th><th>채점 사유</th></tr></thead><tbody>
+<tr><td class="k">q05</td><td>affinity score</td><td>CRAFT는 인접 문자 사이의 연결을 나타내는 가산점(score)과 지역화(region score)를 예측합니다.[3]</td><td><span class="pill no">0/2</span> <span class="pill warn">근거 밖</span></td><td>정답인 affinity score를 명시하지 않고 근거에 없는 &#x27;가산점&#x27;이라는 잘못된 용어를 사용함</td></tr>
+<tr><td class="k">q12</td><td>Word-Patch Alignment(WPA)</td><td>LayoutLMv3에서는 Word-Patch Alignment (WPA) 목적을 통해 텍스트 단어와 이미지 패치의 대응 관계를 학습합니다. 이 목적은 텍스트 단어가 마스킹되었는지를 예측하여 해당하는</td><td><span class="pill warn">2/2</span> <span class="pill warn">근거 밖</span></td><td>WPA는 맞혔으나 &#x27;텍스트 단어의 마스킹 여부를 예측한다&#x27;는 설명은 근거에 없는 왜곡임</td></tr>
+<tr><td class="k">q13</td><td>이미지 패치의 linear projection 을 단어 토큰과 함께 입력</td><td>LayoutLMv3는 문서 이미지를 𝐻×𝑊 크기로 리사이즈한 후, 이 이미지를 𝑃×𝑃 크기의 패치로 나누고, 이를 𝐷 차원으로 선형 변환하여 평탄화시킵니다. [1]</td><td><span class="pill warn">1/2</span> </td><td>패치 선형 투영은 맞혔으나 단어 토큰과 함께 멀티모달 Transformer에 입력한다는 점이 빠짐</td></tr>
+<tr><td class="k">q14</td><td>580M, 고압축 인코더 + 긴 문맥 디코더의 end-to-end 모델</td><td>GOT은 약 580M개의 파라미터를 가지고 있으며, 시각 인코더와 언어 디코커 패러다임을 사용합니다. 인코더는 대략 80M개의 파라미터로 구성되어 있고 1024×1024 입력 크기를 가집니다.[3]</td><td><span class="pill warn">1/2</span> </td><td>580M과 인코더-디코더 구조는 맞혔으나 고압축 인코더·긴 문맥 디코더·end-to-end 특성은 빠짐</td></tr>
+<tr><td class="k">q15</td><td>GOT-OCR 2.0 (General OCR Theory)</td><td>[2] [5]</td><td><span class="pill no">0/2</span> </td><td>청크 번호만 인용했고 논문명(GOT-OCR 2.0)을 명시하지 않음</td></tr>
+<tr><td class="k">q16</td><td>49%, reranking 결합 시 67%</td><td>Contextual Retrieval은 검색 실패율을 49%까지 감소시킬 수 있으며, 이를 reranking과 결합할 경우 추가로 18%의 감소 효과가 있다.[1]</td><td><span class="pill warn">1/2</span> <span class="pill warn">근거 밖</span></td><td>49%는 맞으나 reranking 결합 시 67%를 밝히지 않았고, 근거에 없는 &#x27;추가 18% 감소&#x27;를 임의로 계산해 주장함</td></tr>
+<tr><td class="k">q20</td><td>100만 쪽당 200달러 미만</td><td>olmOCR로 PDF 100만 페이지를 변환하는 비용은 약 $20,000 USD입니다. [1]</td><td><span class="pill no">0/2</span> <span class="pill warn">근거 밖</span></td><td>근거는 100만 쪽당 200달러 미만인데 후보는 20,000달러로 잘못 제시</td></tr>
+<tr><td class="k">q30</td><td>분류 확률과 log-linear 융합, 분리배출 표시가 읽히면 결과 교체</td><td>그린가이드에서는 PP-OCRv5 한국어 모바일 모델을 RapidOCR으로 서빙해 분리배출 표시(무색페트 · HDPE 등)와 제품명을 읽고, 이 결과를 분류 확률과 log-linear 융합하여 최종 </td><td><span class="pill warn">1/2</span> </td><td>log-linear 융합은 맞혔으나 분리배출 표시가 읽히면 결과를 교체한다는 핵심 누락</td></tr>
+</tbody></table></div>
+<div class="narrow"><p>로컬 모델의 감점은 두 종류다. 근거에 있는 숫자를 바꾸거나 새로 계산해 낸 경우(q16, q20)와 핵심 일부를 빠뜨린 경우(q13, q14, q30)다. 사내 지식 RAG에서 숫자 오답은 치명적이다. 로컬 모델을 쓰려면 수치 인용 검증(답 속 숫자가 근거에 있는지 대조) 같은 후처리 가드를 붙여야 한다.</p></div>
+
+<div class="narrow"><h2><span class="stage-no">06</span>운영 보강 — 가드 · 게이트</h2></div>
+<div class="stats">
+  <div class="stat"><div class="n">0.83 → 0.92</div><div class="l">로컬 답변 점수 · 가드+폴백</div></div>
+  <div class="stat"><div class="n">0.87 → 0.97</div><div class="l">근거 충실</div></div>
+  <div class="stat"><div class="n">$0.022</div><div class="l">30문항 폴백 비용 (Claude 단독 $0.36)</div></div>
+  <div class="stat"><div class="n">1.00 / 0.013</div><div class="l">답 없는 질문 거절률 / 잘못된 거절률</div></div>
+</div>
+<div class="tablewrap"><table><thead><tr><th>구성</th><th class="num">점수</th><th class="num">완전 정답</th><th class="num">근거 충실</th><th class="num">평균 지연</th><th class="num">비용</th><th>비고</th></tr></thead><tbody>
+<tr><td class="k">로컬 그대로</td><td class="num">0.833</td><td class="num">23/30</td><td class="num">0.867</td><td class="num">6.9s</td><td class="num">$0</td><td>05절 결과</td></tr>
+<tr><td class="k">로컬 + 가드</td><td class="num">0.900</td><td class="num">25/30</td><td class="num">0.900</td><td class="num">6.6s</td><td class="num">$0</td><td>검사에 걸려 재생성 5건</td></tr>
+<tr><td class="k">로컬 + 가드 + 폴백</td><td class="num">0.917</td><td class="num">26/30</td><td class="num">0.967</td><td class="num">6.9s</td><td class="num">$0.022</td><td>재생성 뒤에도 걸린 2건만 Claude</td></tr>
+<tr><td class="k">Claude Sonnet 단독</td><td class="num">1.000</td><td class="num">30/30</td><td class="num">1.000</td><td class="num">3.7s</td><td class="num">$0.36</td><td>비교 기준</td></tr>
+</tbody></table></div>
+<div class="narrow"><p>가드는 rerank 점수와 질문 속 고유명으로 근거 없는 질문을 거르고, 답의 숫자·인용·언어를 근거와 대조한다. 걸리면 한 번 다시 쓰고, 그래도 걸리면 Claude 로 넘긴다. 남은 감점 4건(q05 용어 오류, q13·q14·q30 일부 누락)은 숫자·언어 검사로 잡히지 않는 유형이다. 30문항이라 한 문항이 0.033이므로 세 구성의 차이는 2~3문항 수준이다.</p></div>
+<div class="tablewrap"><table><thead><tr><th>게이트 지표 (vlm_ctx · hybrid+rerank)</th><th class="num">기준선</th><th class="num">지금</th><th class="num">허용폭</th><th class="num">표본</th><th>판정</th></tr></thead><tbody>
+<tr><td class='k'>base30.hit@1</td><td class='num'>0.767</td><td class='num'>0.767</td><td class='num'>±0.033</td><td class='num'>30</td><td><span class='pill ok'>통과</span></td></tr><tr><td class='k'>base30.recall@5</td><td class='num'>1.000</td><td class='num'>1.000</td><td class='num'>±0.033</td><td class='num'>30</td><td><span class='pill ok'>통과</span></td></tr><tr><td class='k'>synth_dev.hit@1</td><td class='num'>0.736</td><td class='num'>0.736</td><td class='num'>±0.02</td><td class='num'>87</td><td><span class='pill ok'>통과</span></td></tr><tr><td class='k'>synth_dev.recall@5</td><td class='num'>0.920</td><td class='num'>0.920</td><td class='num'>±0.02</td><td class='num'>87</td><td><span class='pill ok'>통과</span></td></tr><tr><td class='k'>synth_holdout.hit@1</td><td class='num'>0.800</td><td class='num'>0.800</td><td class='num'>±0.05</td><td class='num'>20</td><td><span class='pill ok'>통과</span></td></tr><tr><td class='k'>synth_holdout.recall@5</td><td class='num'>0.900</td><td class='num'>0.900</td><td class='num'>±0.05</td><td class='num'>20</td><td><span class='pill ok'>통과</span></td></tr><tr><td class='k'>vague.hit@1</td><td class='num'>1.000</td><td class='num'>1.000</td><td class='num'>±0.083</td><td class='num'>12</td><td><span class='pill ok'>통과</span></td></tr><tr><td class='k'>vague.recall@5</td><td class='num'>1.000</td><td class='num'>1.000</td><td class='num'>±0.083</td><td class='num'>12</td><td><span class='pill ok'>통과</span></td></tr><tr><td class='k'>false_refusal</td><td class='num'>0.013</td><td class='num'>0.013</td><td class='num'>±0.02</td><td class='num'>149</td><td><span class='pill ok'>통과</span></td></tr><tr><td class='k'>true_refusal</td><td class='num'>1.000</td><td class='num'>1.000</td><td class='num'>±0.083</td><td class='num'>12</td><td><span class='pill ok'>통과</span></td></tr>
+</tbody></table></div>
+<p class="ban">평가셋 = 본 30 + Claude 합성 107(근거 원문 대조로 검증, holdout 20은 튜닝에 쓰지 않음) + 막연한 질문 12 + 답 없는 질문 12. 일부러 rerank 후보를 30→5로 줄이자 지표 6개가 허용폭을 넘어 게이트가 막았다(종료 코드 1).</p>
+
+<div class="narrow"><h2><span class="stage-no">07</span>한계와 다음 단계</h2></div>
+<div class="tablewrap"><table><thead><tr><th>항목</th><th>현재</th><th>다음</th><th>상태</th></tr></thead><tbody>
+<tr><td class="k">평가셋 크기</td><td>검색 게이트는 161문항으로 늘렸지만 답변 채점은 여전히 30문항(한 문항 3.3%p)이다.</td><td>답변 채점도 합성 holdout 으로 넓히고 부트스트랩 신뢰구간을 낸다.</td><td><span class="pill warn">부분 반영</span></td></tr>
+<tr><td class="k">출제 편향</td><td>합성 107문항은 Claude 가 만들고 근거 원문 대조만 했다. 사람 검수는 하지 않아 라벨 노이즈가 있다(예: 질문과 근거가 어긋난 s081).</td><td>표본 20%를 사람이 검수해 노이즈율을 잰다.</td><td><span class="pill warn">부분 반영</span></td></tr>
+<tr><td class="k">라벨 수정 1건</td><td>q13의 근거 문구가 너무 좁아 정답 청크를 오답으로 판정했다. 문구를 고친 뒤 전체를 다시 쟀다.</td><td>근거를 문구 대신 청크 id 목록으로 고정한다.</td><td><span class="pill ok">반영</span></td></tr>
+<tr><td class="k">채점자 편향</td><td>Claude가 Claude 답을 채점했다.</td><td>사람이 표본을 검수하거나 다른 계열 채점자로 교차 확인한다.</td><td><span class="pill warn">잔여</span></td></tr>
+<tr><td class="k">스캔 문서</td><td>합성 스캔 2문서·3페이지, 문항 4개뿐이다.</td><td>실제 스캔 공문서와 영수증을 추가한다.</td><td><span class="pill warn">잔여</span></td></tr>
+<tr><td class="k">hybrid 가중치</td><td>RRF 1:1만 시험했다.</td><td>가중 RRF와 dense 단독 + rerank를 비교한다.</td><td><span class="pill no">미착수</span></td></tr>
+</tbody></table></div>
+
+<footer>실측: 2026-11-10 이 머신(<code>~/projects/ai-ocr</code>)에서 모든 단계를 직접 실행했다. 수치는 <code>reports/retrieval.json</code>·<code>ocr_eval.json</code>·<code>answers.json</code>·<code>answers_guarded*.json</code>·<code>gate.json</code>에서 <code>src/aiocr/report.py</code>가 자동으로 옮겼다. Claude 비용은 <code>claude -p</code>가 돌려준 API 환산값이다. 외부 인용은 Contextual Retrieval 효과(실패율 49%·67% 감소)뿐이며 평가 말뭉치의 원문이다. 출처 https://www.anthropic.com/news/contextual-retrieval · 등급 1차(발표 기관 원문) · 확인 2026-11-10. 이 보고서의 수치는 그 주장을 재현하려는 것이 아니라 이 말뭉치에서 독립적으로 잰 값이다.</footer>
+</div>

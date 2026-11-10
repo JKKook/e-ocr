@@ -1,0 +1,22 @@
+{
+ "pms-gg-release": {
+  "rapidocr": {
+   "cer": 0.1083,
+   "sec_per_page": 13.33
+  },
+  "vlm": {
+   "cer": 0.0167,
+   "sec_per_page": 36.05
+  }
+ },
+ "pms-ml-lab": {
+  "rapidocr": {
+   "cer": 0.2148,
+   "sec_per_page": 0.52
+  },
+  "vlm": {
+   "cer": 0.0,
+   "sec_per_page": 34.86
+  }
+ }
+}
