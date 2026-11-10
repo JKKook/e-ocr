@@ -61,6 +61,7 @@ npm run app:dev    # next dev(:3000) + 따로 띄운 API(:8765, 토큰 없음)�
 ```bash
 uv run python scripts/demo_export.py          # demo/data/ — 공개·개인(pms-*) 문서만, 원문 PDF·쪽 이미지는 pms-* 만
 cd desktop && npm run build:demo               # demo/site/ (정적) — 끝에 데스크톱용 out/ 을 다시 빌드
+cd ../demo/site && vercel deploy --prod --yes  # https://e-ocr.vercel.app (Vercel 프로젝트 e-ocr)
 ```
 
 ## 보고서 모드 (2026-11-10 grill 합의)

@@ -11,7 +11,7 @@
     "app:dev": "ELECTRON_DEV=1 electron .",
     "capture": "AIOCR_CAPTURE=../reports/screens electron .",
     "prebuild": "cp node_modules/pdfjs-dist/build/pdf.worker.min.mjs public/pdf.worker.min.mjs",
-    "build:demo": "NEXT_PUBLIC_DEMO=1 npm run build && rm -rf ../demo/site && cp -R out ../demo/site && mkdir -p ../demo/site/demo && cp -R ../demo/data/. ../demo/site/demo/ && npm run build"
+    "build:demo": "NEXT_PUBLIC_DEMO=1 npm run build && rm -rf ../demo/site && cp -R out ../demo/site && mkdir -p ../demo/site/demo && cp -R ../demo/data/. ../demo/site/demo/ && (cp -R ../demo/.vercel-link ../demo/site/.vercel 2>/dev/null || true) && npm run build"
   },
   "dependencies": {
     "next": "16.4.6",
